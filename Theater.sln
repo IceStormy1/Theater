@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater", "Theatre\Theater.csproj", "{884E7427-528C-42D5-A63C-325903A2D8D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Abstractions", "Theater.Abstractions\Theater.Abstractions.csproj", "{2EDF53BE-C829-4F95-9156-DAD6744645E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Core", "Theater.Core\Theater.Core.csproj", "{2EA9BEE4-CABD-4349-B5A7-9E7C9B6A3DEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Sql", "Theater.Sql\Theater.Sql.csproj", "{92F37CF0-8A49-4439-A37E-B8E838B81CAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Contracts", "Theater.Contracts\Theater.Contracts.csproj", "{3918C3A8-AE6F-45FA-BDF4-ED209F935328}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Validation", "Theater.Validation\Theater.Validation.csproj", "{B5E911C6-C2DE-43D3-AD49-B3165F8C8A9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Entities", "Theater.Entities\Theater.Entities.csproj", "{3063E283-5561-40D3-8F25-21C9037E7684}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{884E7427-528C-42D5-A63C-325903A2D8D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{884E7427-528C-42D5-A63C-325903A2D8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{884E7427-528C-42D5-A63C-325903A2D8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{884E7427-528C-42D5-A63C-325903A2D8D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EDF53BE-C829-4F95-9156-DAD6744645E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EDF53BE-C829-4F95-9156-DAD6744645E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EDF53BE-C829-4F95-9156-DAD6744645E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EDF53BE-C829-4F95-9156-DAD6744645E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EA9BEE4-CABD-4349-B5A7-9E7C9B6A3DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EA9BEE4-CABD-4349-B5A7-9E7C9B6A3DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EA9BEE4-CABD-4349-B5A7-9E7C9B6A3DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EA9BEE4-CABD-4349-B5A7-9E7C9B6A3DEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92F37CF0-8A49-4439-A37E-B8E838B81CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92F37CF0-8A49-4439-A37E-B8E838B81CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92F37CF0-8A49-4439-A37E-B8E838B81CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92F37CF0-8A49-4439-A37E-B8E838B81CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3918C3A8-AE6F-45FA-BDF4-ED209F935328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3918C3A8-AE6F-45FA-BDF4-ED209F935328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3918C3A8-AE6F-45FA-BDF4-ED209F935328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3918C3A8-AE6F-45FA-BDF4-ED209F935328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5E911C6-C2DE-43D3-AD49-B3165F8C8A9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E911C6-C2DE-43D3-AD49-B3165F8C8A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E911C6-C2DE-43D3-AD49-B3165F8C8A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E911C6-C2DE-43D3-AD49-B3165F8C8A9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3063E283-5561-40D3-8F25-21C9037E7684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3063E283-5561-40D3-8F25-21C9037E7684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3063E283-5561-40D3-8F25-21C9037E7684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3063E283-5561-40D3-8F25-21C9037E7684}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52B158DC-6091-4EFB-9AF0-2DE42636359B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.21.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Theater.Contracts\Theater.Contracts.csproj" />
+	  <ProjectReference Include="..\Theater.Entities\Theater.Entities.csproj" />
+	</ItemGroup>
+
+</Project>
