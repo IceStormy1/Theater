@@ -11,11 +11,17 @@ namespace Theater.Core
         {
             builder
                 .RegisterType<AuthorizationRepository>()
-                .As<IAuthorizationRepository>();
+                .As<IAuthorizationRepository>()
+                .InstancePerLifetimeScope();
 
             builder
                 .RegisterType<AuthorizationService>()
-                .As<IAuthorizationService>();
+                .As<IAuthorizationService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<JwtHelper>()
+                .As<IJwtHelper>()
+                .InstancePerLifetimeScope();
         }
     }
 }

@@ -1,21 +1,25 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
+using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Jwt;
 using Theater.Entities.Authorization;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace Theater.Core.Authorization
 {
-    public class JwtHelper
+    public class JwtHelper : IJwtHelper
     {
+        private const string FullNameFormat = "{0} {1} {2}";
         private static JwtOptions _jwtOptions;
 
-        public JwtHelper(JwtOptions jwOptions)
+        public JwtHelper(IOptions<JwtOptions> jwOptions)
         {
-            _jwtOptions = jwOptions;
+            _jwtOptions = jwOptions.Value;
         }
 
         public string GenerateJwtToken(UserEntity user)
@@ -27,6 +31,11 @@ namespace Theater.Core.Authorization
             {
                 new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new (JwtRegisteredClaimNames.Email, user.Email),
+                new (JwtRegisteredClaimNames.PhoneNumber, user.Phone),
+                new (JwtRegisteredClaimNames.Name, string.Format(FullNameFormat, user.LastName, user.FirstName, user.MiddleName)),
+                new (JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("d/M/yyyy")),
+                new (JwtRegisteredClaimNames.Gender, user.Gender.ToString("D")),
+                new (nameof(UserEntity.UserRole), JsonSerializer.Serialize(user.UserRole)),
                 new (nameof(UserEntity.UserName), user.UserName)
             };
 

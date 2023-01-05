@@ -1,10 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.Extensions.Options;
 using Theater.Abstractions.Authorization;
-using Theater.Abstractions.Jwt;
 using Theater.Contracts.Authorization;
 using Theater.Entities.Authorization;
 
@@ -14,17 +12,16 @@ namespace Theater.Core.Authorization
     {
         private readonly IAuthorizationRepository _authorizationRepository;
         private readonly IMapper _mapper;
-
-        private static JwtOptions _jwtOptions;
+        private readonly IJwtHelper _jwtHelper;
 
         public AuthorizationService(
             IAuthorizationRepository authorizationRepository,
             IMapper mapper,
-            IOptions<JwtOptions> jwOptions)
+            IJwtHelper jwtHelper)
         {
             _authorizationRepository = authorizationRepository;
             _mapper = mapper;
-            _jwtOptions = jwOptions.Value;
+            _jwtHelper = jwtHelper;
         }
 
         public async Task<UserModel> GetUserById(Guid userId)
@@ -56,7 +53,7 @@ namespace Theater.Core.Authorization
             if (userEntity == null)
                 return null;
 
-            var token = new JwtHelper(_jwtOptions).GenerateJwtToken(userEntity);
+            var token = _jwtHelper.GenerateJwtToken(userEntity);
 
             return new AuthenticateResponse { Token = token };
         }
