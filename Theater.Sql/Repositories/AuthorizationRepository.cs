@@ -26,6 +26,7 @@ namespace Theater.Sql.Repositories
         public async Task<UserEntity> FindUser(string userName, string password)
             => await _authorizationDbContext.Users
                 .AsNoTracking()
+                .Include(x => x.UserRole)
                 .FirstOrDefaultAsync(user => string.Equals(password, user.Password)
                                              && (string.Equals(user.UserName, userName)
                                                  || string.Equals(user.Email, userName)));

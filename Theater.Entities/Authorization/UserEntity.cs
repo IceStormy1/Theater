@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Theater.Entities.Theater;
 
 namespace Theater.Entities.Authorization
 {
@@ -55,8 +57,32 @@ namespace Theater.Entities.Authorization
         public DateTime DateOfCreate { get; set; }
 
         /// <summary>
+        /// Дата рождения
+        /// </summary>
+        public DateTime BirthDate { get; set; }
+
+        /// <summary>
         /// Роль пользователя
         /// </summary>
         public ushort RoleId { get; set; }
+
+        /// <summary>
+        /// Деньги пользователя
+        /// </summary>
+        public decimal Money { get; set; }
+
+        /// <summary>
+        /// Идентификатор фотографии пользователя в ЛК 
+        /// </summary>
+        public Guid? PhotoId { get; set; }
+
+        /// <summary>
+        /// Ссылка на роль пользователя
+        /// </summary>
+        public UserRoleEntity UserRole { get; set; }
+
+        public List<UserReviewEntity> Reviews { get; set; }
+        public List<BookedTicketEntity> BookedTickets { get; set; }
+        public List<PurchasedUserTicketEntity> PurchasedUserTickets { get; set; }
     }
 }
