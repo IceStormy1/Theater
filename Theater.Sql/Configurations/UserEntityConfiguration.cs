@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
+using Theater.Abstractions.Authorization.Models;
 using Theater.Entities.Authorization;
 
 namespace Theater.Sql.Configurations
@@ -50,7 +51,7 @@ namespace Theater.Sql.Configurations
                     Id = Guid.Parse("f2343d16-e610-4a73-a0f0-b9f63df511e6"),
                     Phone = "81094316687",
                     Password = "E10ADC3949BA59ABBE56E057F20F883E", // 123456
-                    RoleId = 2,
+                    RoleId = (int)UserRole.Admin,
                     UserName = "IceStormy-admin",
                     BirthDate = new DateTime(2001, 06, 06),
                     Money = new decimal(1000.00)
@@ -66,7 +67,7 @@ namespace Theater.Sql.Configurations
                     Id = Guid.Parse("e1f83d38-56a7-435b-94bd-fe891ed0f03a"),
                     Phone = "81094316687",
                     Password = "E10ADC3949BA59ABBE56E057F20F883E", // 123456
-                    RoleId = 1,
+                    RoleId = (int)UserRole.User,
                     BirthDate = new DateTime(2001, 06, 06),
                     UserName = "IceStormy-user",
                     Money = new decimal(1000.00)
