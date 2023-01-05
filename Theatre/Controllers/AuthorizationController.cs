@@ -28,10 +28,10 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Registration([FromBody] UserParameters parameters)
         {
-            var (isSuccess, userId) = await _authorizationService.CreateUser(parameters);
+            var createUserResult = await _authorizationService.CreateUser(parameters);
 
-            return isSuccess
-                ? Ok(userId)
+            return createUserResult.IsSuccess
+                ? Ok(createUserResult.UserId)
                 : BadRequest("Указанный пользователь уже существует");
         }
 

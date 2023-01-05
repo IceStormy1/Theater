@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Theater.Abstractions.Authorization;
+using Theater.Abstractions.Authorization.Models;
 using Theater.Entities.Authorization;
 
 namespace Theater.Sql.Repositories
@@ -38,19 +38,19 @@ namespace Theater.Sql.Repositories
                 .Take(300)
                 .ToListAsync();
 
-        public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserEntity userEntity)
+        public async Task<CreateUserResult> CreateUser(UserEntity userEntity)
         {
             var user = await _authorizationDbContext.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => string.Equals(userEntity.UserName, user.UserName));
 
             if (user != null)
-                return (false, null);
+                return new CreateUserResult();
 
             _authorizationDbContext.Users.Add(userEntity);
             await _authorizationDbContext.SaveChangesAsync();
 
-            return (true, userEntity.Id);
+            return new CreateUserResult{UserId = userEntity.Id, IsSuccess = true};
         }
     }
 }
