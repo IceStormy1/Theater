@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Authorization
 {
-    public class UserParameters : UserBase
+    public class UserParameters : UserBase, IUser
     {
         /// <summary>
         /// Email пользователя

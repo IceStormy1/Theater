@@ -73,7 +73,7 @@ namespace Theater.Controllers
         }
 
         /// <summary>
-        /// Регистрирует нового пользователя
+        /// Войти при помощи логина и пароля
         /// </summary>
         /// <response code="200">В случае успешной регистрации</response>
         /// <response code="400">В случае ошибок валидации</response>
