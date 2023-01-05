@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Authorization;
+using Theater.Policy;
 using IAuthorizationService = Theater.Abstractions.Authorization.IAuthorizationService;
 
 namespace Theater.Controllers
@@ -62,6 +63,7 @@ namespace Theater.Controllers
         /// <param name="userId">Идентификатор пользователя</param>
         /// <response code="200">В случае, если пользователь был найден в системе</response>
         /// <response code="404">В случае если пользователь не был найден</response>
+        [Authorize(Policy = nameof(RoleModel.User.Policies.UserSearch))]
         [HttpPost("users")]
         [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

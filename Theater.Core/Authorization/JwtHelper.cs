@@ -35,7 +35,7 @@ namespace Theater.Core.Authorization
                 new (JwtRegisteredClaimNames.Name, string.Format(FullNameFormat, user.LastName, user.FirstName, user.MiddleName)),
                 new (JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("d/M/yyyy")),
                 new (JwtRegisteredClaimNames.Gender, user.Gender.ToString("D")),
-                new (nameof(UserEntity.UserRole), JsonSerializer.Serialize(user.UserRole)),
+                new ("role", user.UserRole.RoleName.ToLower()),
                 new (nameof(UserEntity.UserName), user.UserName)
             };
 

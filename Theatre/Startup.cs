@@ -16,7 +16,9 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Theater.Abstractions.Jwt;
+using Theater.Policy;
 using Theater.Sql;
 using Theater.Validation.Authorization;
 
@@ -34,10 +36,8 @@ namespace Theater
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             var jwtOptionsSection = Configuration.GetSection("JwtOptions");
             services.Configure<JwtOptions>(jwtOptionsSection);
 
@@ -60,6 +60,20 @@ namespace Theater
                         ValidateLifetime = true
                     };
                 });
+
+            services.Configure<RoleModel>(Configuration.GetSection("RoleModel"));
+
+            var defaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = defaultPolicy;
+
+                options.AddRoleModelPolicies<UserPolices>(Configuration, nameof(RoleModel.User));
+              //  options.AddRoleModelPolicies<MwPolicies>(Configuration, nameof(RoleModel.MedicalWorker));
+            });
 
             services.AddAllDbContext(Configuration);
 

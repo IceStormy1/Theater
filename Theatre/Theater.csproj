@@ -28,4 +28,8 @@
 		<ProjectReference Include="..\Theater.Validation\Theater.Validation.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controllers\Admin\" />
+	</ItemGroup>
+
 </Project>
