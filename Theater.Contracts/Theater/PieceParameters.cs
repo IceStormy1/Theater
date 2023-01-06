@@ -15,6 +15,11 @@ namespace Theater.Contracts.Theater
         public string Description { get; set; }
 
         /// <summary>
+        /// Краткое описание пьесы
+        /// </summary>
+        public string ShortDescription { get; set; }
+
+        /// <summary>
         /// Идентификатор жанра пьесы
         /// </summary>
         public ushort GenreId { get; set; }
