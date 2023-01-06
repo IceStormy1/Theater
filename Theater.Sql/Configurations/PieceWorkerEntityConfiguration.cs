@@ -4,9 +4,9 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Configurations
 {
-    internal class RepertoryWorkerEntityConfiguration : IEntityTypeConfiguration<RepertoryWorkerEntity>
+    internal class PieceWorkerEntityConfiguration : IEntityTypeConfiguration<PieceWorkerEntity>
     {
-        public void Configure(EntityTypeBuilder<RepertoryWorkerEntity> builder)
+        public void Configure(EntityTypeBuilder<PieceWorkerEntity> builder)
         {
             builder.HasKey(x => x.Id);
         }

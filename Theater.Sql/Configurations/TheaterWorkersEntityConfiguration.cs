@@ -14,7 +14,7 @@ namespace Theater.Sql.Configurations
             builder.Property(x => x.MiddleName).HasMaxLength(128);
             builder.Property(x => x.Description).HasMaxLength(512);
 
-            builder.HasMany(s => s.RepertoriesWorkers)
+            builder.HasMany(s => s.PieceWorkers)
                 .WithOne(x => x.TheaterWorker)
                 .HasForeignKey(x => x.TheaterWorkerId)
                 .OnDelete(DeleteBehavior.Cascade);

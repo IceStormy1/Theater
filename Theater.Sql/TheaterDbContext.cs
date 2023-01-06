@@ -50,7 +50,7 @@ namespace Theater.Sql
         /// <summary>
         /// Репертуары пьес
         /// </summary>
-        public DbSet<RepertoryEntity> Repertories { get; set; }
+        public DbSet<PieceDateEntity> PieceDates { get; set; }
 
         /// <summary>
         /// Билеты
@@ -60,7 +60,7 @@ namespace Theater.Sql
         /// <summary>
         /// Работники, которые участвуют в репертуаре
         /// </summary>
-        public DbSet<RepertoryWorkerEntity> RepertoryWorkers { get; set; }
+        public DbSet<PieceWorkerEntity> PieceWorkers { get; set; }
 
         /// <summary>
         /// Забронированные билеты

@@ -11,8 +11,8 @@ using Theater.Sql;
 namespace Theater.Sql.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    [Migration("20230106114036_AddPositionTypeField")]
-    partial class AddPositionTypeField
+    [Migration("20230106130113_AddTheaterTables")]
+    partial class AddTheaterTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -204,6 +204,25 @@ namespace Theater.Sql.Migrations
                     b.ToTable("BookedTicketsEntity");
                 });
 
+            modelBuilder.Entity("Theater.Entities.Theater.PieceDateEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("PieceId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PieceId");
+
+                    b.ToTable("PieceDates");
+                });
+
             modelBuilder.Entity("Theater.Entities.Theater.PieceEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -233,6 +252,27 @@ namespace Theater.Sql.Migrations
                     b.ToTable("Pieces");
                 });
 
+            modelBuilder.Entity("Theater.Entities.Theater.PieceWorkerEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PieceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TheaterWorkerId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PieceId");
+
+                    b.HasIndex("TheaterWorkerId");
+
+                    b.ToTable("PieceWorkers");
+                });
+
             modelBuilder.Entity("Theater.Entities.Theater.PiecesGenreEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -256,7 +296,7 @@ namespace Theater.Sql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("RepertoryId")
+                    b.Property<Guid>("PieceDateId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("TicketPlace")
@@ -267,7 +307,7 @@ namespace Theater.Sql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RepertoryId");
+                    b.HasIndex("PieceDateId");
 
                     b.ToTable("PiecesTickets");
                 });
@@ -297,53 +337,6 @@ namespace Theater.Sql.Migrations
                     b.HasIndex("TicketPriceEventsVersion", "TicketPriceEventsId");
 
                     b.ToTable("PurchasedUserTickets");
-                });
-
-            modelBuilder.Entity("Theater.Entities.Theater.RepertoryEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("PieceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Time")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PieceId");
-
-                    b.ToTable("Repertories");
-                });
-
-            modelBuilder.Entity("Theater.Entities.Theater.RepertoryWorkerEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("RepertoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TheaterWorkerId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RepertoryId");
-
-                    b.HasIndex("TheaterWorkerId");
-
-                    b.ToTable("RepertoryWorkers");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.TheaterWorkerEntity", b =>
@@ -488,6 +481,17 @@ namespace Theater.Sql.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Theater.Entities.Theater.PieceDateEntity", b =>
+                {
+                    b.HasOne("Theater.Entities.Theater.PieceEntity", "Piece")
+                        .WithMany("PieceDates")
+                        .HasForeignKey("PieceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Piece");
+                });
+
             modelBuilder.Entity("Theater.Entities.Theater.PieceEntity", b =>
                 {
                     b.HasOne("Theater.Entities.Theater.PiecesGenreEntity", "Genre")
@@ -499,15 +503,34 @@ namespace Theater.Sql.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("Theater.Entities.Theater.PiecesTicketEntity", b =>
+            modelBuilder.Entity("Theater.Entities.Theater.PieceWorkerEntity", b =>
                 {
-                    b.HasOne("Theater.Entities.Theater.RepertoryEntity", "Repertory")
-                        .WithMany("PiecesTickets")
-                        .HasForeignKey("RepertoryId")
+                    b.HasOne("Theater.Entities.Theater.PieceDateEntity", "PieceDate")
+                        .WithMany("PieceWorkers")
+                        .HasForeignKey("PieceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Repertory");
+                    b.HasOne("Theater.Entities.Theater.TheaterWorkerEntity", "TheaterWorker")
+                        .WithMany("PieceWorkers")
+                        .HasForeignKey("TheaterWorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PieceDate");
+
+                    b.Navigation("TheaterWorker");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Theater.PiecesTicketEntity", b =>
+                {
+                    b.HasOne("Theater.Entities.Theater.PieceDateEntity", "PieceDate")
+                        .WithMany("PiecesTickets")
+                        .HasForeignKey("PieceDateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PieceDate");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.PurchasedUserTicketEntity", b =>
@@ -527,36 +550,6 @@ namespace Theater.Sql.Migrations
                     b.Navigation("TicketPriceEvents");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Theater.Entities.Theater.RepertoryEntity", b =>
-                {
-                    b.HasOne("Theater.Entities.Theater.PieceEntity", "Piece")
-                        .WithMany("Repertories")
-                        .HasForeignKey("PieceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Piece");
-                });
-
-            modelBuilder.Entity("Theater.Entities.Theater.RepertoryWorkerEntity", b =>
-                {
-                    b.HasOne("Theater.Entities.Theater.RepertoryEntity", "Repertory")
-                        .WithMany("RepertoriesWorkers")
-                        .HasForeignKey("RepertoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Theater.Entities.Theater.TheaterWorkerEntity", "TheaterWorker")
-                        .WithMany("RepertoriesWorkers")
-                        .HasForeignKey("TheaterWorkerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Repertory");
-
-                    b.Navigation("TheaterWorker");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.TheaterWorkerEntity", b =>
@@ -614,9 +607,16 @@ namespace Theater.Sql.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Theater.Entities.Theater.PieceDateEntity", b =>
+                {
+                    b.Navigation("PiecesTickets");
+
+                    b.Navigation("PieceWorkers");
+                });
+
             modelBuilder.Entity("Theater.Entities.Theater.PieceEntity", b =>
                 {
-                    b.Navigation("Repertories");
+                    b.Navigation("PieceDates");
 
                     b.Navigation("Reviews");
                 });
@@ -633,16 +633,9 @@ namespace Theater.Sql.Migrations
                     b.Navigation("TicketPriceEvents");
                 });
 
-            modelBuilder.Entity("Theater.Entities.Theater.RepertoryEntity", b =>
-                {
-                    b.Navigation("PiecesTickets");
-
-                    b.Navigation("RepertoriesWorkers");
-                });
-
             modelBuilder.Entity("Theater.Entities.Theater.TheaterWorkerEntity", b =>
                 {
-                    b.Navigation("RepertoriesWorkers");
+                    b.Navigation("PieceWorkers");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.TicketPriceEventsEntity", b =>

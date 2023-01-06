@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater

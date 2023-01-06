@@ -2,7 +2,7 @@
 
 namespace Theater.Entities.Theater
 {
-    public class RepertoryWorkerEntity
+    public class PieceWorkerEntity
     {
         /// <summary>
         /// Идентификатор 
@@ -22,11 +22,11 @@ namespace Theater.Entities.Theater
         /// <summary>
         /// Идентификатор репертуара
         /// </summary>
-        public Guid RepertoryId { get; set; }
+        public Guid PieceId { get; set; }
 
         /// <summary>
         /// Ссылка на репертуар
         /// </summary>
-        public RepertoryEntity Repertory { get; set; }
+        public PieceDateEntity PieceDate { get; set; }
     }
 }

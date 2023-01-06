@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Theater
 {
-    public class RepertoryWorkerParameters
+    public class PieceWorkerParameters
     {
         /// <summary>
         /// Идентификатор работника театра 
@@ -12,6 +12,6 @@ namespace Theater.Contracts.Theater
         /// <summary>
         /// Идентификатор репертуара
         /// </summary>
-        public Guid RepertoryId { get; set; }
+        public Guid PieceId { get; set; }
     }
 }

@@ -21,14 +21,14 @@ namespace Theater.Entities.Theater
         public ushort TicketPlace { get; set; }
 
         /// <summary>
-        /// Идентификатор репертуара
+        /// Идентификатор даты начала пьесы
         /// </summary>
-        public Guid RepertoryId { get; set; }
+        public Guid PieceDateId { get; set; }
 
         /// <summary>
-        /// Ссылка на репертуар
+        /// Ссылка на дату начала пьесы
         /// </summary>
-        public RepertoryEntity Repertory { get; set; }
+        public PieceDateEntity PieceDate { get; set; }
 
         public List<BookedTicketEntity> BookedTickets { get; set; }
         public List<TicketPriceEventsEntity> TicketPriceEvents { get; set; }

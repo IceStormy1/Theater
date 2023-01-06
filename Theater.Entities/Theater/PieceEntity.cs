@@ -36,6 +36,6 @@ namespace Theater.Entities.Theater
         public PiecesGenreEntity Genre { get; set; }
 
         public List<UserReviewEntity> Reviews { get; set; }
-        public List<RepertoryEntity> Repertories { get; set; }
+        public List<PieceDateEntity> PieceDates { get; set; }
     }
 }

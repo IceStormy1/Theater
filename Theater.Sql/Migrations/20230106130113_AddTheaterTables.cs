@@ -74,7 +74,8 @@ namespace Theater.Sql.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    PositionName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false)
+                    PositionName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    PositionType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,20 +128,18 @@ namespace Theater.Sql.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Repertories",
+                name: "PieceDates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Time = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     PieceId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Repertories", x => x.Id);
+                    table.PrimaryKey("PK_PieceDates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Repertories_Pieces_PieceId",
+                        name: "FK_PieceDates_Pieces_PieceId",
                         column: x => x.PieceId,
                         principalTable: "Pieces",
                         principalColumn: "Id",
@@ -181,38 +180,38 @@ namespace Theater.Sql.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TicketRow = table.Column<int>(type: "integer", nullable: false),
                     TicketPlace = table.Column<int>(type: "integer", nullable: false),
-                    RepertoryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    PieceDateId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PiecesTickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PiecesTickets_Repertories_RepertoryId",
-                        column: x => x.RepertoryId,
-                        principalTable: "Repertories",
+                        name: "FK_PiecesTickets_PieceDates_PieceDateId",
+                        column: x => x.PieceDateId,
+                        principalTable: "PieceDates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RepertoryWorkers",
+                name: "PieceWorkers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TheaterWorkerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RepertoryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    PieceId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RepertoryWorkers", x => x.Id);
+                    table.PrimaryKey("PK_PieceWorkers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RepertoryWorkers_Repertories_RepertoryId",
-                        column: x => x.RepertoryId,
-                        principalTable: "Repertories",
+                        name: "FK_PieceWorkers_PieceDates_PieceId",
+                        column: x => x.PieceId,
+                        principalTable: "PieceDates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RepertoryWorkers_TheaterWorkers_TheaterWorkerId",
+                        name: "FK_PieceWorkers_TheaterWorkers_TheaterWorkerId",
                         column: x => x.TheaterWorkerId,
                         principalTable: "TheaterWorkers",
                         principalColumn: "Id",
@@ -326,14 +325,29 @@ namespace Theater.Sql.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PieceDates_PieceId",
+                table: "PieceDates",
+                column: "PieceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pieces_GenreId",
                 table: "Pieces",
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PiecesTickets_RepertoryId",
+                name: "IX_PiecesTickets_PieceDateId",
                 table: "PiecesTickets",
-                column: "RepertoryId");
+                column: "PieceDateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PieceWorkers_PieceId",
+                table: "PieceWorkers",
+                column: "PieceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PieceWorkers_TheaterWorkerId",
+                table: "PieceWorkers",
+                column: "TheaterWorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchasedUserTickets_TicketPriceEventsVersion_TicketPriceEv~",
@@ -344,21 +358,6 @@ namespace Theater.Sql.Migrations
                 name: "IX_PurchasedUserTickets_UserId",
                 table: "PurchasedUserTickets",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Repertories_PieceId",
-                table: "Repertories",
-                column: "PieceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RepertoryWorkers_RepertoryId",
-                table: "RepertoryWorkers",
-                column: "RepertoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RepertoryWorkers_TheaterWorkerId",
-                table: "RepertoryWorkers",
-                column: "TheaterWorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TheaterWorkers_PositionId",
@@ -402,10 +401,10 @@ namespace Theater.Sql.Migrations
                 name: "Files");
 
             migrationBuilder.DropTable(
-                name: "PurchasedUserTickets");
+                name: "PieceWorkers");
 
             migrationBuilder.DropTable(
-                name: "RepertoryWorkers");
+                name: "PurchasedUserTickets");
 
             migrationBuilder.DropTable(
                 name: "UserReviews");
@@ -414,19 +413,19 @@ namespace Theater.Sql.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "TicketPriceEvents");
-
-            migrationBuilder.DropTable(
                 name: "TheaterWorkers");
 
             migrationBuilder.DropTable(
-                name: "PiecesTickets");
+                name: "TicketPriceEvents");
 
             migrationBuilder.DropTable(
                 name: "WorkersPositions");
 
             migrationBuilder.DropTable(
-                name: "Repertories");
+                name: "PiecesTickets");
+
+            migrationBuilder.DropTable(
+                name: "PieceDates");
 
             migrationBuilder.DropTable(
                 name: "Pieces");

@@ -48,6 +48,6 @@ namespace Theater.Entities.Theater
         /// </summary>
         public WorkersPositionEntity Position { get; set; }
 
-        public List<RepertoryWorkerEntity> RepertoriesWorkers { get; set; }
+        public List<PieceWorkerEntity> PieceWorkers { get; set; }
     }
 }
