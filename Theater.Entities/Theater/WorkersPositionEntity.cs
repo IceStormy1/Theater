@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Theater.Common;
 
 namespace Theater.Entities.Theater
 {

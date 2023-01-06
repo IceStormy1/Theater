@@ -1,4 +1,6 @@
-﻿namespace Theater.Contracts.Theater
+﻿using Theater.Common;
+
+namespace Theater.Contracts.Theater
 {
     public class WorkersPositionParameters
     {

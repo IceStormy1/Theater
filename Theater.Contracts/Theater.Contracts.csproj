@@ -8,4 +8,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.6" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Theater.Common\Theater.Common.csproj" />
+	</ItemGroup>
+
 </Project>
