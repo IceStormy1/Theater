@@ -26,6 +26,5 @@ namespace Theater.Entities.Theater
         public PieceEntity Piece { get; set; }
 
         public List<PiecesTicketEntity> PiecesTickets { get; set; }
-        public List<PieceWorkerEntity> PieceWorkers { get; set; }
     }
 }

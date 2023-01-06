@@ -20,13 +20,13 @@ namespace Theater.Entities.Theater
         public TheaterWorkerEntity TheaterWorker { get; set; }
 
         /// <summary>
-        /// Идентификатор репертуара
+        /// Идентификатор пьесы
         /// </summary>
         public Guid PieceId { get; set; }
 
         /// <summary>
-        /// Ссылка на репертуар
+        /// Ссылка на пьесу
         /// </summary>
-        public PieceDateEntity PieceDate { get; set; }
+        public PieceEntity Piece { get; set; }
     }
 }

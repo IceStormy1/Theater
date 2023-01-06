@@ -14,11 +14,6 @@ namespace Theater.Sql.Configurations
                 .WithOne(x => x.PieceDate)
                 .HasForeignKey(x => x.PieceDateId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany(s => s.PieceWorkers)
-                .WithOne(x => x.PieceDate)
-                .HasForeignKey(x => x.PieceId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
