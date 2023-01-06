@@ -6,5 +6,10 @@
         /// Наименование роли
         /// </summary>
         public string PositionName { get; set; }
+
+        /// <summary>
+        /// Тип должности
+        /// </summary>
+        public PositionType PositionType { get; set; }
     }
 }

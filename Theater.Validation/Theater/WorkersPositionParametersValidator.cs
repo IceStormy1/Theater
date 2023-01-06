@@ -12,6 +12,10 @@ namespace Theater.Validation.Theater
                 .MaximumLength(128)
                 .MinimumLength(5)
                 .WithName("Должность");
+
+            RuleFor(position => position.PositionType)
+                .IsInEnum()
+                .WithMessage("Некорректный тип должности");
         }
     }
 }
