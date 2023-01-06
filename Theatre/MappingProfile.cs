@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using System;
 using Theater.Abstractions.Authorization.Models;
+using Theater.Abstractions.Piece.Models;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.Theater;
 using Theater.Entities.Authorization;
+using Theater.Extensions;
 
 namespace Theater
 {
@@ -19,6 +22,10 @@ namespace Theater
                 .ForMember(destination => destination.Password, options => options.MapFrom(c => c.Password));
 
             CreateMap<UserEntity, AuthenticateResponse>();
+
+            CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
+            CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
+                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(c => c.PositionTypeName.GetEnumDisplayName()));
         }
     }
 }

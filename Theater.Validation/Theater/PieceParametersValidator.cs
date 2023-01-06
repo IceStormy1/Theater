@@ -17,11 +17,11 @@ namespace Theater.Validation.Theater
                 .MaximumLength(128)
                 .WithName("Наименование пьесы");
 
-            When(worker => !string.IsNullOrWhiteSpace(worker.Description), () =>
-            {
-                RuleFor(worker => worker.Description)
-                    .Description("Описание пьесы");
-            });
+            RuleFor(worker => worker.Description)
+                .Description("Описание пьесы");
+
+            RuleFor(worker => worker.ShortDescription)
+                .Description("Краткое описание пьесы");
         }
     }
 }
