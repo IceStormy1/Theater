@@ -24,7 +24,7 @@ namespace Theater.Controllers
         /// <summary>
         /// Пополнить баланс пользователя
         /// </summary>
-        /// <response code="200">В случае успешной регистрации</response>
+        /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
         [HttpPatch("replenish")]
         [ProducesResponseType(StatusCodes.Status200OK)]

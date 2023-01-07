@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Theater.Abstractions.Piece.Models;
+using Theater.Common;
 using Theater.Contracts.Theater;
 
 namespace Theater.Abstractions.Piece
@@ -11,5 +12,11 @@ namespace Theater.Abstractions.Piece
         /// Получить краткую информацию об актуальных пьесах
         /// </summary>
         Task<IReadOnlyCollection<PieceShortInformationModel>> GetPieceShortInformation();
+
+        /// <summary>
+        /// Получить полную информацию о пьесе по идентификатору
+        /// </summary>
+        /// <returns>Полная информация о пьесе</returns>
+        Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId);
     }
 }

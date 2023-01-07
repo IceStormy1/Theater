@@ -27,6 +27,8 @@ namespace Theater
             CreateMap<PieceDateDto, PieceDateParameters>();
             CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(c => c.PositionTypeName.GetEnumDisplayName()));
+
+            CreateMap<PieceDto, PieceModel>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,9 +19,23 @@ namespace Theater.Controllers
         }
 
         /// <summary>
+        /// Получить полную информацию о пьесе по идентификатору
+        /// </summary>
+        /// <param name="pieceId">Идентификатор пьесы</param>
+        /// <response code="200">В случае успешной регистрации</response>
+        [HttpGet("{pieceId}")]
+        [ProducesResponseType(typeof(PieceModel), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPieceById([FromRoute] Guid pieceId)
+        {
+            var piecesResult = await _pieceService.GetPieceById(pieceId);
+
+            return RenderResult(piecesResult);
+        }
+
+        /// <summary>
         /// Получить краткую информацию об актуальных пьесах
         /// </summary>
-        /// <response code="200">В случае успешной регистрации</response>
+        /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyCollection<PieceShortInformationModel>), StatusCodes.Status200OK)]

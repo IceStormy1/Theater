@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.Piece.Models;
 using Theater.Contracts.Theater;
+using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
 {
@@ -20,13 +21,9 @@ namespace Theater.Sql.Repositories
 
         public async Task<IReadOnlyCollection<PieceShortInformationDto>> GetPieceShortInformation()
         {
-            return await _theaterDbContext.Pieces.AsNoTracking()
-                .Include(piece => piece.PieceDates)
-                .Include(piece => piece.Genre)
-                .Include(piece => piece.PieceWorkers)
-                    .ThenInclude(x => x.TheaterWorker)
-                .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
-                .Select(x => new PieceShortInformationDto
+            var pieceQuery = GetPieceQueryWithIncludes();
+
+            return await pieceQuery.Select(x => new PieceShortInformationDto
                 {
                     Id = x.Id,
                     PieceGenre = x.Genre.GenreName,
@@ -41,6 +38,47 @@ namespace Theater.Sql.Repositories
                     }).ToList()
                 })
                 .ToListAsync();
+        }
+
+        public async Task<PieceDto> GetPieceById(Guid pieceId)
+        {
+            var pieceQuery = GetPieceQueryWithIncludes(pieceId);
+
+            return await pieceQuery.Select(x => new PieceDto
+                {
+                    Id = x.Id,
+                    PieceGenre = x.Genre.GenreName,
+                    PieceName = x.PieceName,
+                    Description = x.Description,
+                    ShortDescription = x.ShortDescription,
+                    PhotoIds = x.PhotoIds,
+                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Date = c.Date }).ToList(),
+                    WorkerShortInformation = x.PieceWorkers.Select(c => new TheaterWorkerShortInformationDto
+                    {
+                        FullName = c.TheaterWorker.LastName + " " + c.TheaterWorker.FirstName + " " + c.TheaterWorker.LastName,
+                        Id = c.TheaterWorkerId,
+                        PositionName = c.TheaterWorker.Position.PositionName,
+                        PositionTypeName = c.TheaterWorker.Position.PositionType
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        private IQueryable<PieceEntity> GetPieceQueryWithIncludes(Guid? pieceId = null)
+        {
+            var pieceQuery = _theaterDbContext.Pieces
+                .AsNoTracking()
+                .Include(piece => piece.PieceDates)
+                .Include(piece => piece.Genre)
+                .Include(piece => piece.PieceWorkers)
+                .ThenInclude(x => x.TheaterWorker)
+                .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
+                .AsQueryable();
+
+            if(pieceId.HasValue)
+                pieceQuery = pieceQuery.Where(x=>x.Id == pieceId.Value);
+
+            return pieceQuery;
         }
     }
 }

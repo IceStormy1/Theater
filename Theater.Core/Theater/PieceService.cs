@@ -1,7 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Piece;
+using Theater.Abstractions.Piece.Models;
+using Theater.Common;
 using Theater.Contracts.Theater;
 
 namespace Theater.Core.Theater
@@ -22,6 +25,18 @@ namespace Theater.Core.Theater
             var piecesShortInformation = await _pieceRepository.GetPieceShortInformation();
 
             return _mapper.Map<IReadOnlyCollection<PieceShortInformationModel>>(piecesShortInformation);
+        }
+
+        public async Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId)
+        {
+            var pieceDto = await _pieceRepository.GetPieceById(pieceId);
+
+            if(pieceDto is null)
+                return WriteResult<PieceModel>.FromError(PieceErrors.NotFound.Error);
+
+            var pieceResult = _mapper.Map<PieceModel>(pieceDto);
+
+            return WriteResult.FromValue(pieceResult);
         }
     }
 }
