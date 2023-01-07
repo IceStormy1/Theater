@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Theater.Common;
 
 namespace Theater.Abstractions.UserAccount
 {
@@ -10,6 +11,6 @@ namespace Theater.Abstractions.UserAccount
         /// </summary>
         /// <param name="userId">Идентификатор пользователя</param>
         /// <param name="replenishmentAmount">Сумма пополнения</param>
-        Task ReplenishBalance(Guid userId, decimal replenishmentAmount);
+        Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount);
     }
 }

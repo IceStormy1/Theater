@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Theater.Abstractions.UserAccount.Models;
 using Theater.Contracts.Authorization;
 using Theater.Policy;
 using IAuthorizationService = Theater.Abstractions.Authorization.IAuthorizationService;
@@ -31,9 +32,7 @@ namespace Theater.Controllers
         {
             var createUserResult = await _authorizationService.CreateUser(parameters);
 
-            return createUserResult.IsSuccess
-                ? Ok(createUserResult.UserId)
-                : BadRequest("Указанный пользователь уже существует");
+            return RenderResult(createUserResult);
         }
 
         /// <summary>
@@ -51,8 +50,8 @@ namespace Theater.Controllers
             var user = await _authorizationService.GetUserById(userId);
 
             return user is null
-                ? NotFound()
-                : Ok(await _authorizationService.GetUserById(userId));
+                ? RenderResult(UserAccountErrors.NotFound)
+                : Ok(user);
         }
 
         //todo: переделать под параметры (пейджинация и поиск)
@@ -88,7 +87,7 @@ namespace Theater.Controllers
             var authenticateResult = await _authorizationService.Authorize(parameters);
 
             return authenticateResult is null
-                ? NotFound(new NotFoundObjectResult("Указанный пользователь не найден в системе"))
+                ? RenderResult(UserAccountErrors.NotFound)
                 : Ok(authenticateResult);
         }
     }

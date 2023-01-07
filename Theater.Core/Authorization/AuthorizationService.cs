@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Authorization.Models;
+using Theater.Common;
 using Theater.Contracts.Authorization;
 using Theater.Entities.Authorization;
 
@@ -39,7 +40,7 @@ namespace Theater.Core.Authorization
             return _mapper.Map<List<UserModel>>(users);
         }
 
-        public async Task<CreateUserResult> CreateUser(UserParameters user)
+        public async Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user)
         {
             var userEntity = _mapper.Map<UserEntity>(user);
 

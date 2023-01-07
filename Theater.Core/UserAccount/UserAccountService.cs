@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.UserAccount;
+using Theater.Common;
 
 namespace Theater.Core.UserAccount
 {
@@ -13,9 +14,9 @@ namespace Theater.Core.UserAccount
             _userAccountRepository = userAccountRepository;
         }
 
-        public async Task ReplenishBalance(Guid userId, decimal replenishmentAmount)
+        public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
         {
-            await _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
+            return await _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
         }
     }
 }

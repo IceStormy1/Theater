@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Authorization.Models;
+using Theater.Common;
 using Theater.Contracts.Authorization;
 
 namespace Theater.Abstractions.Authorization
@@ -27,7 +28,7 @@ namespace Theater.Abstractions.Authorization
         /// </summary>
         /// <param name="user">Данные пользователя</param>
         /// <returns>Возвращает true при успешном создании пользователя</returns>
-        Task<CreateUserResult> CreateUser(UserParameters user);
+        Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user);
 
         /// <summary>
         /// Авторизация пользователя

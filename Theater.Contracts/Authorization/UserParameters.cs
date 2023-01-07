@@ -35,11 +35,6 @@ namespace Theater.Contracts.Authorization
         public GenderType Gender { get; set; }
 
         /// <summary>
-        /// Дата создания пользователя
-        /// </summary>
-        public DateTime DateOfCreate { get; set; }
-
-        /// <summary>
         /// Дата рождения
         /// </summary>
         public DateTime BirthDate { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Authorization.Models;
+using Theater.Common;
 using Theater.Entities.Authorization;
 
 namespace Theater.Abstractions.Authorization
@@ -42,6 +43,6 @@ namespace Theater.Abstractions.Authorization
         /// true и идентификатор пользователя при успешном создании пользователя<br/>
         /// false и <b>null</b> если не удалось создать пользователя
         /// </returns>
-        Task<CreateUserResult> CreateUser(UserEntity userEntity);
+        Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity);
     }
 }

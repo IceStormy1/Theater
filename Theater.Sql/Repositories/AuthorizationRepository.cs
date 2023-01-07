@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Authorization.Models;
+using Theater.Abstractions.UserAccount.Models;
+using Theater.Common;
 using Theater.Entities.Authorization;
 
 namespace Theater.Sql.Repositories
@@ -38,19 +40,19 @@ namespace Theater.Sql.Repositories
                 .Take(300)
                 .ToListAsync();
 
-        public async Task<CreateUserResult> CreateUser(UserEntity userEntity)
+        public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
         {
             var user = await _authorizationDbContext.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => string.Equals(userEntity.UserName, user.UserName));
 
             if (user != null)
-                return new CreateUserResult();
+                return WriteResult<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
 
             _authorizationDbContext.Users.Add(userEntity);
             await _authorizationDbContext.SaveChangesAsync();
 
-            return new CreateUserResult{UserId = userEntity.Id, IsSuccess = true};
+            return new WriteResult<CreateUserResult>(new CreateUserResult { UserId = userEntity.Id, IsSuccess = true });
         }
     }
 }

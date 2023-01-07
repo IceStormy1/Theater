@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.UserAccount;
+using Theater.Abstractions.UserAccount.Models;
 using Theater.Contracts.UserAccount;
 
 namespace Theater.Controllers
@@ -31,11 +32,11 @@ namespace Theater.Controllers
         public async Task<IActionResult> ReplenishBalance([FromBody] UserReplenishParameters parameters)
         {
             if (!UserId.HasValue)
-                throw new Exception("Необходимо авторизоваться");
+                return RenderResult(UserAccountErrors.Unauthorized);
 
-            await _userAccountService.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
+            var replenishResult = await _userAccountService.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
 
-            return Ok();
+            return RenderResult(replenishResult);
         }
     }
 }

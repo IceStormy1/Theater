@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Theater.Abstractions.UserAccount;
+using Theater.Abstractions.UserAccount.Models;
+using Theater.Common;
 
 namespace Theater.Sql.Repositories
 {
@@ -14,17 +16,19 @@ namespace Theater.Sql.Repositories
             _theaterDbContext = theaterDbContext;
         }
 
-        public async Task ReplenishBalance(Guid userId, decimal replenishmentAmount)
+        public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
         {
             var user = await _theaterDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
             if (user is null)
-                throw new Exception("Пользователь не найден");
+                return UserAccountErrors.NotFound;
 
             user.Money += replenishmentAmount;
 
             _theaterDbContext.Users.Update(user);
             await _theaterDbContext.SaveChangesAsync();
+
+            return WriteResult.Successful;
         }
     }
 }
