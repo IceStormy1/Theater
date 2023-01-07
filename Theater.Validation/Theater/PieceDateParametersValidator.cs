@@ -7,9 +7,6 @@ namespace Theater.Validation.Theater
     {
         public PieceDateParametersValidator()
         {
-            RuleFor(repertory => repertory.PieceId)
-                .ValidateGuid("Некорректный идентификатор пьесы");
-
             RuleFor(repertory => repertory.Date)
                 .NotEmpty()
                 .WithName("Дата начала");

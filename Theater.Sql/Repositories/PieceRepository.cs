@@ -24,24 +24,23 @@ namespace Theater.Sql.Repositories
                 .Include(piece => piece.PieceDates)
                 .Include(piece => piece.Genre)
                 .Include(piece => piece.PieceWorkers)
-                    .ThenInclude(x=>x.TheaterWorker)
+                    .ThenInclude(x => x.TheaterWorker)
                 .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
-                .Select(x=>new PieceShortInformationDto
+                .Select(x => new PieceShortInformationDto
                 {
-                    Id = x.Id, 
+                    Id = x.Id,
                     PieceGenre = x.Genre.GenreName,
                     PieceName = x.PieceName,
-                    WorkerShortInformation = x.PieceWorkers.Select(c=>new TheaterWorkerShortInformationDto
+                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Date = c.Date }).ToList(),
+                    WorkerShortInformation = x.PieceWorkers.Select(c => new TheaterWorkerShortInformationDto
                     {
                         FullName = c.TheaterWorker.LastName + " " + c.TheaterWorker.FirstName + " " + c.TheaterWorker.LastName,
                         Id = c.TheaterWorkerId,
                         PositionName = c.TheaterWorker.Position.PositionName,
                         PositionTypeName = c.TheaterWorker.Position.PositionType
-
                     }).ToList()
                 })
                 .ToListAsync();
-
         }
     }
 }

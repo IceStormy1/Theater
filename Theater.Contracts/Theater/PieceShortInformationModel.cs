@@ -24,5 +24,10 @@ namespace Theater.Contracts.Theater
         /// Работники, которые принимали участие в пьесе
         /// </summary>
         public IReadOnlyCollection<TheaterWorkerShortInformationModel> WorkerShortInformation { get; set; }
+        
+        /// <summary>
+        /// Даты
+        /// </summary>
+        public IReadOnlyCollection<PieceDateParameters> PieceDates { get; set; }
     }
 }

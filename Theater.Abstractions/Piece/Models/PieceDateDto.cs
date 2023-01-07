@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Theater.Contracts.Theater
+namespace Theater.Abstractions.Piece.Models
 {
-    public class PieceDateParameters
+    public class PieceDateDto
     {
         /// <summary>
         /// Дата и время пьесы

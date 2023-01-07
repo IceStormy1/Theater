@@ -24,6 +24,7 @@ namespace Theater
             CreateMap<UserEntity, AuthenticateResponse>();
 
             CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
+            CreateMap<PieceDateDto, PieceDateParameters>();
             CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(c => c.PositionTypeName.GetEnumDisplayName()));
         }

@@ -24,5 +24,10 @@ namespace Theater.Abstractions.Piece.Models
         /// Работники, которые принимали участие в пьесе
         /// </summary>
         public IReadOnlyCollection<TheaterWorkerShortInformationDto> WorkerShortInformation { get; set; }
+        
+        /// <summary>
+        /// Даты пьесы
+        /// </summary>
+        public IReadOnlyCollection<PieceDateDto> PieceDates { get; set; }
     }
 }
