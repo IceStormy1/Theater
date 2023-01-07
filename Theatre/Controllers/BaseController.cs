@@ -9,6 +9,6 @@ namespace Theater.Controllers
     [Route("api/[controller]")]
     public class BaseController : ControllerBase
     {
-        protected Guid UserId => Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+        protected Guid? UserId => Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
     }
 }

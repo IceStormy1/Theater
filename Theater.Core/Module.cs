@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Piece;
+using Theater.Abstractions.UserAccount;
 using Theater.Core.Authorization;
 using Theater.Core.Theater;
+using Theater.Core.UserAccount;
 using Theater.Sql.Repositories;
 
 namespace Theater.Core
@@ -31,6 +33,14 @@ namespace Theater.Core
 
             builder.RegisterType<PieceRepository>()
                 .As<IPieceRepository>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<UserAccountService>()
+                .As<IUserAccountService>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<UserAccountRepository>()
+                .As<IUserAccountRepository>()
                 .InstancePerLifetimeScope();
         }
     }

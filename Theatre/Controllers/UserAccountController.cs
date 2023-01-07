@@ -1,11 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+using Theater.Abstractions.UserAccount;
+using Theater.Contracts.UserAccount;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/account")]
+    [Authorize]
     public class UserAccountController : BaseController
     {
+        private readonly IUserAccountService _userAccountService;
 
+        public UserAccountController(IUserAccountService userAccountService)
+        {
+            _userAccountService = userAccountService;
+        }
+
+        /// <summary>
+        /// Пополнить баланс пользователя
+        /// </summary>
+        /// <response code="200">В случае успешной регистрации</response>
+        /// <response code="400">В случае ошибок валидации</response>
+        [HttpPatch("replenish")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ReplenishBalance([FromBody] UserReplenishParameters parameters)
+        {
+            if (!UserId.HasValue)
+                throw new Exception("Необходимо авторизоваться");
+
+            await _userAccountService.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
+
+            return Ok();
+        }
     }
 }
