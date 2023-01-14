@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Piece;
 using Theater.Contracts.Theater;
@@ -38,12 +37,12 @@ namespace Theater.Controllers
         /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IReadOnlyCollection<PieceShortInformationModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PieceShortInformationResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPieceShortInformation()
         {
-            var piecesResult = await _pieceService.GetPieceShortInformation();
+            var piecesShortInformation = await _pieceService.GetPieceShortInformation();
 
-            return Ok(piecesResult);
+            return Ok(new PieceShortInformationResponse { PiecesShortInformation = piecesShortInformation });
         }
     }
 }
