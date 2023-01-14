@@ -10,46 +10,42 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Core.Authorization
 {
-    public class AuthorizationService : IAuthorizationService
+    public class AuthorizationService : ServiceBase<IAuthorizationRepository>, IAuthorizationService
     {
-        private readonly IAuthorizationRepository _authorizationRepository;
-        private readonly IMapper _mapper;
         private readonly IJwtHelper _jwtHelper;
 
         public AuthorizationService(
-            IAuthorizationRepository authorizationRepository,
             IMapper mapper,
-            IJwtHelper jwtHelper)
+            IAuthorizationRepository repository,
+            IJwtHelper jwtHelper) : base(mapper, repository)
         {
-            _authorizationRepository = authorizationRepository;
-            _mapper = mapper;
             _jwtHelper = jwtHelper;
         }
 
         public async Task<UserModel> GetUserById(Guid userId)
         {
-            var user = await _authorizationRepository.GetUserById(userId);
+            var user = await Repository.GetUserById(userId);
 
-            return _mapper.Map<UserModel>(user);
+            return Mapper.Map<UserModel>(user);
         }
 
         public async Task<IList<UserModel>> GetUsers()
         {
-            var users = await _authorizationRepository.GetUsers();
+            var users = await Repository.GetUsers();
 
-            return _mapper.Map<List<UserModel>>(users);
+            return Mapper.Map<List<UserModel>>(users);
         }
 
         public async Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user)
         {
-            var userEntity = _mapper.Map<UserEntity>(user);
+            var userEntity = Mapper.Map<UserEntity>(user);
 
-            return await _authorizationRepository.CreateUser(userEntity);
+            return await Repository.CreateUser(userEntity);
         }
 
         public async Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters)
         {
-            var userEntity = await _authorizationRepository
+            var userEntity = await Repository
                 .FindUser(authenticateParameters.UserName, authenticateParameters.Password);
 
             if (userEntity == null)

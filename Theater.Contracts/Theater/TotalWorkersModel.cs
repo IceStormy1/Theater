@@ -1,0 +1,23 @@
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Theater.Common;
+
+namespace Theater.Contracts.Theater
+{
+    public class TotalWorkersModel
+    {
+        /// <summary>
+        /// Количество работников по каждому типу должности
+        /// </summary>
+        /// <remarks>
+        /// Key - тип должности; Value - количество работников
+        /// </remarks>
+        public IReadOnlyDictionary<int, int> TotalWorkersByPositionType { get; set; } = new Dictionary<int, int>();
+
+        /// <summary>
+        /// Суммарное количество работников театра
+        /// </summary>
+        public int TotalWorkersCount => TotalWorkersByPositionType.Values.Sum(x => x);
+    }
+}

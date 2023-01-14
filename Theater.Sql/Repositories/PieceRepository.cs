@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.Piece.Models;
-using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
@@ -72,6 +71,7 @@ namespace Theater.Sql.Repositories
                 .Include(piece => piece.Genre)
                 .Include(piece => piece.PieceWorkers)
                 .ThenInclude(x => x.TheaterWorker)
+                .ThenInclude(x => x.Position)
                 .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
                 .AsQueryable();
 

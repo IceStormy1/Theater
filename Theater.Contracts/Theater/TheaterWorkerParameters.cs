@@ -1,4 +1,5 @@
 ﻿using System;
+using Theater.Common;
 using Theater.Contracts.Authorization;
 
 namespace Theater.Contracts.Theater
@@ -39,5 +40,10 @@ namespace Theater.Contracts.Theater
         /// Идентификатор должности работника театра
         /// </summary>
         public ushort PositionId { get; set; }
+
+        /// <summary>
+        /// Тип должности
+        /// </summary>
+        public PositionType PositionType { get; set; }
     }
 }

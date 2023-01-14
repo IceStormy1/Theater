@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Theater.Extensions
+namespace Theater.Common.Extensions
 {
     public static class EnumExtensions
     {

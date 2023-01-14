@@ -1,6 +1,7 @@
 using Autofac;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,11 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
-using Microsoft.AspNetCore.Authorization;
 using Theater.Abstractions.Jwt;
 using Theater.Policy;
 using Theater.Sql;
 using Theater.Validation.Authorization;
+using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace Theater
 {
@@ -114,6 +115,9 @@ namespace Theater
 
                 var xmlContractDocs = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory), "*.xml");
                 foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);
+
+                c.EnableAnnotations();
+                c.AddEnumsWithValuesFixFilters();
             });
 
             services.AddMvc(opt => { opt.EnableEndpointRouting = false; })
@@ -123,6 +127,10 @@ namespace Theater
 
                     fv.ValidatorOptions.LanguageManager.Enabled = true;
                     fv.ValidatorOptions.LanguageManager.Culture = new CultureInfo("ru-RU");
+                })
+                .AddJsonOptions(x =>
+                {
+                    x.JsonSerializerOptions.MaxDepth = 64;
                 });
 
             services.AddCors(options =>
