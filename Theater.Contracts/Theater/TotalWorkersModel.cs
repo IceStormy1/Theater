@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Theater.Common;
 
 namespace Theater.Contracts.Theater
 {

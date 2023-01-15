@@ -9,7 +9,7 @@ namespace Theater.Validation.Theater
 
         public PiecesTicketParametersValidator()
         {
-            RuleFor(ticket => ticket.RepertoryId)
+            RuleFor(ticket => ticket.PieceDateId)
                 .ValidateGuid("Некорректный идентификатор репертуара");
 
             RuleFor(ticket => ticket.TicketPlace)

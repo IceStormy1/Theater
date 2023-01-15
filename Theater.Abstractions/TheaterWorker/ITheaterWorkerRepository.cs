@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Piece.Models;
-using Theater.Abstractions.TheaterWorker.Models;
 using Theater.Common;
 using Theater.Entities.Theater;
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Piece.Models;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Common;
-using Theater.Common.Extensions;
 using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
@@ -23,6 +22,7 @@ namespace Theater.Sql.Repositories
         public async Task<IReadOnlyDictionary<int, int>> GetTotalWorkers()
         {
             var totalWorkers = await _dbContext.TheaterWorkers
+                .AsNoTracking()
                 .Include(x => x.Position)
                 .GroupBy(x => x.Position.PositionType)
                 .Select(x => new
@@ -37,6 +37,7 @@ namespace Theater.Sql.Repositories
         public async Task<IReadOnlyCollection<TheaterWorkerShortInformationDto>> GetShortInformationWorkersByPositionType(int positionType)
         {
             var workersShortInformation = await _dbContext.TheaterWorkers
+                .AsNoTracking()
                 .Include(x => x.Position)
                 .Where(x=>(int)x.Position.PositionType == positionType)
                 .Select(x => new TheaterWorkerShortInformationDto
@@ -54,6 +55,7 @@ namespace Theater.Sql.Repositories
         public async Task<WriteResult<TheaterWorkerEntity>> GetTheaterWorkerById(Guid id)
         {
             var workersShortInformation = await _dbContext.TheaterWorkers
+                .AsNoTracking()
                 .Include(x => x.Position)
                 .Include(x => x.PieceWorkers)
                 .ThenInclude(x => x.Piece)

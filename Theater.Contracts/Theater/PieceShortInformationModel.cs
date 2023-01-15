@@ -28,6 +28,6 @@ namespace Theater.Contracts.Theater
         /// <summary>
         /// Даты
         /// </summary>
-        public IReadOnlyCollection<PieceDateParameters> PieceDates { get; set; }
+        public IReadOnlyCollection<PieceDateModel> PieceDates { get; set; }
     }
 }

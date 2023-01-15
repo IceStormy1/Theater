@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Piece.Models;
 using Theater.Common;
@@ -27,7 +26,7 @@ namespace Theater
             CreateMap<UserEntity, AuthenticateResponse>();
 
             CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
-            CreateMap<PieceDateDto, PieceDateParameters>();
+            CreateMap<PieceDateDto, PieceDateModel>();
             CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(c => c.PositionTypeName.GetEnumDisplayName()));
 
@@ -38,6 +37,9 @@ namespace Theater
                 .ForMember(destination => destination.PositionName, options => options.MapFrom(c => c.Position.PositionName))
                 .ForMember(destination => destination.PositionType, options => options.MapFrom(c => c.Position.PositionType));
             CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
+            
+            
+            CreateMap<PiecesTicketEntity, PiecesTicketModel>();
         }
     }
 }

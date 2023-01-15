@@ -15,9 +15,9 @@ namespace Theater.Core.Theater
         {
         }
 
-        public async Task<IReadOnlyCollection<PieceShortInformationModel>> GetPieceShortInformation()
+        public async Task<IReadOnlyCollection<PieceShortInformationModel>> GetPiecesShortInformation()
         {
-            var piecesShortInformation = await Repository.GetPieceShortInformation();
+            var piecesShortInformation = await Repository.GetPiecesShortInformation();
 
             return Mapper.Map<IReadOnlyCollection<PieceShortInformationModel>>(piecesShortInformation);
         }

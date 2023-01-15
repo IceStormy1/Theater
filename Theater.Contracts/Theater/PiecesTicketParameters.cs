@@ -15,8 +15,8 @@ namespace Theater.Contracts.Theater
         public ushort TicketPlace { get; set; }
 
         /// <summary>
-        /// Идентификатор репертуара
+        /// Идентификатор даты начала пьесы
         /// </summary>
-        public Guid RepertoryId { get; set; }
+        public Guid PieceDateId { get; set; }
     }
 }

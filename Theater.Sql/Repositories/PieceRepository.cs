@@ -18,7 +18,7 @@ namespace Theater.Sql.Repositories
             _theaterDbContext = theaterDbContext;
         }
 
-        public async Task<IReadOnlyCollection<PieceShortInformationDto>> GetPieceShortInformation()
+        public async Task<IReadOnlyCollection<PieceShortInformationDto>> GetPiecesShortInformation()
         {
             var pieceQuery = GetPieceQueryWithIncludes();
 
@@ -27,10 +27,10 @@ namespace Theater.Sql.Repositories
                     Id = x.Id,
                     PieceGenre = x.Genre.GenreName,
                     PieceName = x.PieceName,
-                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Date = c.Date }).ToList(),
+                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Id = c.Id, Date = c.Date }).ToList(),
                     WorkerShortInformation = x.PieceWorkers.Select(c => new TheaterWorkerShortInformationDto
                     {
-                        FullName = c.TheaterWorker.LastName + " " + c.TheaterWorker.FirstName + " " + c.TheaterWorker.LastName,
+                        FullName = $"{c.TheaterWorker.LastName} {c.TheaterWorker.FirstName} {c.TheaterWorker.LastName}",
                         Id = c.TheaterWorkerId,
                         PositionName = c.TheaterWorker.Position.PositionName,
                         PositionTypeName = c.TheaterWorker.Position.PositionType
