@@ -11,7 +11,7 @@ namespace Theater.Abstractions.Piece
         /// <summary>
         /// Получить краткую информацию об актуальных пьесах
         /// </summary>
-        Task<IReadOnlyCollection<PieceShortInformationModel>> GetPieceShortInformation();
+        Task<IReadOnlyCollection<PieceShortInformationModel>> GetPiecesShortInformation();
 
         /// <summary>
         /// Получить полную информацию о пьесе по идентификатору
