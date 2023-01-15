@@ -16,16 +16,6 @@ namespace Theater.Core
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder
-                .RegisterType<AuthorizationRepository>()
-                .As<IAuthorizationRepository>()
-                .InstancePerLifetimeScope();
-
-            builder
-                .RegisterType<AuthorizationService>()
-                .As<IAuthorizationService>()
-                .InstancePerLifetimeScope();
-
             builder.RegisterType<JwtHelper>()
                 .As<IJwtHelper>()
                 .InstancePerLifetimeScope();
