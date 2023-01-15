@@ -3,19 +3,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Theater.Abstractions.TheaterWorker;
+using Theater.Contracts;
 using Theater.Contracts.Theater;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/worker")]
-    public class TheaterWorkerController : BaseController
+    public class TheaterWorkerController : BaseController<ITheaterWorkerService>
     {
-        private readonly ITheaterWorkerService _theaterWorkerService;
-
-        public TheaterWorkerController(ITheaterWorkerService theaterWorkerService)
+        public TheaterWorkerController(ITheaterWorkerService theaterWorkerService) : base(theaterWorkerService)
         {
-            _theaterWorkerService = theaterWorkerService;
         }
 
         /// <summary>
@@ -26,7 +24,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(TotalWorkersModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTotalWorkers()
         {
-            var totalWorkers = await _theaterWorkerService.GetTotalWorkers();
+            var totalWorkers = await Service.GetTotalWorkers();
 
             return Ok(totalWorkers);
         }
@@ -36,16 +34,13 @@ namespace Theater.Controllers
         /// </summary>
         /// <response code="200">В случае успешного запроса</response>
         [HttpPost("positionType/{positionType:int}")]
-        [ProducesResponseType(typeof(ShortInformationWorkersByPositionTypeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DocumentCollection<TheaterWorkerShortInformationModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetShortInformationWorkersByPositionType([FromRoute] int positionType)
         {
             var workersShortInformation = 
-                await _theaterWorkerService.GetShortInformationWorkersByPositionType(positionType);
+                await Service.GetShortInformationWorkersByPositionType(positionType);
 
-            return Ok(new ShortInformationWorkersByPositionTypeResponse
-            {
-                TheaterWorkersShortInformation = workersShortInformation
-            });
+            return Ok(new DocumentCollection<TheaterWorkerShortInformationModel>(workersShortInformation));
         }
 
         /// <summary>
@@ -58,7 +53,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid id)
         {
-            var theaterWorker = await _theaterWorkerService.GetTheaterWorkerById(id);
+            var theaterWorker = await Service.GetTheaterWorkerById(id);
 
             return RenderResult(theaterWorker);
         }

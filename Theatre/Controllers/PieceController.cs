@@ -3,18 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Piece;
+using Theater.Contracts;
 using Theater.Contracts.Theater;
 
 namespace Theater.Controllers
 {
     [ApiController]
-    public class PieceController : BaseController
+    public class PieceController : BaseController<IPieceService>
     {
-        private readonly IPieceService _pieceService;
-
-        public PieceController(IPieceService pieceService)
+        public PieceController(IPieceService service) : base(service)
         {
-            _pieceService = pieceService;
         }
 
         /// <summary>
@@ -22,11 +20,11 @@ namespace Theater.Controllers
         /// </summary>
         /// <param name="pieceId">Идентификатор пьесы</param>
         /// <response code="200">В случае успешной регистрации</response>
-        [HttpGet("{pieceId}")]
+        [HttpGet("{pieceId:guid}")]
         [ProducesResponseType(typeof(PieceModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPieceById([FromRoute] Guid pieceId)
         {
-            var piecesResult = await _pieceService.GetPieceById(pieceId);
+            var piecesResult = await Service.GetPieceById(pieceId);
 
             return RenderResult(piecesResult);
         }
@@ -37,12 +35,12 @@ namespace Theater.Controllers
         /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
         [HttpGet]
-        [ProducesResponseType(typeof(PieceShortInformationResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPieceShortInformation()
+        [ProducesResponseType(typeof(DocumentCollection<PieceShortInformationModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPiecesShortInformation()
         {
-            var piecesShortInformation = await _pieceService.GetPieceShortInformation();
+            var piecesShortInformation = await Service.GetPiecesShortInformation();
 
-            return Ok(new PieceShortInformationResponse { PiecesShortInformation = piecesShortInformation });
+            return Ok(new DocumentCollection<PieceShortInformationModel>(piecesShortInformation));
         }
     }
 }

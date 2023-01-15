@@ -1,17 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Theater.Common;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseController : ControllerBase
+    public class BaseController<TService> : ControllerBase
     {
+        protected readonly TService Service;
+
         protected Guid? UserId => Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+        public BaseController(TService service)
+        {
+            Service = service;
+        }
 
         /// <summary>
         /// Returns ActionResult from the given WriteResult

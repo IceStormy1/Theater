@@ -12,12 +12,11 @@ namespace Theater.Controllers
 {
     [ApiController]
     [Authorize]
-    public class AuthorizationController : BaseController
+    public class AuthorizationController : BaseController<IAuthorizationService>
     {
-        private readonly IAuthorizationService _authorizationService;
-
-        public AuthorizationController(IAuthorizationService authorizationService)
-            => _authorizationService = authorizationService;
+        public AuthorizationController(IAuthorizationService service) : base(service)
+        {
+        }
 
         /// <summary>
         /// Регистрирует нового пользователя
@@ -30,7 +29,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Registration([FromBody] UserParameters parameters)
         {
-            var createUserResult = await _authorizationService.CreateUser(parameters);
+            var createUserResult = await Service.CreateUser(parameters);
 
             return RenderResult(createUserResult);
         }
@@ -47,7 +46,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
         {
-            var user = await _authorizationService.GetUserById(userId);
+            var user = await Service.GetUserById(userId);
 
             return user is null
                 ? RenderResult(UserAccountErrors.NotFound)
@@ -68,7 +67,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUsersByParameters()
         {
-            var users = await _authorizationService.GetUsers();
+            var users = await Service.GetUsers();
 
             return Ok(users);
         }
@@ -84,7 +83,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] AuthenticateParameters parameters)
         {
-            var authenticateResult = await _authorizationService.Authorize(parameters);
+            var authenticateResult = await Service.Authorize(parameters);
 
             return authenticateResult is null
                 ? RenderResult(UserAccountErrors.NotFound)

@@ -11,13 +11,10 @@ namespace Theater.Controllers
     [ApiController]
     [Route("api/account")]
     [Authorize]
-    public class UserAccountController : BaseController
+    public class UserAccountController : BaseController<IUserAccountService>
     {
-        private readonly IUserAccountService _userAccountService;
-
-        public UserAccountController(IUserAccountService userAccountService)
+        public UserAccountController(IUserAccountService userAccountService) : base(userAccountService)
         {
-            _userAccountService = userAccountService;
         }
 
         /// <summary>
@@ -33,7 +30,7 @@ namespace Theater.Controllers
             if (!UserId.HasValue)
                 return RenderResult(UserAccountErrors.Unauthorized);
 
-            var replenishResult = await _userAccountService.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
+            var replenishResult = await Service.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
 
             return RenderResult(replenishResult);
         }
