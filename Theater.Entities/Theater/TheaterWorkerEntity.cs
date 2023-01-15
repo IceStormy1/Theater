@@ -6,6 +6,9 @@ namespace Theater.Entities.Theater
 {
     public class TheaterWorkerEntity
     {
+        /// <summary>
+        /// Идентификатор работника театра
+        /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
@@ -37,6 +40,11 @@ namespace Theater.Entities.Theater
         /// Описание работника
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Идентификатор фотографии работника
+        /// </summary>
+        public Guid? PhotoId { get; set; }
 
         /// <summary>
         /// Идентификатор должности работника театра

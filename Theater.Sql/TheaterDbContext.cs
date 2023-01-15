@@ -65,7 +65,7 @@ namespace Theater.Sql
         /// <summary>
         /// Забронированные билеты
         /// </summary>
-        public DbSet<BookedTicketEntity> BookedTicketsEntity { get; set; }
+        public DbSet<BookedTicketEntity> BookedTickets { get; set; }
 
         /// <summary>
         /// Купленные билеты пользователя

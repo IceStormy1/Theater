@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Theater.Common;
 using Theater.Contracts.Theater;
 
 namespace Theater.Abstractions.Ticket
@@ -14,5 +15,13 @@ namespace Theater.Abstractions.Ticket
         /// <param name="dateId">Идентификатор даты пьесы</param>
         /// <returns></returns>
         Task<IReadOnlyCollection<PiecesTicketModel>> GetPieceTicketsByDate(Guid pieceId, Guid dateId);
+
+        /// <summary>
+        /// Купить билет 
+        /// </summary>
+        /// <param name="ticketId">Идентификатор билета</param>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns>Результат покупки</returns>
+        Task<WriteResult> BuyTicket(Guid ticketId, Guid userId);
     }
 }

@@ -9,6 +9,7 @@ namespace Theater.Sql.Configurations
         public void Configure(EntityTypeBuilder<BookedTicketEntity> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.HasIndex(x => new { x.UserId, x.Id }).IsUnique();
         }
     }
 }

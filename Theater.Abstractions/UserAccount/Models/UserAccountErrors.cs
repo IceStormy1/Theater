@@ -21,5 +21,11 @@ namespace Theater.Abstractions.UserAccount.Models
         /// </summary>
         public static WriteResult UserAlreadyExist =>
             WriteResult.FromError(ErrorModel.Default("account/user-already-exist", "Указанный пользователь уже существует"));
+
+        /// <summary>
+        /// На балансе недостаточно средств
+        /// </summary>
+        public static WriteResult NotEnoughMoney =>
+            WriteResult.FromError(ErrorModel.Default("account/not-enough-money", "На балансе недостаточно средств"));
     }
 }

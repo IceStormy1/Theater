@@ -19,6 +19,11 @@ namespace Theater.Entities.Theater
         /// Место
         /// </summary>
         public ushort TicketPlace { get; set; }
+        
+        /// <summary>
+        /// Стоимость билета
+        /// </summary>
+        public ushort TicketPrice { get; set; }
 
         /// <summary>
         /// Идентификатор даты начала пьесы
