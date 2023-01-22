@@ -35,11 +35,13 @@ namespace Theater.Abstractions.UserAccount
         /// Создать пользователя
         /// </summary>
         /// <param name="userEntity">Данные пользователя</param>
-        /// <returns>
-        /// true и идентификатор пользователя при успешном создании пользователя<br/>
-        /// false и <b>null</b> если не удалось создать пользователя
-        /// </returns>
         Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity);
+
+        /// <summary>
+        /// Создать пользователя
+        /// </summary>
+        /// <param name="userEntity">Данные пользователя</param>
+        Task<WriteResult> UpdateUser(UserEntity userEntity);
 
         /// <summary>
         /// Пополнить баланс пользователя

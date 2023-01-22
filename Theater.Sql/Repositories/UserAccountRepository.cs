@@ -55,6 +55,14 @@ namespace Theater.Sql.Repositories
             return new WriteResult<CreateUserResult>(new CreateUserResult { UserId = userEntity.Id, IsSuccess = true });
         }
 
+        public async Task<WriteResult> UpdateUser(UserEntity userEntity)
+        {
+            _theaterDbContext.Users.Update(userEntity);
+            await _theaterDbContext.SaveChangesAsync();
+
+            return WriteResult.Successful;
+        }
+
         public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
         {
             var user = await _theaterDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);

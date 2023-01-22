@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.UserAccount;
+using Theater.Abstractions.UserAccount.Models;
 using Theater.Common;
 using Theater.Contracts.Authorization;
 using Theater.Entities.Authorization;
@@ -42,6 +43,18 @@ namespace Theater.Core.UserAccount
             var userEntity = Mapper.Map<UserEntity>(user);
 
             return await Repository.CreateUser(userEntity);
+        }
+
+        public async Task<WriteResult> UpdateUser(UserParameters user, Guid userId)
+        {
+            var userEntity = await Repository.GetUserById(userId);
+
+            if(userEntity is null)
+                return WriteResult.FromError(UserAccountErrors.NotFound.Error);
+
+            Mapper.Map(user, userEntity);
+
+            return await Repository.UpdateUser(userEntity);
         }
 
         public async Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters)

@@ -93,6 +93,24 @@ namespace Theater.Controllers
         }
 
         /// <summary>
+        /// Обновить профиль пользователя
+        /// </summary>
+        /// <response code="200">В случае успешного запроса</response>
+        /// <response code="400">В случае ошибок валидации</response>
+        [HttpPost("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateUser([FromBody] UserParameters parameters)
+        {
+            if (!UserId.HasValue)
+                return RenderResult(UserAccountErrors.Unauthorized);
+
+            var updateResult = await Service.UpdateUser(parameters, UserId.Value);
+
+            return RenderResult(updateResult);
+        }
+
+        /// <summary>
         /// Пополнить баланс пользователя
         /// </summary>
         /// <response code="200">В случае успешного запроса</response>

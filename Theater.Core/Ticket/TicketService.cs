@@ -81,6 +81,8 @@ namespace Theater.Core.Ticket
             if (ticket.BookedTickets.Any(x => x.UserId != user.Id))
                 return WriteResult.FromError(TicketErrors.AlreadyBooked.Error);
 
+            // TODO: валидация на уже купленный билет
+
             return ticket.TicketPrice > user.Money 
                 ? WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error) 
                 : WriteResult.Successful;
