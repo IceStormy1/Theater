@@ -10,7 +10,7 @@ namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/worker")]
-    public class TheaterWorkerController : BaseController<ITheaterWorkerService>
+    public sealed class TheaterWorkerController : BaseController<ITheaterWorkerService>
     {
         public TheaterWorkerController(ITheaterWorkerService theaterWorkerService) : base(theaterWorkerService)
         {

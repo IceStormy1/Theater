@@ -29,5 +29,12 @@ namespace Theater.Abstractions.Ticket
         /// <param name="ticket">Сущность билета</param>
         /// <param name="user">Сущность пользователя</param>
         Task<WriteResult> BuyTicket(PiecesTicketEntity ticket, UserEntity user);
+
+        /// <summary>
+        /// Забронировать билет
+        /// </summary>
+        /// <param name="ticketId">Идентификатор билета</param>
+        /// <param name="userId">Идентификатор пользователя</param>
+        Task<WriteResult> BookTicket(Guid ticketId, Guid userId);
     }
 }

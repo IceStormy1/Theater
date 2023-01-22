@@ -55,7 +55,9 @@ namespace Theater.Sql.Repositories
             {
                 _theaterDbContext.Users.Update(user);
                 _theaterDbContext.BookedTickets.RemoveRange(ticket.BookedTickets);
-                _theaterDbContext.PurchasedUserTickets.Add(BuildPurchasedUserTicketEntity(ticketPriceEvent.PiecesTicketId, ticketPriceEvent.Version, user.Id));
+
+                var purchasedUserTicket = BuildPurchasedUserTicketEntity(ticketPriceEvent.PiecesTicketId, ticketPriceEvent.Version, user.Id);
+                _theaterDbContext.PurchasedUserTickets.Add(purchasedUserTicket);
 
                 await _theaterDbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -66,7 +68,28 @@ namespace Theater.Sql.Repositories
             {
                 await transaction.RollbackAsync();
                
-                return WriteResult.FromError(TicketErrors.UpdateConflict.Error);
+                return WriteResult.FromError(TicketErrors.BuyTicketConflict.Error);
+            }
+        }
+
+        public async Task<WriteResult> BookTicket(Guid ticketId, Guid userId)
+        {
+            try
+            {
+                _theaterDbContext.BookedTickets.Add(new BookedTicketEntity
+                {
+                    PiecesTicketId = ticketId,
+                    Timestamp = DateTime.UtcNow,
+                    UserId = userId
+                });
+
+                await _theaterDbContext.SaveChangesAsync();
+
+                return WriteResult.Successful;
+            }
+            catch (Exception)
+            {
+                return WriteResult.FromError(TicketErrors.BookTicketConflict.Error);
             }
         }
 

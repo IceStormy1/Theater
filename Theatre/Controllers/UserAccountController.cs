@@ -14,7 +14,7 @@ namespace Theater.Controllers
     [ApiController]
     [Route("api/account")]
     [Authorize]
-    public class UserAccountController : BaseController<IUserAccountService>
+    public sealed class UserAccountController : BaseController<IUserAccountService>
     {
         public UserAccountController(IUserAccountService userAccountService) : base(userAccountService)
         {

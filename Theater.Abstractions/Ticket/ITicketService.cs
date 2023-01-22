@@ -23,5 +23,13 @@ namespace Theater.Abstractions.Ticket
         /// <param name="userId">Идентификатор пользователя</param>
         /// <returns>Результат покупки</returns>
         Task<WriteResult> BuyTicket(Guid ticketId, Guid userId);
+
+        /// <summary>
+        /// Забронировать билет билет 
+        /// </summary>
+        /// <param name="ticketId">Идентификатор билета</param>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns>Результат бронирования</returns>
+        Task<WriteResult> BookTicket(Guid ticketId, Guid userId);
     }
 }

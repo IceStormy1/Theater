@@ -14,12 +14,18 @@ namespace Theater.Abstractions.Ticket
         /// Билет уже забронирован другим человеком
         /// </summary>
         public static WriteResult AlreadyBooked =>
-            WriteResult.FromError(ErrorModel.Default("ticket/already-booked", "Билет уже забронирован другим человеком"));
+            WriteResult.FromError(ErrorModel.Default("ticket/already-booked", "Билет уже забронирован"));
 
         /// <summary>
-        /// Билет уже забронирован другим человеком
+        /// Произошла ошибка при покупке билета
         /// </summary>
-        public static WriteResult UpdateConflict =>
-            WriteResult.FromError(ErrorModel.Default("ticket/update-conflict", "Произошла ошибка при покупке билета"));
+        public static WriteResult BuyTicketConflict =>
+            WriteResult.FromError(ErrorModel.Default("ticket/buy-conflict", "Произошла ошибка при покупке билета"));
+
+        /// <summary>
+        /// Произошла ошибка при покупке билета
+        /// </summary>
+        public static WriteResult BookTicketConflict =>
+            WriteResult.FromError(ErrorModel.Default("ticket/book-conflict", "Произошла ошибка при покупке билета"));
     }
 }

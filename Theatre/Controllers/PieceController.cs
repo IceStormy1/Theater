@@ -9,7 +9,7 @@ using Theater.Contracts.Theater;
 namespace Theater.Controllers
 {
     [ApiController]
-    public class PieceController : BaseController<IPieceService>
+    public sealed class PieceController : BaseController<IPieceService>
     {
         public PieceController(IPieceService service) : base(service)
         {
