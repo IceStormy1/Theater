@@ -3,7 +3,7 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Entities.Theater
 {
-    public sealed class UserReviewEntity
+    public sealed class UserReviewEntity : IEntity
     {
         /// <summary>
         /// Идентификатор роли

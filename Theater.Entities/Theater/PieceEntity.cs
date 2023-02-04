@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Theater.Entities.Theater
 {
-    public sealed class PieceEntity
+    public sealed class PieceEntity : IEntity
     {
         /// <summary>
         /// Идентификатор пьесы

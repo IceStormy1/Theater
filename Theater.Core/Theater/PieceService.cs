@@ -2,16 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Theater.Abstractions;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.Piece.Models;
 using Theater.Common;
+using Theater.Contracts;
 using Theater.Contracts.Theater;
+using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater
 {
     public sealed class PieceService : ServiceBase<IPieceRepository>, IPieceService
     {
-        public PieceService(IMapper mapper, IPieceRepository repository) : base(mapper, repository)
+        public PieceService(
+            IMapper mapper,
+            IPieceRepository repository) : base(mapper, repository)
         {
         }
 
@@ -32,6 +37,15 @@ namespace Theater.Core.Theater
             var pieceResult = Mapper.Map<PieceModel>(pieceDto);
 
             return WriteResult.FromValue(pieceResult);
+        }
+
+        public async Task<WriteResult<DocumentMeta>> CreatePiece(PieceParameters parameters)
+        {
+            var pieceEntity = Mapper.Map<PieceEntity>(parameters);
+
+            await Repository.Add(pieceEntity);
+
+            return WriteResult.FromValue(new DocumentMeta { Id = pieceEntity.Id });
         }
     }
 }

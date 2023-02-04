@@ -3,7 +3,7 @@
     internal class RoleModel
     {
         public User User { get; set; }
-        //public MedicalWorker MedicalWorker { get; set; }
+       
     }
 
     internal class User

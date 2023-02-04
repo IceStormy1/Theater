@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Common;
+using Theater.Contracts;
 using Theater.Contracts.Theater;
 
 namespace Theater.Abstractions.Piece
@@ -18,5 +19,12 @@ namespace Theater.Abstractions.Piece
         /// </summary>
         /// <returns>Полная информация о пьесе</returns>
         Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId);
+
+        /// <summary>
+        /// Создать пьесу
+        /// </summary>
+        /// <param name="parameters">Параметры пьесы</param>
+        /// <returns></returns>
+        Task<WriteResult<DocumentMeta>> CreatePiece(PieceParameters parameters);
     }
 }

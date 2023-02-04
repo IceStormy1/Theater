@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.Piece.Models;
 using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
 {
-    public sealed class PieceRepository : IPieceRepository
+    public sealed class PieceRepository : BaseCrudRepository<PieceEntity, TheaterDbContext>, IPieceRepository
     {
-        private readonly TheaterDbContext _theaterDbContext;
-
-        public PieceRepository(TheaterDbContext theaterDbContext)
+        public PieceRepository(
+            TheaterDbContext dbContext,
+            ILogger<BaseCrudRepository<PieceEntity, TheaterDbContext>> logger) : base(dbContext, logger)
         {
-            _theaterDbContext = theaterDbContext;
         }
 
         public async Task<IReadOnlyCollection<PieceShortInformationDto>> GetPiecesShortInformation()
@@ -65,7 +65,7 @@ namespace Theater.Sql.Repositories
 
         private IQueryable<PieceEntity> GetPieceQueryWithIncludes(Guid? pieceId = null)
         {
-            var pieceQuery = _theaterDbContext.Pieces
+            var pieceQuery = DbContext.Pieces
                 .AsNoTracking()
                 .Include(piece => piece.PieceDates)
                 .Include(piece => piece.Genre)

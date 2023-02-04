@@ -18,6 +18,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using Theater.Abstractions.Jwt;
+using Theater.Entities.Theater;
 using Theater.Policy;
 using Theater.Sql;
 using Theater.Validation.Authorization;
@@ -142,8 +143,10 @@ namespace Theater
                         .AllowAnyHeader();
                 });
             });
-
+            
             services.AddMemoryCache();
+
+            AddRelationRepository(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -187,6 +190,11 @@ namespace Theater
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule<Core.Module>();
+        }
+
+        private static void AddRelationRepository(IServiceCollection services)
+        {
+            services.AddRelationRepository<PieceEntity, TheaterDbContext>();
         }
     }
 }

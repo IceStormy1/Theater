@@ -2,7 +2,7 @@
 
 namespace Theater.Entities.Theater
 {
-    public sealed class PieceWorkerEntity
+    public sealed class PieceWorkerEntity : IEntity
     {
         /// <summary>
         /// Идентификатор 

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Piece.Models;
+using Theater.Entities.Theater;
 
 namespace Theater.Abstractions.Piece
 {
-    public interface IPieceRepository
+    public interface IPieceRepository : ICrudRepository<PieceEntity>
     {
         /// <summary>
         /// Получить краткую информацию об актуальных пьесах

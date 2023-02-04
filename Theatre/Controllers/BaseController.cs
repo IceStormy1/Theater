@@ -13,21 +13,19 @@ namespace Theater.Controllers
     {
         protected readonly TService Service;
 
+        /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
         protected Guid? UserId => Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        public BaseController(TService service)
-        {
-            Service = service;
-        }
+        public BaseController(TService service) 
+            => Service = service;
 
         /// <summary>
-        /// Returns ActionResult from the given WriteResult
+        /// Возвращает ActionResult из WriteResult
         /// </summary>
-        /// <remarks>
-        /// Use generic param to define in which model successful result should be mapped
-        /// </remarks>
-        /// <param name="source">Write result with error or data</param>
-        /// <typeparam name="T">Desired response model</typeparam>
+        /// <param name="source">Write result с ошибкой или моделью</param>
+        /// <typeparam name="T"></typeparam>
         protected IActionResult RenderResult<T>(IWriteResult<T> source)
         {
             if (!source.IsSuccess)
@@ -40,14 +38,14 @@ namespace Theater.Controllers
         }
 
         /// <summary>
-        /// Returns ActionResult from the given WriteResult
+        /// Возвращает ActionResult из WriteResult
         /// </summary>
         /// <param name="source">Write result</param>
         protected IActionResult RenderResult(WriteResult source)
             => source.IsSuccess ? new OkResult() : RenderError(source.Error);
 
         /// <summary>
-        /// Returns action result for error as <see cref="ProblemDetails"/> with proper status code
+        /// Возвращает action result для ошибки как <see cref="ProblemDetails"/> с status code
         /// </summary>
         /// <param name="errorModel">Error model</param>
         private IActionResult RenderError(ErrorModel errorModel)

@@ -31,6 +31,7 @@ namespace Theater
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(c => c.PositionTypeName.GetEnumDisplayName()));
 
             CreateMap<PieceDto, PieceModel>();
+            CreateMap<PieceParameters, PieceEntity>();
 
             CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(c => c.Position.PositionType.GetEnumDisplayName()))
