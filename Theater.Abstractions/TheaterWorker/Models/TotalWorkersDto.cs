@@ -2,7 +2,7 @@
 
 namespace Theater.Abstractions.TheaterWorker.Models
 {
-    public class TotalWorkersDto
+    public sealed class TotalWorkersDto
     {
         /// <summary>
         /// Количество работников по каждому типу должности

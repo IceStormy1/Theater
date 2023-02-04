@@ -11,7 +11,7 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace Theater.Core.Authorization
 {
-    public class JwtHelper : IJwtHelper
+    public sealed class JwtHelper : IJwtHelper
     {
         private const string FullNameFormat = "{0} {1} {2}";
         private static JwtOptions _jwtOptions;

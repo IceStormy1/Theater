@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Theater.Abstractions.Piece.Models
 {
-    public class PieceDto : PieceShortInformationDto
+    public sealed class PieceDto : PieceShortInformationDto
     {
         /// <summary>
         /// Описание пьесы

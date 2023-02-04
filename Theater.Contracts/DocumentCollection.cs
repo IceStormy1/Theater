@@ -7,7 +7,7 @@ namespace Theater.Contracts
     /// Содержит список элементов. 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DocumentCollection<T>
+    public sealed class DocumentCollection<T>
     {
         /// <summary>
         /// Список документов.

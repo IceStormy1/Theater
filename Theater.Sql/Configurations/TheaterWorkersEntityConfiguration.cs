@@ -4,7 +4,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Configurations
 {
-    internal class TheaterWorkersEntityConfiguration : IEntityTypeConfiguration<TheaterWorkerEntity>
+    internal sealed class TheaterWorkersEntityConfiguration : IEntityTypeConfiguration<TheaterWorkerEntity>
     {
         public void Configure(EntityTypeBuilder<TheaterWorkerEntity> builder)
         {

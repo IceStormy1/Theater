@@ -11,7 +11,7 @@ using Theater.Entities.Theater;
 
 namespace Theater
 {
-    internal class MappingProfile : Profile
+    internal sealed class MappingProfile : Profile
     {
         public MappingProfile()
         {

@@ -4,7 +4,7 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Entities.Theater
 {
-    public class TheaterWorkerEntity
+    public sealed class TheaterWorkerEntity
     {
         /// <summary>
         /// Идентификатор работника театра

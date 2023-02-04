@@ -2,7 +2,7 @@
 
 namespace Theater.Entities.FileStorage
 {
-    public class FileStorageEntity
+    public sealed class FileStorageEntity
     {
         /// <summary>
         /// Идентификатор файла

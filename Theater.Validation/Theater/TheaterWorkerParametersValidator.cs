@@ -4,7 +4,7 @@ using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater
 {
-    public class TheaterWorkerParametersValidator : AbstractValidator<TheaterWorkerParameters>
+    public sealed class TheaterWorkerParametersValidator : AbstractValidator<TheaterWorkerParameters>
     {
         /// <param name="userValidator"><see cref="UserValidator"/></param>
         public TheaterWorkerParametersValidator(IValidator<IUser> userValidator)

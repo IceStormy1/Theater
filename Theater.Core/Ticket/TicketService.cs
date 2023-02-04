@@ -13,7 +13,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Ticket
 {
-    public class TicketService : ServiceBase<ITicketRepository>, ITicketService
+    public sealed class TicketService : ServiceBase<ITicketRepository>, ITicketService
     {
         private readonly IUserAccountRepository _userAccountRepository;
 

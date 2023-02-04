@@ -3,7 +3,7 @@ using Theater.Contracts.UserAccount;
 
 namespace Theater.Validation.UserAccount
 {
-    public class UserReplenishParametersValidator : AbstractValidator<UserReplenishParameters>
+    public sealed class UserReplenishParametersValidator : AbstractValidator<UserReplenishParameters>
     {
         private const decimal MinimalAmountValue = 0;
         private const decimal MaximumAmountValue = 1_000_000;

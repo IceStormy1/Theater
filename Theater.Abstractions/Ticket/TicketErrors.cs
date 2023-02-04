@@ -2,7 +2,7 @@
 
 namespace Theater.Abstractions.Ticket
 {
-    public class TicketErrors
+    public static class TicketErrors
     {
         /// <summary>
         /// Билет не найден в системе

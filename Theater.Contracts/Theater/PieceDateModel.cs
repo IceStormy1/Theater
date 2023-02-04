@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Theater
 {
-    public class PieceDateModel : PieceDateParameters
+    public sealed class PieceDateModel : PieceDateParameters
     {
         /// <summary>
         /// Идентификатор даты пьесы

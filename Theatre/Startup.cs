@@ -25,7 +25,7 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace Theater
 {
-    public class Startup
+    public sealed class Startup
     {
         private const string ApiName = "Theater";
         private readonly Version _assemblyVersion = new(1, 0);

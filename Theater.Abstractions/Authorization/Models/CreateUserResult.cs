@@ -2,7 +2,7 @@
 
 namespace Theater.Abstractions.Authorization.Models
 {
-    public class CreateUserResult
+    public sealed class CreateUserResult
     {
         /// <summary>
         /// Идентификатор пользователя

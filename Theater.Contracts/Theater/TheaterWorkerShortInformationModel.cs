@@ -5,7 +5,7 @@ namespace Theater.Contracts.Theater
     /// <summary>
     /// Краткая информация о работнике театра
     /// </summary>
-    public class TheaterWorkerShortInformationModel
+    public sealed class TheaterWorkerShortInformationModel
     {
         /// <summary>
         /// Идентификатор работника театра

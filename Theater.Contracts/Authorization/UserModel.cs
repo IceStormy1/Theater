@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Authorization
 {
-    public class UserModel : UserParameters
+    public sealed class UserModel : UserParameters
     {
         /// <summary>
         /// Идентификатор пользователя

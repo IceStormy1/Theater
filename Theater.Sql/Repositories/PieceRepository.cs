@@ -9,7 +9,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
 {
-    public class PieceRepository : IPieceRepository
+    public sealed class PieceRepository : IPieceRepository
     {
         private readonly TheaterDbContext _theaterDbContext;
 

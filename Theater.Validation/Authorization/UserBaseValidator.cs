@@ -3,7 +3,7 @@ using Theater.Contracts.Authorization;
 
 namespace Theater.Validation.Authorization
 {
-    public class UserBaseValidator : AbstractValidator<UserBase>
+    public sealed class UserBaseValidator : AbstractValidator<UserBase>
     {
         public UserBaseValidator()
         {

@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Theater
 {
-    public class PieceModel : PieceShortInformationModel
+    public sealed class PieceModel : PieceShortInformationModel
     {
         /// <summary>
         /// Описание пьесы

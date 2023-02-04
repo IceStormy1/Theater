@@ -1,6 +1,6 @@
 ﻿namespace Theater.Contracts.UserAccount
 {
-    public class UserReplenishParameters
+    public sealed class UserReplenishParameters
     {
         /// <summary>
         /// Сумма пополнения

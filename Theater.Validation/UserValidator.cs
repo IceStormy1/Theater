@@ -4,7 +4,7 @@ using Theater.Contracts;
 
 namespace Theater.Validation
 {
-    public class UserValidator : AbstractValidator<IUser>
+    public sealed class UserValidator : AbstractValidator<IUser>
     {
         private const ushort MinimumUserYears = 14;
         private static readonly DateTime MinimumBirthDate = new(1930, 01, 01);

@@ -5,7 +5,7 @@ using Theater.Contracts.Authorization;
 
 namespace Theater.Validation.Authorization
 {
-    public class UserParametersValidator : AbstractValidator<UserParameters>
+    public sealed class UserParametersValidator : AbstractValidator<UserParameters>
     {
         /// <param name="userValidator"><see cref="UserValidator"/></param>
         /// <param name="userBaseValidator"><see cref="UserBase"/></param>

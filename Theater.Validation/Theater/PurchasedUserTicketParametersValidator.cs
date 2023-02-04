@@ -4,7 +4,7 @@ using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater
 {
-    public class PurchasedUserTicketParametersValidator : AbstractValidator<PurchasedUserTicketParameters>
+    public sealed class PurchasedUserTicketParametersValidator : AbstractValidator<PurchasedUserTicketParameters>
     {
         public PurchasedUserTicketParametersValidator()
         {

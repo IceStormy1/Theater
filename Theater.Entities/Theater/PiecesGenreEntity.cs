@@ -2,7 +2,7 @@
 
 namespace Theater.Entities.Theater
 {
-    public class PiecesGenreEntity
+    public sealed class PiecesGenreEntity
     {
         /// <summary>
         /// Идентификатор роли

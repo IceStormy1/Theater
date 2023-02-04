@@ -150,7 +150,7 @@ namespace Theater.Common
     public enum ErrorKind
     {
         /// <summary>
-        /// Дефольтный
+        /// Дефолтный
         /// </summary>
         Default,
 

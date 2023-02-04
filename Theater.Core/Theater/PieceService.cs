@@ -9,7 +9,7 @@ using Theater.Contracts.Theater;
 
 namespace Theater.Core.Theater
 {
-    public class PieceService : ServiceBase<IPieceRepository>, IPieceService
+    public sealed class PieceService : ServiceBase<IPieceRepository>, IPieceService
     {
         public PieceService(IMapper mapper, IPieceRepository repository) : base(mapper, repository)
         {

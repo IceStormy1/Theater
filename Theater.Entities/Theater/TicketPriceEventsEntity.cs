@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Theater.Entities.Theater
 {
-    public class TicketPriceEventsEntity
+    public sealed class TicketPriceEventsEntity
     {
         public Guid PiecesTicketId { get; set; }
 

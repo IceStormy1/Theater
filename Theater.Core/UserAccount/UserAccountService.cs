@@ -12,7 +12,7 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Core.UserAccount
 {
-    public class UserAccountService : ServiceBase<IUserAccountRepository>, IUserAccountService
+    public sealed class UserAccountService : ServiceBase<IUserAccountRepository>, IUserAccountService
     {
         private readonly IJwtHelper _jwtHelper;
 

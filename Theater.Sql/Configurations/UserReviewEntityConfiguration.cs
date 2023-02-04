@@ -4,7 +4,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Configurations
 {
-    internal class UserReviewEntityConfiguration : IEntityTypeConfiguration<UserReviewEntity>
+    internal sealed class UserReviewEntityConfiguration : IEntityTypeConfiguration<UserReviewEntity>
     {
         public void Configure(EntityTypeBuilder<UserReviewEntity> builder)
         {

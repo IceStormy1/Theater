@@ -8,7 +8,7 @@ using Theater.Contracts.Theater;
 
 namespace Theater.Core.Theater
 {
-    public class TheaterWorkerService : ServiceBase<ITheaterWorkerRepository>, ITheaterWorkerService
+    public sealed class TheaterWorkerService : ServiceBase<ITheaterWorkerRepository>, ITheaterWorkerService
     {
         public TheaterWorkerService(IMapper mapper, ITheaterWorkerRepository repository) 
             : base(mapper, repository)

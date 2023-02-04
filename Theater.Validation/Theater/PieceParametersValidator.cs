@@ -3,7 +3,7 @@ using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater
 {
-    public class PieceParametersValidator : AbstractValidator<PieceParameters>
+    public sealed class PieceParametersValidator : AbstractValidator<PieceParameters>
     {
         public PieceParametersValidator()
         {

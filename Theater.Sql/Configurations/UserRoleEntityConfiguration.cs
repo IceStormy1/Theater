@@ -5,7 +5,7 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Sql.Configurations
 {
-    public class UserRoleEntityConfiguration : IEntityTypeConfiguration<UserRoleEntity>
+    internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<UserRoleEntity>
     {
         public void Configure(EntityTypeBuilder<UserRoleEntity> builder)
         {

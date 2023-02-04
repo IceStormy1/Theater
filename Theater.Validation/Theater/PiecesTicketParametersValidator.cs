@@ -3,7 +3,7 @@ using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater
 {
-    public class PiecesTicketParametersValidator : AbstractValidator<PiecesTicketParameters>
+    public sealed class PiecesTicketParametersValidator : AbstractValidator<PiecesTicketParameters>
     {
         private const ushort MinimumValue = 1;
 

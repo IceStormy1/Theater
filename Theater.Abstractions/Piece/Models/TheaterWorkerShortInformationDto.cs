@@ -3,7 +3,7 @@ using Theater.Common;
 
 namespace Theater.Abstractions.Piece.Models
 {
-    public class TheaterWorkerShortInformationDto
+    public sealed class TheaterWorkerShortInformationDto
     {
         /// <summary>
         /// Идентификатор работника театра

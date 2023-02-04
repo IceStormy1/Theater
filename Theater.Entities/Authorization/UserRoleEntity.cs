@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Theater.Entities.Authorization
 {
-    public class UserRoleEntity
+    public sealed class UserRoleEntity
     {
         /// <summary>
         /// Идентификатор роли

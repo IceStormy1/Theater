@@ -2,7 +2,7 @@
 
 namespace Theater.Abstractions.Piece.Models
 {
-    public class PieceDateDto
+    public sealed class PieceDateDto
     {
         /// <summary>
         /// Идентификатор

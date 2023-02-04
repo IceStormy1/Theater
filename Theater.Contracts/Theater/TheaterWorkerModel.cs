@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Theater
 {
-    public class TheaterWorkerModel : TheaterWorkerParameters
+    public sealed class TheaterWorkerModel : TheaterWorkerParameters
     {
         /// <summary>
         /// Идентификатор работника театра

@@ -4,7 +4,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Configurations
 {
-    internal class PieceEntityConfiguration : IEntityTypeConfiguration<PieceEntity>
+    internal sealed class PieceEntityConfiguration : IEntityTypeConfiguration<PieceEntity>
     {
         public void Configure(EntityTypeBuilder<PieceEntity> builder)
         {

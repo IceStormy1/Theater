@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Theater.Contracts.Theater
 {
-    public class TotalWorkersModel
+    public sealed class TotalWorkersModel
     {
         /// <summary>
         /// Количество работников по каждому типу должности

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Theater.Abstractions.Jwt
 {
-    public class JwtOptions
+    public sealed class JwtOptions
     {
         /// <summary>
         /// Кто генирирует токен 

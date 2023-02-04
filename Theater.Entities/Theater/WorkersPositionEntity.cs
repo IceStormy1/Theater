@@ -3,7 +3,7 @@ using Theater.Common;
 
 namespace Theater.Entities.Theater
 {
-    public class WorkersPositionEntity
+    public sealed class WorkersPositionEntity
     {
         /// <summary>
         /// Идентификатор должности

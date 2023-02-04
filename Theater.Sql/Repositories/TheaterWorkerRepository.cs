@@ -7,10 +7,11 @@ using Theater.Abstractions.Piece.Models;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Common;
 using Theater.Entities.Theater;
+using Theater.Abstractions.TheaterWorker.Models;
 
 namespace Theater.Sql.Repositories
 {
-    public class TheaterWorkerRepository : ITheaterWorkerRepository
+    public sealed class TheaterWorkerRepository : ITheaterWorkerRepository
     {
         private readonly TheaterDbContext _dbContext;
 

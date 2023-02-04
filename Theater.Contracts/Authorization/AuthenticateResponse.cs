@@ -1,6 +1,6 @@
 ﻿namespace Theater.Contracts.Authorization
 {
-    public class AuthenticateResponse
+    public sealed class AuthenticateResponse
     {
         /// <summary>
         /// Токен

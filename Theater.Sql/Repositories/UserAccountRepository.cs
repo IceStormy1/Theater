@@ -11,7 +11,7 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Sql.Repositories
 {
-    public class UserAccountRepository : IUserAccountRepository
+    public sealed class UserAccountRepository : IUserAccountRepository
     {
         private readonly TheaterDbContext _theaterDbContext;
 

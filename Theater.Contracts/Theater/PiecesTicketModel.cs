@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Theater
 {
-    public class PiecesTicketModel : PiecesTicketParameters
+    public sealed class PiecesTicketModel : PiecesTicketParameters
     {
         /// <summary>
         /// Идентификатор билета

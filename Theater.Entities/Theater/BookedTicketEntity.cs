@@ -3,7 +3,7 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Entities.Theater
 {
-    public class BookedTicketEntity
+    public sealed class BookedTicketEntity
     {
         /// <summary>
         /// Идентификатор забронированного билета

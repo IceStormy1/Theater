@@ -4,7 +4,7 @@ using Theater.Entities.FileStorage;
 
 namespace Theater.Sql.Configurations
 {
-    public class FileStorageEntityConfiguration : IEntityTypeConfiguration<FileStorageEntity>
+    internal class FileStorageEntityConfiguration : IEntityTypeConfiguration<FileStorageEntity>
     {
         public void Configure(EntityTypeBuilder<FileStorageEntity> builder)
         {

@@ -4,7 +4,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Configurations
 {
-    internal class BookedTicketsEntityConfiguration : IEntityTypeConfiguration<BookedTicketEntity>
+    internal sealed class BookedTicketsEntityConfiguration : IEntityTypeConfiguration<BookedTicketEntity>
     {
         public void Configure(EntityTypeBuilder<BookedTicketEntity> builder)
         {
