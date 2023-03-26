@@ -11,7 +11,7 @@ namespace Theater.Abstractions
         /// </summary>
         /// <param name="id">Идентификатор сущности</param>
         /// <returns></returns>
-        Task<T> GetById(Guid id);
+        Task<T> GetByEntityId(Guid id);
 
         /// <summary>
         /// Добавить сущность

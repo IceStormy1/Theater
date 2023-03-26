@@ -39,7 +39,7 @@ namespace Theater.Sql.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PieceDto> GetPieceById(Guid pieceId)
+        public async Task<PieceDto> GetPieceDtoById(Guid pieceId)
         {
             var pieceQuery = GetPieceQueryWithIncludes(pieceId);
 

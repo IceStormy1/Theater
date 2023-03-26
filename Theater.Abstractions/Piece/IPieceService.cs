@@ -21,10 +21,15 @@ namespace Theater.Abstractions.Piece
         Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId);
 
         /// <summary>
-        /// Создать пьесу
+        /// Создать/обновить пьесу
         /// </summary>
         /// <param name="parameters">Параметры пьесы</param>
-        /// <returns></returns>
-        Task<WriteResult<DocumentMeta>> CreatePiece(PieceParameters parameters);
+        Task<WriteResult<DocumentMeta>> CreateOrUpdatePiece(PieceParameters parameters, Guid? pieceId);
+       
+        /// <summary>
+        /// Удалить пьесы по идентификатору
+        /// </summary>
+        /// <param name="id">Идентификатор пьесы</param>
+        Task<WriteResult> DeletePiece(Guid id);
     }
 }

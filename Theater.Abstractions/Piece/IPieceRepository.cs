@@ -17,6 +17,6 @@ namespace Theater.Abstractions.Piece
         /// Получить полную информацию о пьесе по идентификатору
         /// </summary>
         /// <returns>Полная информация о пьесе</returns>
-        Task<PieceDto> GetPieceById(Guid pieceId);
+        Task<PieceDto> GetPieceDtoById(Guid pieceId);
     }
 }

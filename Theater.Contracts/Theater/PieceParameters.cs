@@ -3,7 +3,7 @@
 namespace Theater.Contracts.Theater
 {
     public class PieceParameters
-    {
+    {//todo: добавить работников театра и возможно исправить модели пьес
         /// <summary>
         /// Наименование пьесы
         /// </summary>

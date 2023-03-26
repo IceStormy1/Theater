@@ -48,12 +48,12 @@ namespace Theater.Controllers
         /// </summary>
         /// <response code="200">В случае успешного запроса</response>
         /// <response code="404">В случае успешного запроса</response>
-        [HttpGet("positionType/{id:guid}")]
+        [HttpGet("{theaterWorkerId:guid}")]
         [ProducesResponseType(typeof(TheaterWorkerModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid id)
+        public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid theaterWorkerId)
         {
-            var theaterWorker = await Service.GetTheaterWorkerById(id);
+            var theaterWorker = await Service.GetTheaterWorkerById(theaterWorkerId);
 
             return RenderResult(theaterWorker);
         }

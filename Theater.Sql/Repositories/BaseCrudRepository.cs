@@ -22,7 +22,7 @@ namespace Theater.Sql.Repositories
             Logger = logger;
         }
 
-        public Task<T> GetById(Guid id)
+        public Task<T> GetByEntityId(Guid id)
         {
             var query = DbSet.AsNoTracking().Where(x => x.Id == id);
 

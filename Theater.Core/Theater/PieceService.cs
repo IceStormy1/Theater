@@ -29,7 +29,7 @@ namespace Theater.Core.Theater
 
         public async Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId)
         {
-            var pieceDto = await Repository.GetPieceById(pieceId);
+            var pieceDto = await Repository.GetPieceDtoById(pieceId);
 
             if(pieceDto is null)
                 return WriteResult<PieceModel>.FromError(PieceErrors.NotFound.Error);
@@ -39,13 +39,29 @@ namespace Theater.Core.Theater
             return WriteResult.FromValue(pieceResult);
         }
 
-        public async Task<WriteResult<DocumentMeta>> CreatePiece(PieceParameters parameters)
+        public async Task<WriteResult<DocumentMeta>> CreateOrUpdatePiece(PieceParameters parameters, Guid? pieceId)
         {
-            var pieceEntity = Mapper.Map<PieceEntity>(parameters);
+            var piece = await Repository.GetByEntityId(pieceId ?? Guid.NewGuid());
 
-            await Repository.Add(pieceEntity);
+            if (piece is null)
+            {
+                piece = Mapper.Map<PieceEntity>(parameters);
 
-            return WriteResult.FromValue(new DocumentMeta { Id = pieceEntity.Id });
+                await Repository.Add(piece);
+            }
+
+            Mapper.Map(parameters, piece);
+
+            await Repository.Update(piece);
+
+            return WriteResult.FromValue(new DocumentMeta { Id = piece.Id });
+        }
+
+        public async Task<WriteResult> DeletePiece(Guid id)
+        {
+            await Repository.Delete(id);
+
+            return WriteResult.Successful;
         }
     }
 }
