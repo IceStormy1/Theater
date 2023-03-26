@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Theater.Common;
 using Theater.Contracts.Theater;
+using Theater.Entities.Theater;
 
 namespace Theater.Abstractions.TheaterWorker
 {
-    public interface ITheaterWorkerService
+    public interface ITheaterWorkerService : ICrudService<TheaterWorkerParameters, TheaterWorkerEntity>
     {
         /// <summary>
         /// Получить количество работников театра по каждому из типов должности 
@@ -17,10 +16,5 @@ namespace Theater.Abstractions.TheaterWorker
         /// Получить краткую информацию о работниках театра по типу должности 
         /// </summary>
         Task<IReadOnlyCollection<TheaterWorkerShortInformationModel>> GetShortInformationWorkersByPositionType(int positionType);
-
-        /// <summary>
-        /// Получить полную информацию о работнике театра по его идентификатору
-        /// </summary>
-        Task<WriteResult<TheaterWorkerModel>> GetTheaterWorkerById(Guid id);
     }
 }

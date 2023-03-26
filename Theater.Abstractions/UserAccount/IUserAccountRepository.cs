@@ -7,15 +7,8 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Abstractions.UserAccount
 {
-    public interface IUserAccountRepository
+    public interface IUserAccountRepository : ICrudRepository<UserEntity>
     {
-        /// <summary>
-        /// Получить пользователя по уникальному идентификатору
-        /// </summary>
-        /// <param name="userId">Идентификатор пользователя</param>
-        /// <returns>Возвращает данные пользователя</returns>
-        Task<UserEntity> GetUserById(Guid userId);
-
         /// <summary>
         /// Получить пользователя по его никнейму
         /// </summary>

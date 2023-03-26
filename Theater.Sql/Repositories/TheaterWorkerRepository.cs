@@ -1,28 +1,23 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Theater.Abstractions.Piece.Models;
 using Theater.Abstractions.TheaterWorker;
-using Theater.Common;
 using Theater.Entities.Theater;
-using Theater.Abstractions.TheaterWorker.Models;
 
 namespace Theater.Sql.Repositories
 {
-    public sealed class TheaterWorkerRepository : ITheaterWorkerRepository
+    public sealed class TheaterWorkerRepository : BaseCrudRepository<TheaterWorkerEntity, TheaterDbContext>, ITheaterWorkerRepository
     {
-        private readonly TheaterDbContext _dbContext;
-
-        public TheaterWorkerRepository(TheaterDbContext dbContext)
+        public TheaterWorkerRepository(TheaterDbContext dbContext, ILogger<BaseCrudRepository<TheaterWorkerEntity, TheaterDbContext>> logger) : base(dbContext, logger)
         {
-            _dbContext = dbContext;
         }
 
         public async Task<IReadOnlyDictionary<int, int>> GetTotalWorkers()
         {
-            var totalWorkers = await _dbContext.TheaterWorkers
+            var totalWorkers = await DbContext.TheaterWorkers
                 .AsNoTracking()
                 .Include(x => x.Position)
                 .GroupBy(x => x.Position.PositionType)
@@ -37,7 +32,7 @@ namespace Theater.Sql.Repositories
 
         public async Task<IReadOnlyCollection<TheaterWorkerShortInformationDto>> GetShortInformationWorkersByPositionType(int positionType)
         {
-            var workersShortInformation = await _dbContext.TheaterWorkers
+            var workersShortInformation = await DbContext.TheaterWorkers
                 .AsNoTracking()
                 .Include(x => x.Position)
                 .Where(x=>(int)x.Position.PositionType == positionType)
@@ -53,18 +48,12 @@ namespace Theater.Sql.Repositories
             return workersShortInformation;
         }
 
-        public async Task<WriteResult<TheaterWorkerEntity>> GetTheaterWorkerById(Guid id)
+        protected override IQueryable<TheaterWorkerEntity> AddIncludes(IQueryable<TheaterWorkerEntity> query)
         {
-            var workersShortInformation = await _dbContext.TheaterWorkers
-                .AsNoTracking()
+            return query
                 .Include(x => x.Position)
                 .Include(x => x.PieceWorkers)
-                .ThenInclude(x => x.Piece)
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            return workersShortInformation is null 
-                ? WriteResult<TheaterWorkerEntity>.FromError(TheaterWorkerErrors.NotFound.Error)
-                : WriteResult.FromValue(workersShortInformation);
+                .ThenInclude(x => x.Piece);
         }
     }
 }

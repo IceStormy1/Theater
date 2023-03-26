@@ -13,9 +13,10 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Ticket
 {
-    public sealed class TicketService : ServiceBase<ITicketRepository>, ITicketService
+    public sealed class TicketService : ServiceBase<PiecesTicketParameters, PiecesTicketEntity>, ITicketService
     {
         private readonly IUserAccountRepository _userAccountRepository;
+        private readonly ITicketRepository _ticketRepository;
 
         public TicketService(
             IMapper mapper, 
@@ -23,18 +24,19 @@ namespace Theater.Core.Ticket
             IUserAccountRepository userAccountRepository) : base(mapper, repository)
         {
             _userAccountRepository = userAccountRepository;
+            _ticketRepository = repository;
         }
 
         public async Task<IReadOnlyCollection<PiecesTicketModel>> GetPieceTicketsByDate(Guid pieceId, Guid dateId)
         {
-            var tickets = await Repository.GetPieceTicketsByDate(pieceId, dateId);
+            var tickets = await _ticketRepository.GetPieceTicketsByDate(pieceId, dateId);
 
             return Mapper.Map<IReadOnlyCollection<PiecesTicketModel>>(tickets);
         }
 
         public async Task<WriteResult> BuyTicket(Guid ticketId, Guid userId)
         {
-            var user = await _userAccountRepository.GetUserById(userId);
+            var user = await _userAccountRepository.GetByEntityId(userId);
 
             if (user is null)
                 return WriteResult.FromError(UserAccountErrors.NotFound.Error);
@@ -42,7 +44,7 @@ namespace Theater.Core.Ticket
             if (user.Money == default)
                 return WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error);
 
-            var ticket = await Repository.GetPieceTicketById(ticketId);
+            var ticket = await _ticketRepository.GetPieceTicketById(ticketId);
 
             if (ticket is null)
                 return WriteResult.FromError(TicketErrors.NotFound.Error);
@@ -51,12 +53,12 @@ namespace Theater.Core.Ticket
 
             return !validationResult.IsSuccess 
                 ? validationResult 
-                : await Repository.BuyTicket(ticket, user);
+                : await _ticketRepository.BuyTicket(ticket, user);
         }
 
         public async Task<WriteResult> BookTicket(Guid ticketId, Guid userId)
         {
-            var user = await _userAccountRepository.GetUserById(userId);
+            var user = await _userAccountRepository.GetByEntityId(userId);
 
             if (user is null)
                 return WriteResult.FromError(UserAccountErrors.NotFound.Error);
@@ -64,7 +66,7 @@ namespace Theater.Core.Ticket
             if (user.Money == default)
                 return WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error);
 
-            var ticket = await Repository.GetPieceTicketById(ticketId);
+            var ticket = await _ticketRepository.GetPieceTicketById(ticketId);
 
             if (ticket is null)
                 return WriteResult.FromError(TicketErrors.NotFound.Error);
@@ -73,7 +75,7 @@ namespace Theater.Core.Ticket
 
             return !validationResult.IsSuccess
                 ? validationResult
-                : await Repository.BookTicket(ticketId, userId);
+                : await _ticketRepository.BookTicket(ticketId, userId);
         }
 
         private static WriteResult CheckIfCanBuyTicket(PiecesTicketEntity ticket, UserEntity user)

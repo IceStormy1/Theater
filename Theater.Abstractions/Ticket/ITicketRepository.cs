@@ -7,7 +7,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Abstractions.Ticket
 {
-    public interface ITicketRepository
+    public interface ITicketRepository : ICrudRepository<PiecesTicketEntity>
     {
         /// <summary>
         /// Получить билеты указанной пьесы по идентификатору даты пьесы

@@ -65,13 +65,7 @@ namespace Theater.Sql.Repositories
 
         private IQueryable<PieceEntity> GetPieceQueryWithIncludes(Guid? pieceId = null)
         {
-            var pieceQuery = DbContext.Pieces
-                .AsNoTracking()
-                .Include(piece => piece.PieceDates)
-                .Include(piece => piece.Genre)
-                .Include(piece => piece.PieceWorkers)
-                .ThenInclude(x => x.TheaterWorker)
-                .ThenInclude(x => x.Position)
+            var pieceQuery = AddIncludes(query: DbContext.Pieces.AsQueryable())
                 .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
                 .AsQueryable();
 
@@ -79,6 +73,16 @@ namespace Theater.Sql.Repositories
                 pieceQuery = pieceQuery.Where(x=>x.Id == pieceId.Value);
 
             return pieceQuery;
+        }
+
+        protected override IQueryable<PieceEntity> AddIncludes(IQueryable<PieceEntity> query)
+        {
+            return query
+                .Include(piece => piece.PieceDates)
+                .Include(piece => piece.Genre)
+                .Include(piece => piece.PieceWorkers)
+                .ThenInclude(x => x.TheaterWorker)
+                .ThenInclude(x => x.Position);
         }
     }
 }

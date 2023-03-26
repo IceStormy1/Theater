@@ -12,9 +12,10 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Core.UserAccount
 {
-    public sealed class UserAccountService : ServiceBase<IUserAccountRepository>, IUserAccountService
+    public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>, IUserAccountService
     {
         private readonly IJwtHelper _jwtHelper;
+        private readonly IUserAccountRepository _userAccountRepository;
 
         public UserAccountService(
             IMapper mapper, 
@@ -22,18 +23,19 @@ namespace Theater.Core.UserAccount
             IJwtHelper jwtHelper) : base(mapper, repository)
         {
             _jwtHelper = jwtHelper;
+            _userAccountRepository = repository;
         }
 
         public async Task<UserModel> GetUserById(Guid userId)
         {
-            var user = await Repository.GetUserById(userId);
+            var user = await Repository.GetByEntityId(userId);
 
             return Mapper.Map<UserModel>(user);
         }
 
         public async Task<IList<UserModel>> GetUsers()
         {
-            var users = await Repository.GetUsers();
+            var users = await _userAccountRepository.GetUsers();
 
             return Mapper.Map<List<UserModel>>(users);
         }
@@ -42,24 +44,24 @@ namespace Theater.Core.UserAccount
         {
             var userEntity = Mapper.Map<UserEntity>(user);
 
-            return await Repository.CreateUser(userEntity);
+            return await _userAccountRepository.CreateUser(userEntity);
         }
 
         public async Task<WriteResult> UpdateUser(UserParameters user, Guid userId)
         {
-            var userEntity = await Repository.GetUserById(userId);
+            var userEntity = await Repository.GetByEntityId(userId);
 
             if(userEntity is null)
                 return WriteResult.FromError(UserAccountErrors.NotFound.Error);
 
             Mapper.Map(user, userEntity);
 
-            return await Repository.UpdateUser(userEntity);
+            return await _userAccountRepository.UpdateUser(userEntity);
         }
 
         public async Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters)
         {
-            var userEntity = await Repository
+            var userEntity = await _userAccountRepository
                 .FindUser(authenticateParameters.UserName, authenticateParameters.Password);
 
             if (userEntity == null)
@@ -72,7 +74,7 @@ namespace Theater.Core.UserAccount
 
         public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
         {
-            return await Repository.ReplenishBalance(userId, replenishmentAmount);
+            return await _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
         }
     }
 }

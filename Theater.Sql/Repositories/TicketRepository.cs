@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,17 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
 {
-    public sealed class TicketRepository : ITicketRepository
+    public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity, TheaterDbContext>, ITicketRepository
     {
-        private readonly TheaterDbContext _theaterDbContext;
-
-        public TicketRepository(TheaterDbContext theaterDbContext)
+        public TicketRepository(
+            TheaterDbContext dbContext,
+            ILogger<BaseCrudRepository<PiecesTicketEntity, TheaterDbContext>> logger) : base(dbContext, logger)
         {
-            _theaterDbContext = theaterDbContext;
         }
 
         public async Task<IReadOnlyCollection<PiecesTicketEntity>> GetPieceTicketsByDate(Guid pieceId, Guid dateId)
         {
-            var piecesDates = await _theaterDbContext.PieceDates
+            var piecesDates = await DbContext.PieceDates
                 .AsNoTracking()
                 .Where(x => x.Id == dateId && x.PieceId == pieceId)
                 .Include(x => x.PiecesTickets)
@@ -33,7 +33,7 @@ namespace Theater.Sql.Repositories
 
         public async Task<PiecesTicketEntity> GetPieceTicketById(Guid ticketId)
         {
-            return await _theaterDbContext.PiecesTickets
+            return await DbContext.PiecesTickets
                 .AsNoTracking()
                 .Include(x => x.BookedTickets)
                 .Include(x => x.TicketPriceEvents)
@@ -49,17 +49,17 @@ namespace Theater.Sql.Repositories
             if(ticketPriceEvent is null)
                 return WriteResult.FromError(TicketErrors.NotFound.Error);
 
-            var transaction = await _theaterDbContext.Database.BeginTransactionAsync();
+            var transaction = await DbContext.Database.BeginTransactionAsync();
 
             try
             {
-                _theaterDbContext.Users.Update(user);
-                _theaterDbContext.BookedTickets.RemoveRange(ticket.BookedTickets);
+                DbContext.Users.Update(user);
+                DbContext.BookedTickets.RemoveRange(ticket.BookedTickets);
 
                 var purchasedUserTicket = BuildPurchasedUserTicketEntity(ticketPriceEvent.PiecesTicketId, ticketPriceEvent.Version, user.Id);
-                _theaterDbContext.PurchasedUserTickets.Add(purchasedUserTicket);
+                DbContext.PurchasedUserTickets.Add(purchasedUserTicket);
 
-                await _theaterDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
 
                 return WriteResult.Successful;
@@ -76,14 +76,14 @@ namespace Theater.Sql.Repositories
         {
             try
             {
-                _theaterDbContext.BookedTickets.Add(new BookedTicketEntity
+                DbContext.BookedTickets.Add(new BookedTicketEntity
                 {
                     PiecesTicketId = ticketId,
                     Timestamp = DateTime.UtcNow,
                     UserId = userId
                 });
 
-                await _theaterDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return WriteResult.Successful;
             }

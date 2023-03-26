@@ -53,7 +53,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid theaterWorkerId)
         {
-            var theaterWorker = await Service.GetTheaterWorkerById(theaterWorkerId);
+            var theaterWorker = await Service.GetById(theaterWorkerId);
 
             return RenderResult(theaterWorker);
         }
