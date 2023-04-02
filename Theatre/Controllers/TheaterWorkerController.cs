@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
+using Theater.Entities.Theater;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/worker")]
-    public sealed class TheaterWorkerController : BaseController<ITheaterWorkerService>
+    public sealed class TheaterWorkerController : BaseController<TheaterWorkerParameters, TheaterWorkerEntity>
     {
+        private readonly ITheaterWorkerService _theaterWorkerService;
+
         public TheaterWorkerController(ITheaterWorkerService theaterWorkerService) : base(theaterWorkerService)
         {
+            _theaterWorkerService = theaterWorkerService;
         }
 
         /// <summary>
@@ -24,7 +28,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(TotalWorkersModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTotalWorkers()
         {
-            var totalWorkers = await Service.GetTotalWorkers();
+            var totalWorkers = await _theaterWorkerService.GetTotalWorkers();
 
             return Ok(totalWorkers);
         }
@@ -38,7 +42,7 @@ namespace Theater.Controllers
         public async Task<IActionResult> GetShortInformationWorkersByPositionType([FromRoute] int positionType)
         {
             var workersShortInformation = 
-                await Service.GetShortInformationWorkersByPositionType(positionType);
+                await _theaterWorkerService.GetShortInformationWorkersByPositionType(positionType);
 
             return Ok(new DocumentCollection<TheaterWorkerShortInformationModel>(workersShortInformation));
         }

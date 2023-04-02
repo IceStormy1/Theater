@@ -3,16 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Theater.Abstractions;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
+using Theater.Entities;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseController<TService> : ControllerBase
+    public class BaseController<TParameters, TEntity> : ControllerBase
+        where TParameters : class
+        where TEntity : class, IEntity
     {
-        protected readonly TService Service;
+        protected readonly ICrudService<TParameters, TEntity> Service;
 
         /// <summary>
         /// Идентификатор пользователя
@@ -24,8 +28,10 @@ namespace Theater.Controllers
         /// </summary>
         protected UserRole? UserRole => GetUserRoleFromToken();
 
-        public BaseController(TService service) 
-            => Service = service;
+        public BaseController(ICrudService<TParameters, TEntity> service)
+        {
+            Service = service;
+        }
 
         /// <summary>
         /// Возвращает ActionResult из WriteResult

@@ -30,7 +30,7 @@ namespace Theater.Sql.Repositories
                     Id = x.Id,
                     PieceGenre = x.Genre.GenreName,
                     PieceName = x.PieceName,
-                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Id = c.Id, Date = c.Date }).ToList(),
+                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Id = c.Id, Date = c.Date, PieceId = c.PieceId}).ToList(),
                     WorkerShortInformation = x.PieceWorkers.Select(c => new TheaterWorkerShortInformationDto
                     {
                         FullName = $"{c.TheaterWorker.LastName} {c.TheaterWorker.FirstName} {c.TheaterWorker.LastName}",
@@ -56,7 +56,7 @@ namespace Theater.Sql.Repositories
                     Description = x.Description,
                     ShortDescription = x.ShortDescription,
                     PhotoIds = x.PhotoIds,
-                    PieceDates = x.PieceDates.Select(c => new PieceDateDto { Date = c.Date }).ToList(),
+                    PieceDates = x.PieceDates.Select(c => new PieceDateDto {Id = c.Id, Date = c.Date, PieceId = c.PieceId}).ToList(),
                     WorkerShortInformation = x.PieceWorkers.Select(c => new TheaterWorkerShortInformationDto
                     {
                         FullName = c.TheaterWorker.LastName + " " + c.TheaterWorker.FirstName + " " + c.TheaterWorker.LastName,

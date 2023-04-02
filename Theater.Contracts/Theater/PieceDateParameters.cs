@@ -8,5 +8,10 @@ namespace Theater.Contracts.Theater
         /// Дата и время пьесы
         /// </summary>
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Идентификатор пьесы
+        /// </summary>
+        public Guid PieceId { get; set; }
     }
 }

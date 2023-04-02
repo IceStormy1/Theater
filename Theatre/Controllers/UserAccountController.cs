@@ -7,6 +7,7 @@ using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserAccount.Models;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
+using Theater.Entities.Authorization;
 using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 
@@ -15,10 +16,13 @@ namespace Theater.Controllers
     [ApiController]
     [Route("api/account")]
     [Authorize]
-    public sealed class UserAccountController : BaseController<IUserAccountService>
+    public sealed class UserAccountController : BaseController<UserParameters, UserEntity>
     {
+        private readonly IUserAccountService _userAccountService;
+
         public UserAccountController(IUserAccountService userAccountService) : base(userAccountService)
         {
+            _userAccountService = userAccountService;
         }
 
         /// <summary>
@@ -32,7 +36,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Registration([FromBody] UserParameters parameters)
         {
-            var createUserResult = await Service.CreateUser(parameters);
+            var createUserResult = await _userAccountService.CreateUser(parameters);
 
             return RenderResult(createUserResult);
         }
@@ -49,7 +53,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
         {
-            var user = await Service.GetUserById(userId);
+            var user = await _userAccountService.GetUserById(userId);
 
             return user is null
                 ? RenderResult(UserAccountErrors.NotFound)
@@ -69,7 +73,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUsersByParameters()
         {
-            var users = await Service.GetUsers();
+            var users = await _userAccountService.GetUsers();
 
             return Ok(users);
         }
@@ -85,7 +89,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] AuthenticateParameters parameters)
         {
-            var authenticateResult = await Service.Authorize(parameters);
+            var authenticateResult = await _userAccountService.Authorize(parameters);
 
             return authenticateResult is null
                 ? RenderResult(UserAccountErrors.NotFound)
@@ -108,7 +112,7 @@ namespace Theater.Controllers
             if (UserId.Value != userId && UserRole != RoleUser.Admin)
                 return RenderResult(UserAccountErrors.InsufficientRights);
 
-            var updateResult = await Service.UpdateUser(parameters, userId);
+            var updateResult = await _userAccountService.UpdateUser(parameters, userId);
 
             return RenderResult(updateResult);
         }
@@ -126,7 +130,7 @@ namespace Theater.Controllers
             if (!UserId.HasValue)
                 return RenderResult(UserAccountErrors.Unauthorized);
 
-            var replenishResult = await Service.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
+            var replenishResult = await _userAccountService.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
 
             return RenderResult(replenishResult);
         }

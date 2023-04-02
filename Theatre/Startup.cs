@@ -17,7 +17,11 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
+using Theater.Abstractions;
 using Theater.Abstractions.Jwt;
+using Theater.Contracts.Authorization;
+using Theater.Contracts.Theater;
+using Theater.Core;
 using Theater.Entities.Theater;
 using Theater.Policy;
 using Theater.Sql;
@@ -147,6 +151,8 @@ namespace Theater
             services.AddMemoryCache();
 
             AddRelationRepository(services);
+            AddCrudServices(services);
+            AddStubValidators(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -195,6 +201,21 @@ namespace Theater
         private static void AddRelationRepository(IServiceCollection services)
         {
             services.AddRelationRepository<PieceEntity, TheaterDbContext>();
+            services.AddRelationRepository<PieceDateEntity, TheaterDbContext>();
+        }
+
+        private static void AddCrudServices(IServiceCollection services)
+        {
+            services.AddScoped(typeof(ICrudService<,>), typeof(ServiceBase<,>));
+            //services.AddCrudService<PieceDateParameters, PieceDateEntity>();
+        }
+
+        private static void AddStubValidators(IServiceCollection services)
+        {
+            services.AddStubValidator<PieceParameters>();
+            services.AddStubValidator<TheaterWorkerParameters>();
+            services.AddStubValidator<PiecesTicketParameters>();
+            services.AddStubValidator<UserParameters>();
         }
     }
 }

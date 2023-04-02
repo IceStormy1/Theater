@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Theater.Abstractions;
 using Theater.Abstractions.Ticket;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserAccount.Models;
@@ -20,8 +21,9 @@ namespace Theater.Core.Ticket
 
         public TicketService(
             IMapper mapper, 
-            ITicketRepository repository, 
-            IUserAccountRepository userAccountRepository) : base(mapper, repository)
+            ITicketRepository repository,
+            IDocumentValidator<PiecesTicketParameters> documentValidator,
+            IUserAccountRepository userAccountRepository) : base(mapper, repository, documentValidator)
         {
             _userAccountRepository = userAccountRepository;
             _ticketRepository = repository;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.UserAccount;
@@ -19,8 +20,9 @@ namespace Theater.Core.UserAccount
 
         public UserAccountService(
             IMapper mapper, 
-            IUserAccountRepository repository, 
-            IJwtHelper jwtHelper) : base(mapper, repository)
+            IUserAccountRepository repository,
+            IDocumentValidator<UserParameters> documentValidator,
+            IJwtHelper jwtHelper) : base(mapper, repository, documentValidator)
         {
             _jwtHelper = jwtHelper;
             _userAccountRepository = repository;

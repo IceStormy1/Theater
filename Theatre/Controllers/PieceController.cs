@@ -5,14 +5,18 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Piece;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
+using Theater.Entities.Theater;
 
 namespace Theater.Controllers
 {
     [ApiController]
-    public sealed class PieceController : BaseController<IPieceService>
+    public sealed class PieceController : BaseController<PieceParameters, PieceEntity>
     {
+        private readonly IPieceService _pieceService;
+
         public PieceController(IPieceService service) : base(service)
         {
+            _pieceService = service;
         }
 
         /// <summary>
@@ -24,7 +28,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(PieceModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPieceById([FromRoute] Guid pieceId)
         {
-            var piecesResult = await Service.GetPieceById(pieceId);
+            var piecesResult = await _pieceService.GetPieceById(pieceId);
 
             return RenderResult(piecesResult);
         }
@@ -38,7 +42,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(DocumentCollection<PieceShortInformationModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPiecesShortInformation()
         {
-            var piecesShortInformation = await Service.GetPiecesShortInformation();
+            var piecesShortInformation = await _pieceService.GetPiecesShortInformation();
 
             return Ok(new DocumentCollection<PieceShortInformationModel>(piecesShortInformation));
         }

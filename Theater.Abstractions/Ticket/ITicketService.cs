@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Common;
 using Theater.Contracts.Theater;
+using Theater.Entities.Theater;
 
 namespace Theater.Abstractions.Ticket
 {
-    public interface ITicketService
+    public interface ITicketService : ICrudService<PiecesTicketParameters, PiecesTicketEntity>
     {
         /// <summary>
         /// Получить билеты указанной пьесы по идентификатору даты пьесы

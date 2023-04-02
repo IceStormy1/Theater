@@ -26,6 +26,6 @@ namespace Theater.Abstractions.Piece
         /// </summary>
         /// <param name="pieceId">Идентификатор пьесы</param>
         /// <param name="date">Дата пьесы</param>
-        Task<WriteResult<DocumentMeta>> CreatePieceDate(Guid pieceId, DateTime date);
+        Task<WriteResult<DocumentMeta>> CreatePieceDate(PieceDateParameters parameters);
     }
 }

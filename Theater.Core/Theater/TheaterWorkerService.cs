@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Theater.Abstractions;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
@@ -11,8 +12,11 @@ namespace Theater.Core.Theater
     {
         private readonly ITheaterWorkerRepository _theaterWorkerRepository;
 
-        public TheaterWorkerService(IMapper mapper, ITheaterWorkerRepository repository) 
-            : base(mapper, repository)
+        public TheaterWorkerService(
+            IMapper mapper,
+            IDocumentValidator<TheaterWorkerParameters> documentValidator,
+            ITheaterWorkerRepository repository) 
+            : base(mapper, repository, documentValidator)
         {
             _theaterWorkerRepository = repository;
         }

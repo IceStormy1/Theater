@@ -9,16 +9,13 @@ using Theater.Entities;
 
 namespace Theater.Controllers.Admin
 {
-#if DEBUG
     [Authorize]
-#endif
     [Route("api/admin")]
-    public class BaseAdminController<TService, TParameters, TEntity> : BaseController<TService> 
-        where TService : ICrudService<TParameters, TEntity>
+    public class BaseAdminController<TParameters, TEntity> : BaseController<TParameters, TEntity>
         where TParameters : class
         where TEntity : class, IEntity
     {
-        public BaseAdminController(TService service) : base(service)
+        public BaseAdminController(ICrudService<TParameters, TEntity> service) : base(service)
         {
         }
 

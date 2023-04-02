@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
 using Theater.Contracts.Authorization;
+using Theater.Entities.Authorization;
 
 namespace Theater.Abstractions.UserAccount
 {
-    public interface IUserAccountService
+    public interface IUserAccountService : ICrudService<UserParameters, UserEntity>
     {
         /// <summary>
         /// Получить пользователя по уникальному идентификатору

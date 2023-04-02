@@ -13,5 +13,10 @@ namespace Theater.Abstractions.Piece.Models
         /// Дата и время пьесы
         /// </summary>
         public DateTime Date { get; set; }
+
+        /// <summary>
+        /// Идентификатор пьесы
+        /// </summary>
+        public Guid PieceId { get; set; }
     }
 }

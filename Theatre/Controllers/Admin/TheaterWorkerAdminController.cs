@@ -8,7 +8,7 @@ namespace Theater.Controllers.Admin
 {
     [Authorize]
     [Route("api/admin/theaterWorker")]
-    public sealed class TheaterWorkerAdminController : BaseAdminController<ITheaterWorkerService, TheaterWorkerParameters, TheaterWorkerEntity>
+    public sealed class TheaterWorkerAdminController : BaseAdminController<TheaterWorkerParameters, TheaterWorkerEntity>
     {
         public TheaterWorkerAdminController(ITheaterWorkerService service) : base(service)
         {

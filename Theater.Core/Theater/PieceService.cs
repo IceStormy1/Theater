@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Theater.Abstractions;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.Piece.Models;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
-using Theater.Sql.Repositories;
 
 namespace Theater.Core.Theater
 {
@@ -21,7 +21,8 @@ namespace Theater.Core.Theater
         public PieceService(
             IMapper mapper,
             IPieceRepository repository, 
-            IPieceDateRepository pieceDateRepository) : base(mapper, repository)
+            IDocumentValidator<PieceParameters> documentValidator,
+            IPieceDateRepository pieceDateRepository) : base(mapper, repository, documentValidator)
         {
             _pieceRepository = repository;
             _pieceDateRepository = pieceDateRepository;
@@ -46,17 +47,17 @@ namespace Theater.Core.Theater
             return WriteResult.FromValue(pieceResult);
         }
 
-        public async Task<WriteResult<DocumentMeta>> CreatePieceDate(Guid pieceId, DateTime date)
+        public async Task<WriteResult<DocumentMeta>> CreatePieceDate(PieceDateParameters parameters)
         {
-            var pieceEntity = await _pieceRepository.GetPieceWithDates(pieceId);
+            var pieceEntity = await _pieceRepository.GetPieceWithDates(parameters.PieceId);
 
             if(pieceEntity is null)
                 return WriteResult<DocumentMeta>.FromError(PieceErrors.NotFound.Error);
 
-            if(pieceEntity.PieceDates.Any(x=>x.Date.Date == date.Date))
+            if(pieceEntity.PieceDates.Any(x=>x.Date.Date == parameters.Date))
                 return WriteResult<DocumentMeta>.FromError(PieceErrors.DateAlreadyExists.Error);
 
-            var pieceDateEntity = new PieceDateEntity { Date = date, PieceId = pieceId };
+            var pieceDateEntity = Mapper.Map<PieceDateEntity>(parameters);
 
             await _pieceDateRepository.Add(pieceDateEntity);
 
