@@ -8,6 +8,7 @@ using Theater.Abstractions.UserAccount.Models;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
 using Theater.Policy;
+using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 
 namespace Theater.Controllers
 {
@@ -60,7 +61,6 @@ namespace Theater.Controllers
         /// Возвращает первые 300 пользователей отсортированные по никнейму
         /// </summary>
         /// <returns></returns>
-        /// <param name="userId">Идентификатор пользователя</param>
         /// <response code="200">В случае, если пользователь был найден в системе</response>
         /// <response code="404">В случае если пользователь не был найден</response>
         [Authorize(Policy = nameof(RoleModel.User.Policies.UserSearch))]
@@ -97,15 +97,18 @@ namespace Theater.Controllers
         /// </summary>
         /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
-        [HttpPost("update")]
+        [HttpPost("{userId:guid}/update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateUser([FromBody] UserParameters parameters)
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UserParameters parameters)
         {
             if (!UserId.HasValue)
                 return RenderResult(UserAccountErrors.Unauthorized);
 
-            var updateResult = await Service.UpdateUser(parameters, UserId.Value);
+            if (UserId.Value != userId && UserRole != RoleUser.Admin)
+                return RenderResult(UserAccountErrors.InsufficientRights);
+
+            var updateResult = await Service.UpdateUser(parameters, userId);
 
             return RenderResult(updateResult);
         }

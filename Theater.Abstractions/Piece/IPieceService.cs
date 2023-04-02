@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Common;
+using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 
@@ -19,5 +20,12 @@ namespace Theater.Abstractions.Piece
         /// </summary>
         /// <returns>Полная информация о пьесе</returns>
         Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId);
+
+        /// <summary>
+        /// Добавить дату для указанной пьесы
+        /// </summary>
+        /// <param name="pieceId">Идентификатор пьесы</param>
+        /// <param name="date">Дата пьесы</param>
+        Task<WriteResult<DocumentMeta>> CreatePieceDate(Guid pieceId, DateTime date);
     }
 }

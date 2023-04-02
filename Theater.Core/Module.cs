@@ -26,6 +26,10 @@ namespace Theater.Core
 
             builder.RegisterType<PieceRepository>()
                 .As<IPieceRepository>()
+                .InstancePerLifetimeScope(); 
+            
+            builder.RegisterType<PieceDateRepository>()
+                .As<IPieceDateRepository>()
                 .InstancePerLifetimeScope();
             
             builder.RegisterType<UserAccountService>()

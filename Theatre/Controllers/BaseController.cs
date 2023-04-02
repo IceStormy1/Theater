@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
 
 namespace Theater.Controllers
@@ -17,6 +18,11 @@ namespace Theater.Controllers
         /// Идентификатор пользователя
         /// </summary>
         protected Guid? UserId => Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+        /// <summary>
+        /// Роль пользователя
+        /// </summary>
+        protected UserRole? UserRole => GetUserRoleFromToken();
 
         public BaseController(TService service) 
             => Service = service;
@@ -79,5 +85,14 @@ namespace Theater.Controllers
                 _ => throw new ArgumentOutOfRangeException(nameof(errorKind), errorKind, null)
             };
         }
+
+        /// <summary>
+        /// Получить роль пользователя из токена
+        /// </summary>
+        /// <returns></returns>
+        private UserRole? GetUserRoleFromToken()
+            => Enum.TryParse<UserRole>(User.Claims.First(x => x.Type == ClaimTypes.Role).Value, true, out var userRole)
+                ? userRole
+                : null;
     }
 }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Theater.Abstractions.TheaterWorker;
-using Theater.Common;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 

@@ -9,7 +9,9 @@ using Theater.Entities;
 
 namespace Theater.Controllers.Admin
 {
+#if DEBUG
     [Authorize]
+#endif
     [Route("api/admin")]
     public class BaseAdminController<TService, TParameters, TEntity> : BaseController<TService> 
         where TService : ICrudService<TParameters, TEntity>
@@ -30,7 +32,7 @@ namespace Theater.Controllers.Admin
         [ProducesResponseType(typeof(DocumentMeta), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] TParameters parameters)
-            => await CreateOrUpdateTheaterWorker(parameters);
+            => await CreateOrUpdate(parameters);
 
         /// <summary>
         /// Обновить сущность
@@ -41,8 +43,8 @@ namespace Theater.Controllers.Admin
         [HttpPut("{entityId:guid}")]
         [ProducesResponseType(typeof(DocumentMeta), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdatePiece([FromBody] TParameters parameters, [FromRoute] Guid entityId)
-            => await CreateOrUpdateTheaterWorker(parameters, entityId);
+        public async Task<IActionResult> Update([FromBody] TParameters parameters, [FromRoute] Guid entityId)
+            => await CreateOrUpdate(parameters, entityId);
 
         /// <summary>
         /// Удалить сущность
@@ -53,7 +55,7 @@ namespace Theater.Controllers.Admin
         [HttpDelete("{entityId:guid}")]
         [ProducesResponseType(typeof(DocumentMeta), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeletePiece([FromRoute] Guid entityId)
+        public async Task<IActionResult> Delete([FromRoute] Guid entityId)
         {
             var deletePieceResult = await Service.Delete(entityId);
 
@@ -66,9 +68,9 @@ namespace Theater.Controllers.Admin
         /// <param name="parameters">Параметры</param>
         /// <param name="entityId">Идентификатор сущности</param>
         /// <remarks>
-        /// Идентификатор <paramref name="entityId"/> указывается при обновлении пьесы
+        /// Идентификатор <paramref name="entityId"/> указывается при обновлении сущности
         /// </remarks>
-        private async Task<IActionResult> CreateOrUpdateTheaterWorker(TParameters parameters, Guid? entityId = null)
+        private async Task<IActionResult> CreateOrUpdate(TParameters parameters, Guid? entityId = null)
         {
             var piecesShortInformation = await Service.CreateOrUpdate(parameters, entityId);
 

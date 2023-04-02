@@ -22,7 +22,10 @@ namespace Theater.Sql.Repositories
         {
             var pieceQuery = GetPieceQueryWithIncludes();
 
-            return await pieceQuery.Select(x => new PieceShortInformationDto
+            return await pieceQuery
+                .AsNoTracking()
+                .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
+                .Select(x => new PieceShortInformationDto
                 {
                     Id = x.Id,
                     PieceGenre = x.Genre.GenreName,
@@ -43,7 +46,9 @@ namespace Theater.Sql.Repositories
         {
             var pieceQuery = GetPieceQueryWithIncludes(pieceId);
 
-            return await pieceQuery.Select(x => new PieceDto
+            return await pieceQuery
+                .AsNoTracking()
+                .Select(x => new PieceDto
                 {
                     Id = x.Id,
                     PieceGenre = x.Genre.GenreName,
@@ -63,11 +68,17 @@ namespace Theater.Sql.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<PieceEntity> GetPieceWithDates(Guid pieceId)
+        {
+            return await DbContext.Pieces
+                .AsNoTracking()
+                .Include(x => x.PieceDates)
+                .FirstOrDefaultAsync(x => x.Id == pieceId);
+        }
+
         private IQueryable<PieceEntity> GetPieceQueryWithIncludes(Guid? pieceId = null)
         {
-            var pieceQuery = AddIncludes(query: DbContext.Pieces.AsQueryable())
-                .Where(x => x.PieceDates.Any(c => c.Date >= DateTime.UtcNow))
-                .AsQueryable();
+            var pieceQuery = AddIncludes(query: DbContext.Pieces.AsQueryable()).AsQueryable();
 
             if(pieceId.HasValue)
                 pieceQuery = pieceQuery.Where(x=>x.Id == pieceId.Value);

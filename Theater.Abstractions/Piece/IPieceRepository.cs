@@ -18,5 +18,11 @@ namespace Theater.Abstractions.Piece
         /// </summary>
         /// <returns>Полная информация о пьесе</returns>
         Task<PieceDto> GetPieceDtoById(Guid pieceId);
+
+        /// <summary>
+        /// Получить пьесу с датами
+        /// </summary>
+        /// <param name="pieceId">Идентификатор пьесы</param>
+        Task<PieceEntity> GetPieceWithDates(Guid  pieceId); 
     }
 }

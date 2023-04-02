@@ -33,5 +33,11 @@ namespace Theater.Abstractions
         /// <param name="id">Идентификатор удаляемой сущности</param>
         /// <returns></returns>
         Task Delete(Guid id);
+
+        /// <summary>
+        /// Проверяет, существует ли сущность с таким идентификатором 
+        /// </summary>
+        /// <param name="id">Идентификатор сущности</param>
+        Task<bool> IsEntityExists(Guid id);
     }
 }

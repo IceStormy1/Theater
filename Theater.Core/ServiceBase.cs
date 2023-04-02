@@ -46,7 +46,7 @@ namespace Theater.Core
 
             await Repository.Update(piece);
 
-            return WriteResult.FromValue(new DocumentMeta { Id = piece.Id });
+            return WriteResult.FromValue(new DocumentMeta(piece.Id));
         }
 
         public async Task<WriteResult> Delete(Guid id)

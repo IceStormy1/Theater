@@ -9,5 +9,11 @@ namespace Theater.Abstractions.Piece.Models
         /// </summary>
         public static WriteResult NotFound =>
             WriteResult.FromError(ErrorModel.NotFound("piece/not-found", "Пьеса не найдена в системе"));
+
+        /// <summary>
+        /// Дата для указанной пьесы уже существует
+        /// </summary>
+        public static WriteResult DateAlreadyExists =>
+            WriteResult.FromError(ErrorModel.NotFound("piece/not-found", "Дата для указанной пьесы уже существует"));
     }
 }

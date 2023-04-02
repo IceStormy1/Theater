@@ -65,6 +65,9 @@ namespace Theater.Sql.Repositories
             await DbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> IsEntityExists(Guid id)
+            => await DbSet.AnyAsync(x=>x.Id == id);
+
         protected  virtual IQueryable<T> AddIncludes(IQueryable<T> query) => query;
     }
 }

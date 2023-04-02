@@ -27,5 +27,11 @@ namespace Theater.Abstractions.UserAccount.Models
         /// </summary>
         public static WriteResult NotEnoughMoney =>
             WriteResult.FromError(ErrorModel.Default("account/not-enough-money", "На балансе недостаточно средств"));
+
+        /// <summary>
+        /// Недостаточно прав для совершения операции
+        /// </summary>
+        public static WriteResult InsufficientRights 
+            => WriteResult.FromError(ErrorModel.Default("account/insufficient-rights ", "Недостаточно прав для совершения операции"));
     }
 }
