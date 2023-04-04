@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Theater.Contracts.Theater
 {
@@ -27,6 +28,11 @@ namespace Theater.Contracts.Theater
         /// <summary>
         /// Идентификаторы изображений 
         /// </summary>
-        public Guid[] PhotoIds { get; set; } = Array.Empty<Guid>();
+        public IReadOnlyCollection<Guid> PhotoIds { get; set; } = Array.Empty<Guid>();
+
+        /// <summary>
+        /// Билеты на пьесу
+        /// </summary>
+        public IReadOnlyCollection<PiecesTicketParameters> PiecesTickets { get; set; } = Array.Empty<PiecesTicketParameters>();
     }
 }

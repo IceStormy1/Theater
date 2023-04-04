@@ -43,6 +43,12 @@ namespace Theater
             
             CreateMap<PiecesTicketEntity, PiecesTicketModel>();
             CreateMap<PieceDateParameters, PieceDateEntity>();
+           
+            CreateMap<PieceDateEntity, PieceDateModel>()
+                .ForMember(destination => destination.PiecesTickets, options => options.MapFrom(exp => exp.PiecesTickets));
+
+            CreateMap<PiecesTicketEntity, PiecesTicketModel>();
+            CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
         }
     }
 }

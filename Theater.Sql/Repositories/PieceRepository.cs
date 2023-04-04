@@ -42,32 +42,6 @@ namespace Theater.Sql.Repositories
                 .ToListAsync();
         }
 
-        public async Task<PieceDto> GetPieceDtoById(Guid pieceId)
-        {
-            var pieceQuery = GetPieceQueryWithIncludes(pieceId);
-
-            return await pieceQuery
-                .AsNoTracking()
-                .Select(x => new PieceDto
-                {
-                    Id = x.Id,
-                    PieceGenre = x.Genre.GenreName,
-                    PieceName = x.PieceName,
-                    Description = x.Description,
-                    ShortDescription = x.ShortDescription,
-                    PhotoIds = x.PhotoIds,
-                    PieceDates = x.PieceDates.Select(c => new PieceDateDto {Id = c.Id, Date = c.Date, PieceId = c.PieceId}).ToList(),
-                    WorkerShortInformation = x.PieceWorkers.Select(c => new TheaterWorkerShortInformationDto
-                    {
-                        FullName = c.TheaterWorker.LastName + " " + c.TheaterWorker.FirstName + " " + c.TheaterWorker.LastName,
-                        Id = c.TheaterWorkerId,
-                        PositionName = c.TheaterWorker.Position.PositionName,
-                        PositionTypeName = c.TheaterWorker.Position.PositionType
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync();
-        }
-
         public async Task<PieceEntity> GetPieceWithDates(Guid pieceId)
         {
             return await DbContext.Pieces
@@ -90,6 +64,7 @@ namespace Theater.Sql.Repositories
         {
             return query
                 .Include(piece => piece.PieceDates)
+                    .ThenInclude(x => x.PiecesTickets)
                 .Include(piece => piece.Genre)
                 .Include(piece => piece.PieceWorkers)
                 .ThenInclude(x => x.TheaterWorker)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Theater.Contracts.Theater
 {
@@ -8,5 +9,10 @@ namespace Theater.Contracts.Theater
         /// Идентификатор даты пьесы
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Билеты пьесы
+        /// </summary>
+        public IReadOnlyCollection<PiecesTicketModel> PiecesTickets { get; set; }
     }
 }

@@ -15,6 +15,11 @@ namespace Theater.Contracts.Theater
         public ushort TicketPlace { get; set; }
 
         /// <summary>
+        /// Стоимость билета
+        /// </summary>
+        public ushort TicketPrice { get; set; }
+
+        /// <summary>
         /// Идентификатор даты начала пьесы
         /// </summary>
         public Guid PieceDateId { get; set; }

@@ -37,7 +37,7 @@ namespace Theater.Core.Theater
 
         public async Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId)
         {
-            var pieceDto = await _pieceRepository.GetPieceDtoById(pieceId);
+            var pieceDto = await _pieceRepository.GetByEntityId(pieceId);
 
             if(pieceDto is null)
                 return WriteResult<PieceModel>.FromError(PieceErrors.NotFound.Error);

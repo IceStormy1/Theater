@@ -14,12 +14,6 @@ namespace Theater.Abstractions.Piece
         Task<IReadOnlyCollection<PieceShortInformationDto>> GetPiecesShortInformation();
 
         /// <summary>
-        /// Получить полную информацию о пьесе по идентификатору
-        /// </summary>
-        /// <returns>Полная информация о пьесе</returns>
-        Task<PieceDto> GetPieceDtoById(Guid pieceId);
-
-        /// <summary>
         /// Получить пьесу с датами
         /// </summary>
         /// <param name="pieceId">Идентификатор пьесы</param>
