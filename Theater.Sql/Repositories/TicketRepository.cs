@@ -35,7 +35,7 @@ namespace Theater.Sql.Repositories
         {
             return await DbContext.PiecesTickets
                 .AsNoTracking()
-                .Include(x => x.BookedTickets)
+                .Include(x => x.BookedTicket)
                 .Include(x => x.TicketPriceEvents)
                 .ThenInclude(x => x.PurchasedUserTicket)
                 .FirstOrDefaultAsync(x => x.Id == ticketId);
@@ -54,7 +54,7 @@ namespace Theater.Sql.Repositories
             try
             {
                 DbContext.Users.Update(user);
-                DbContext.BookedTickets.RemoveRange(ticket.BookedTickets);
+                DbContext.BookedTickets.RemoveRange(ticket.BookedTicket);
 
                 var purchasedUserTicket = BuildPurchasedUserTicketEntity(ticketPriceEvent.PiecesTicketId, ticketPriceEvent.Version, user.Id);
                 DbContext.PurchasedUserTickets.Add(purchasedUserTicket);

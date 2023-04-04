@@ -1,0 +1,1 @@
+Add-Migration Test2 -Context TheaterDbContext -Verbose -OutputDir Migrations -Project Theater.Sql -StartupProject Theater -Debug

@@ -10,9 +10,9 @@ namespace Theater.Sql.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasMany(s => s.BookedTickets)
+            builder.HasOne(s => s.BookedTicket)
                 .WithOne(x => x.PiecesTicket)
-                .HasForeignKey(x => x.PiecesTicketId)
+                .HasForeignKey<BookedTicketEntity>(x => x.PiecesTicketId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(s => s.TicketPriceEvents)

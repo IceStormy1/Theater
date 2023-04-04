@@ -35,7 +35,7 @@ namespace Theater.Entities.Theater
         /// </summary>
         public PieceDateEntity PieceDate { get; set; }
 
-        public List<BookedTicketEntity> BookedTickets { get; set; }
+        public BookedTicketEntity BookedTicket { get; set; }
         public List<TicketPriceEventsEntity> TicketPriceEvents { get; set; }
     }
 }

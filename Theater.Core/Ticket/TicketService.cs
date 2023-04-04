@@ -82,7 +82,7 @@ namespace Theater.Core.Ticket
 
         private static WriteResult CheckIfCanBuyTicket(PiecesTicketEntity ticket, UserEntity user)
         {
-            if (ticket.BookedTickets.Any(x => x.UserId != user.Id))
+            if (ticket.BookedTicket.UserId != user.Id)
                 return WriteResult.FromError(TicketErrors.AlreadyBooked.Error);
 
             // TODO: валидация на уже купленный билет
@@ -94,7 +94,7 @@ namespace Theater.Core.Ticket
 
         private static WriteResult CheckIfCanBookTicket(PiecesTicketEntity ticket, UserEntity user)
         {
-            if (ticket.BookedTickets.Any())
+            if (ticket.BookedTicket != null)
                 return WriteResult.FromError(TicketErrors.AlreadyBooked.Error);
 
             return ticket.TicketPrice > user.Money
