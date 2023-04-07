@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using Theater.Abstractions;
 using Theater.Abstractions.Jwt;
 using Theater.Contracts.Authorization;
@@ -117,6 +118,9 @@ namespace Theater
                     Version = $"v{_assemblyVersion}",
                     Title = $"{ApiName} API",
                 });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
                 var xmlContractDocs = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory), "*.xml");
                 foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Validation", "Theat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Entities", "Theater.Entities\Theater.Entities.csproj", "{3063E283-5561-40D3-8F25-21C9037E7684}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Common", "Theater.Common\Theater.Common.csproj", "{C5C72085-578B-468B-B354-F8780E58BC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Common", "Theater.Common\Theater.Common.csproj", "{C5C72085-578B-468B-B354-F8780E58BC17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
