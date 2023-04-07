@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Theater.Contracts.Theater
+﻿namespace Theater.Contracts.Theater
 {
     public class PiecesTicketParameters
     {
@@ -18,10 +16,5 @@ namespace Theater.Contracts.Theater
         /// Стоимость билета
         /// </summary>
         public ushort TicketPrice { get; set; }
-
-        /// <summary>
-        /// Идентификатор даты начала пьесы
-        /// </summary>
-        public Guid PieceDateId { get; set; }
     }
 }

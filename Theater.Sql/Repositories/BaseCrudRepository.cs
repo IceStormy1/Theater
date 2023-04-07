@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
@@ -8,66 +9,92 @@ using Theater.Entities;
 
 namespace Theater.Sql.Repositories
 {
-    public class BaseCrudRepository<T, TDbContext> : ICrudRepository<T> where T : class, IEntity where TDbContext : DbContext
+    public class BaseCrudRepository<TEntity, TDbContext> : ICrudRepository<TEntity> where TEntity : class, IEntity where TDbContext : DbContext
     {
         protected readonly TDbContext DbContext;
-        protected readonly DbSet<T> DbSet;
-        protected readonly ILogger<BaseCrudRepository<T, TDbContext>> Logger;
+        protected readonly DbSet<TEntity> DbSet;
+        protected readonly ILogger<BaseCrudRepository<TEntity, TDbContext>> Logger;
 
-        public BaseCrudRepository(TDbContext dbContext,
-            ILogger<BaseCrudRepository<T, TDbContext>> logger)
+        public BaseCrudRepository(
+            TDbContext dbContext,
+            ILogger<BaseCrudRepository<TEntity, TDbContext>> logger)
         {
             DbContext = dbContext;
-            DbSet = dbContext.Set<T>();
+            DbSet = dbContext.Set<TEntity>();
             Logger = logger;
         }
 
-        public Task<T> GetByEntityId(Guid id)
+        public async Task<TEntity> GetByEntityId(Guid entityId)
         {
-            var query = DbSet.AsNoTracking().Where(x => x.Id == id);
+            var query = DbSet.AsNoTracking().Where(x => x.Id == entityId);
 
             query = AddIncludes(query);
 
-            return query.FirstOrDefaultAsync();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public async Task Add(T relation)
+        public async Task<IReadOnlyCollection<TEntity>> GetByEntityIds(IReadOnlyCollection<Guid> entityIds)
         {
-            DbSet.Add(relation);
+            var query = DbSet.AsNoTracking().Where(x => entityIds.Contains(x.Id));
+
+            query = AddIncludes(query);
+
+            return await query.ToListAsync();
+        }
+
+        public async Task Add(TEntity entity)
+        {
+            DbSet.Add(entity);
             await DbContext.SaveChangesAsync();
         }
 
-        public virtual async Task Update(T relation)
+        public async Task AddRange(IReadOnlyCollection<TEntity> entities)
         {
-            var relationExists = await DbSet.AnyAsync(x => x.Id == relation.Id);
+            DbSet.AddRange(entities);
+            await DbContext.SaveChangesAsync();
+        }
 
-            if (relationExists == false)
+        public virtual async Task Update(TEntity entity)
+        {
+            var entityExists = await DbSet.AnyAsync(x => x.Id == entity.Id);
+
+            if (entityExists == false)
             {
-                Logger.LogWarning($"Entity '{relation.Id}' of type '{typeof(T)}' was not found on update attempt.");
+                Logger.LogWarning("Entity with entityIds {EntityId} of type '{EntityType}' was not found on update attempt.", 
+                    entity.Id, typeof(TEntity));
+                
                 return;
             }
 
-            DbSet.Update(relation);
+            DbSet.Update(entity);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateRange(IReadOnlyCollection<TEntity> entities)
+        {
+            DbSet.UpdateRange(entities);
             await DbContext.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
-            var relation = await DbSet.SingleOrDefaultAsync(x => x.Id == id);
+            var entity = await DbSet.SingleOrDefaultAsync(x => x.Id == id);
 
-            if (relation == null)
+            if (entity == null)
             {
-                Logger.LogWarning($"Entity '{id}' of type '{typeof(T)}' was not found on delete attempt.");
+                Logger.LogWarning("Entity with {EntityId} of type '{EntityType}' was not found on delete attempt.",
+                    id, typeof(TEntity));
+               
                 return;
             }
 
-            DbSet.Remove(relation);
+            DbSet.Remove(entity);
             await DbContext.SaveChangesAsync();
         }
 
         public async Task<bool> IsEntityExists(Guid id)
             => await DbSet.AnyAsync(x=>x.Id == id);
 
-        protected  virtual IQueryable<T> AddIncludes(IQueryable<T> query) => query;
+        protected  virtual IQueryable<TEntity> AddIncludes(IQueryable<TEntity> query) => query;
     }
 }

@@ -9,9 +9,6 @@ namespace Theater.Validation.Theater
 
         public PiecesTicketParametersValidator()
         {
-            RuleFor(ticket => ticket.PieceDateId)
-                .ValidateGuid("Некорректный идентификатор репертуара");
-
             RuleFor(ticket => ticket.TicketPlace)
                 .GreaterThanOrEqualTo(MinimumValue)
                 .WithName("Место");

@@ -49,6 +49,7 @@ namespace Theater
 
             CreateMap<PiecesTicketEntity, PiecesTicketModel>();
             CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
+            CreateMap<PiecesTicketModel, PiecesTicketEntity>();
         }
     }
 }

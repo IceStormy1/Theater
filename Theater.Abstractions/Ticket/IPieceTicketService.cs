@@ -7,7 +7,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Abstractions.Ticket
 {
-    public interface ITicketService : ICrudService<PiecesTicketParameters, PiecesTicketEntity>
+    public interface IPieceTicketService : ICrudService<PiecesTicketParameters, PiecesTicketEntity>
     {
         /// <summary>
         /// Получить билеты указанной пьесы по идентификатору даты пьесы
@@ -32,5 +32,19 @@ namespace Theater.Abstractions.Ticket
         /// <param name="userId">Идентификатор пользователя</param>
         /// <returns>Результат бронирования</returns>
         Task<WriteResult> BookTicket(Guid ticketId, Guid userId);
+
+        /// <summary>
+        /// Добавить билеты для пьесы
+        /// </summary>
+        /// <param name="pieceId">Идентификатор пьесы</param>
+        /// <param name="ticketsParameters">Билеты</param>
+        Task<WriteResult> CreateTickets(Guid pieceId, PieceTicketCreateParameters ticketsParameters);
+
+        /// <summary>
+        /// Добавить билеты для пьесы
+        /// </summary>
+        /// <param name="pieceId">Идентификатор пьесы</param>
+        /// <param name="ticketsParameters">Билеты</param>
+        Task<WriteResult> UpdateTickets(Guid pieceId, PieceTicketUpdateParameters ticketsParameters);
     }
 }

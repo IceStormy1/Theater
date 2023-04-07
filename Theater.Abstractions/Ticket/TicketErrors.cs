@@ -25,7 +25,19 @@ namespace Theater.Abstractions.Ticket
         /// <summary>
         /// Произошла ошибка при покупке билета
         /// </summary>
+        public static WriteResult CreateTicketConflict =>
+            WriteResult.FromError(ErrorModel.Default("ticket/create-conflict", "Произошла ошибка при покупке билета"));
+
+        /// <summary>
+        /// Произошла ошибка при бронировании билета
+        /// </summary>
         public static WriteResult BookTicketConflict =>
-            WriteResult.FromError(ErrorModel.Default("ticket/book-conflict", "Произошла ошибка при покупке билета"));
+            WriteResult.FromError(ErrorModel.Default("ticket/book-conflict", "Произошла ошибка при бронировании билета"));
+
+        /// <summary>
+        /// Произошла ошибка при бронировании билета
+        /// </summary>
+        public static WriteResult TicketsAlreadyCreated =>
+            WriteResult.FromError(ErrorModel.Default("ticket/already-created", "Билеты на указанную дату уже существуют"));
     }
 }

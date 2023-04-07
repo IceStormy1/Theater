@@ -15,11 +15,11 @@ namespace Theater.Controllers
     [ApiController]
     public sealed class TicketController : BaseController<PiecesTicketParameters, PiecesTicketEntity>
     {
-        private readonly ITicketService _ticketService;
+        private readonly IPieceTicketService _pieceTicketService;
 
-        public TicketController(ITicketService service) : base(service)
+        public TicketController(IPieceTicketService service) : base(service)
         {
-            _ticketService = service;
+            _pieceTicketService = service;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Theater.Controllers
         [ProducesResponseType(typeof(DocumentCollection<PiecesTicketModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPieceTicketsByDate([FromRoute] Guid pieceId, [FromRoute] Guid dateId)
         {
-            var tickets = await _ticketService.GetPieceTicketsByDate(pieceId, dateId);
+            var tickets = await _pieceTicketService.GetPieceTicketsByDate(pieceId, dateId);
 
             return Ok(new DocumentCollection<PiecesTicketModel>(tickets));
         }
@@ -52,7 +52,7 @@ namespace Theater.Controllers
             if (!UserId.HasValue)
                 return RenderResult(UserAccountErrors.Unauthorized);
 
-            var buyTicketResult = await _ticketService.BuyTicket(ticketId, UserId.Value);
+            var buyTicketResult = await _pieceTicketService.BuyTicket(ticketId, UserId.Value);
 
             return RenderResult(buyTicketResult);
         }
@@ -72,7 +72,7 @@ namespace Theater.Controllers
             if (!UserId.HasValue)
                 return RenderResult(UserAccountErrors.Unauthorized);
 
-            var buyTicketResult = await _ticketService.BookTicket(ticketId, UserId.Value);
+            var buyTicketResult = await _pieceTicketService.BookTicket(ticketId, UserId.Value);
 
             return RenderResult(buyTicketResult);
         }

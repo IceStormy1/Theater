@@ -5,6 +5,6 @@
         /// <summary>
         /// Количество мест в зале  
         /// </summary>
-        public const ushort NumberOfSeatsInHall = 64;
+        public const ushort NumberOfSeatsInHall = 5;
     }
 }

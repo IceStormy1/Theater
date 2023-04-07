@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
+using Theater.Abstractions.Piece;
+using Theater.Abstractions.Piece.Models;
 using Theater.Abstractions.Ticket;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserAccount.Models;
@@ -14,18 +17,24 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Ticket
 {
-    public sealed class TicketService : ServiceBase<PiecesTicketParameters, PiecesTicketEntity>, ITicketService
+    public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, PiecesTicketEntity>, IPieceTicketService
     {
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly IPieceRepository _pieceRepository;
+        private readonly ILogger<PieceTicketService> _logger;
 
-        public TicketService(
+        public PieceTicketService(
             IMapper mapper, 
             ITicketRepository repository,
             IDocumentValidator<PiecesTicketParameters> documentValidator,
-            IUserAccountRepository userAccountRepository) : base(mapper, repository, documentValidator)
+            IUserAccountRepository userAccountRepository,
+            IPieceRepository pieceRepository, 
+            ILogger<PieceTicketService> logger) : base(mapper, repository, documentValidator)
         {
             _userAccountRepository = userAccountRepository;
+            _pieceRepository = pieceRepository;
+            _logger = logger;
             _ticketRepository = repository;
         }
 
@@ -78,6 +87,68 @@ namespace Theater.Core.Ticket
             return !validationResult.IsSuccess
                 ? validationResult
                 : await _ticketRepository.BookTicket(ticketId, userId);
+        }
+
+        public async Task<WriteResult> CreateTickets(Guid pieceId, PieceTicketCreateParameters ticketsParameters)
+        {
+            var pieceEntity = await _pieceRepository.GetByEntityId(pieceId);
+            // todo: валидация, что дата билета больше или равна текущей даты
+            if (pieceEntity is null)
+                return WriteResult.FromError(PieceErrors.NotFound.Error);
+
+            var piecesTicketEntities = await _ticketRepository.GetPieceTicketsByDate(pieceId, ticketsParameters.PieceDateId);
+
+            if(piecesTicketEntities.Count == default)
+                return WriteResult.FromError(TicketErrors.TicketsAlreadyCreated.Error);
+
+            var ticketEntities = Mapper.Map<List<PiecesTicketEntity>>(ticketsParameters.PiecesTickets);
+            ticketEntities.ForEach(x => x.PieceDateId = ticketsParameters.PieceDateId);
+
+            try
+            {
+                await _ticketRepository.AddRange(ticketEntities);
+
+                return WriteResult.Successful;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Произошла ошибка при попытке добавить билеты в БД");
+
+                return WriteResult.FromError(TicketErrors.CreateTicketConflict.Error);
+            }
+        }
+
+        public async Task<WriteResult> UpdateTickets(Guid pieceId, PieceTicketUpdateParameters ticketsParameters)
+        {
+            var pieceEntity = await _pieceRepository.GetByEntityId(pieceId);
+
+            if (pieceEntity is null)
+                return WriteResult.FromError(PieceErrors.NotFound.Error);
+
+            var ticketsIds = ticketsParameters.PiecesTickets.Select(x => x.Id).ToList();
+            var ticketsEntities = await _ticketRepository.GetByEntityIds(ticketsIds);
+
+            if(ticketsEntities.Count != ticketsParameters.PiecesTickets.Count)
+                return WriteResult.FromError(TicketErrors.NotFound.Error);
+
+            foreach (var piecesTicketEntity in ticketsEntities)
+            {
+                var ticketModel = ticketsParameters.PiecesTickets.First(x => x.Id == piecesTicketEntity.Id);
+                Mapper.Map(ticketModel, piecesTicketEntity);
+            }
+
+            try
+            {
+                await _ticketRepository.UpdateRange(ticketsEntities);
+
+                return WriteResult.Successful;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Произошла ошибка при попытке добавить билеты в БД");
+
+                return WriteResult.FromError(TicketErrors.CreateTicketConflict.Error);
+            }
         }
 
         private static WriteResult CheckIfCanBuyTicket(PiecesTicketEntity ticket, UserEntity user)

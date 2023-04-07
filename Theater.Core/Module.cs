@@ -54,8 +54,8 @@ namespace Theater.Core
                 .As<ITheaterWorkerRepository>()
                 .InstancePerLifetimeScope();
             
-            builder.RegisterType<TicketService>()
-                .As<ITicketService>()
+            builder.RegisterType<PieceTicketService>()
+                .As<IPieceTicketService>()
                 .InstancePerLifetimeScope(); 
             
             builder.RegisterType<TicketRepository>()

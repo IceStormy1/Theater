@@ -29,10 +29,5 @@ namespace Theater.Contracts.Theater
         /// Идентификаторы изображений 
         /// </summary>
         public IReadOnlyCollection<Guid> PhotoIds { get; set; } = Array.Empty<Guid>();
-
-        /// <summary>
-        /// Билеты на пьесу
-        /// </summary>
-        public IReadOnlyCollection<PiecesTicketParameters> PiecesTickets { get; set; } = Array.Empty<PiecesTicketParameters>();
     }
 }
