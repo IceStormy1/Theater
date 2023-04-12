@@ -4,11 +4,11 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
 {
-    public sealed class PieceDateRepository : BaseCrudRepository<PieceDateEntity, TheaterDbContext>, IPieceDateRepository
+    public sealed class PieceDateRepository : BaseCrudRepository<PieceDateEntity>, IPieceDateRepository
     {
         public PieceDateRepository(
             TheaterDbContext dbContext,
-            ILogger<BaseCrudRepository<PieceDateEntity, TheaterDbContext>> logger) : base(dbContext, logger)
+            ILogger<BaseCrudRepository<PieceDateEntity>> logger) : base(dbContext, logger)
         {
         }
     }

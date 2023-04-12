@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using System;
 using Theater.Abstractions.Authorization.Models;
+using Theater.Abstractions.Filter;
 using Theater.Abstractions.Piece.Models;
 using Theater.Common;
 using Theater.Common.Extensions;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
 using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
@@ -32,6 +34,7 @@ namespace Theater
 
             CreateMap<PieceDto, PieceModel>();
             CreateMap<PieceParameters, PieceEntity>();
+            CreateMap<PieceEntity, PieceModel>();
 
             CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
@@ -50,6 +53,7 @@ namespace Theater
             CreateMap<PiecesTicketEntity, PiecesTicketModel>();
             CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
             CreateMap<PiecesTicketModel, PiecesTicketEntity>();
+            CreateMap<PieceFilterParameters, PieceFilterSettings>();
         }
     }
 }

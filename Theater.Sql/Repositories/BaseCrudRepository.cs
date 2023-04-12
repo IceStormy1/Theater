@@ -9,15 +9,16 @@ using Theater.Entities;
 
 namespace Theater.Sql.Repositories
 {
-    public class BaseCrudRepository<TEntity, TDbContext> : ICrudRepository<TEntity> where TEntity : class, IEntity where TDbContext : DbContext
+    public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity> 
+        where TEntity : class, IEntity
     {
-        protected readonly TDbContext DbContext;
+        protected readonly DbContext DbContext;
         protected readonly DbSet<TEntity> DbSet;
-        protected readonly ILogger<BaseCrudRepository<TEntity, TDbContext>> Logger;
+        protected readonly ILogger<BaseCrudRepository<TEntity>> Logger;
 
         public BaseCrudRepository(
-            TDbContext dbContext,
-            ILogger<BaseCrudRepository<TEntity, TDbContext>> logger)
+            DbContext dbContext,
+            ILogger<BaseCrudRepository<TEntity>> logger)
         {
             DbContext = dbContext;
             DbSet = dbContext.Set<TEntity>();
@@ -92,9 +93,8 @@ namespace Theater.Sql.Repositories
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> IsEntityExists(Guid id)
-            => await DbSet.AnyAsync(x=>x.Id == id);
+        public async Task<bool> IsEntityExists(Guid id) => await DbSet.AnyAsync(x=>x.Id == id);
 
-        protected  virtual IQueryable<TEntity> AddIncludes(IQueryable<TEntity> query) => query;
+        public virtual IQueryable<TEntity> AddIncludes(IQueryable<TEntity> query) => query;
     }
 }

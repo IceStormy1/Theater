@@ -6,6 +6,7 @@ using Theater.Abstractions.TheaterWorker;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
+using AutoMapper;
 
 namespace Theater.Controllers
 {
@@ -15,7 +16,9 @@ namespace Theater.Controllers
     {
         private readonly ITheaterWorkerService _theaterWorkerService;
 
-        public TheaterWorkerController(ITheaterWorkerService theaterWorkerService) : base(theaterWorkerService)
+        public TheaterWorkerController(
+            ITheaterWorkerService theaterWorkerService,
+            IMapper mapper) : base(theaterWorkerService, mapper)
         {
             _theaterWorkerService = theaterWorkerService;
         }

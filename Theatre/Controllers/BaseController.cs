@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
@@ -28,9 +29,12 @@ namespace Theater.Controllers
         /// </summary>
         protected UserRole? UserRole => GetUserRoleFromToken();
 
-        public BaseController(ICrudService<TParameters, TEntity> service)
+        protected readonly IMapper Mapper;
+
+        public BaseController(ICrudService<TParameters, TEntity> service, IMapper mapper)
         {
             Service = service;
+            Mapper = mapper;
         }
 
         /// <summary>

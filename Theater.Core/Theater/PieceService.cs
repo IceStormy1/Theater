@@ -37,12 +37,12 @@ namespace Theater.Core.Theater
 
         public async Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId)
         {
-            var pieceDto = await _pieceRepository.GetByEntityId(pieceId);
+            var pieceEntity = await _pieceRepository.GetByEntityId(pieceId);
 
-            if(pieceDto is null)
+            if(pieceEntity is null)
                 return WriteResult<PieceModel>.FromError(PieceErrors.NotFound.Error);
 
-            var pieceResult = Mapper.Map<PieceModel>(pieceDto);
+            var pieceResult = Mapper.Map<PieceModel>(pieceEntity);
 
             return WriteResult.FromValue(pieceResult);
         }

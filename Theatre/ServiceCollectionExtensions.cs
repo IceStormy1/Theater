@@ -15,7 +15,7 @@ namespace Theater
             where TDbContext : DbContext
         {
             return services.AddScoped<ICrudRepository<TEntity>>(p =>
-                new BaseCrudRepository<TEntity, TDbContext>(p.GetRequiredService<TDbContext>(), p.GetRequiredService<ILogger<BaseCrudRepository<TEntity, TDbContext>>>()));
+                new BaseCrudRepository<TEntity>(p.GetRequiredService<TDbContext>(), p.GetRequiredService<ILogger<BaseCrudRepository<TEntity>>>()));
         }
 
         public static IServiceCollection AddCrudService<TDocumentModel, TEntity>(this IServiceCollection services)

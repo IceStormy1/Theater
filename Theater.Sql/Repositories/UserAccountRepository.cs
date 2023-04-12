@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserAccount.Models;
@@ -12,16 +12,19 @@ using Theater.Entities.Authorization;
 
 namespace Theater.Sql.Repositories
 {
-    public sealed class UserAccountRepository : BaseCrudRepository<UserEntity, TheaterDbContext>, IUserAccountRepository
+    public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUserAccountRepository
     {
+        private readonly TheaterDbContext _dbContext;
+
         public UserAccountRepository(
             TheaterDbContext dbContext, 
-            ILogger<BaseCrudRepository<UserEntity, TheaterDbContext>> logger) : base(dbContext, logger)
+            ILogger<BaseCrudRepository<UserEntity>> logger) : base(dbContext, logger)
         {
+            _dbContext = dbContext;
         }
 
         public async Task<UserEntity> FindUser(string userName, string password)
-            => await DbContext.Users
+            => await _dbContext.Users
                 .AsNoTracking()
                 .Include(x => x.UserRole)
                 .FirstOrDefaultAsync(user => string.Equals(password, user.Password)
@@ -29,7 +32,7 @@ namespace Theater.Sql.Repositories
                                                  || string.Equals(user.Email, userName)));
 
         public async Task<IReadOnlyCollection<UserEntity>> GetUsers()
-            => await DbContext.Users
+            => await _dbContext.Users
                 .AsNoTracking()
                 .OrderBy(x => x.UserName)
                 .Take(300)
@@ -37,14 +40,14 @@ namespace Theater.Sql.Repositories
 
         public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
         {
-            var user = await DbContext.Users
+            var user = await _dbContext.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => string.Equals(userEntity.UserName, user.UserName));
 
             if (user != null)
                 return WriteResult<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
 
-            DbContext.Users.Add(userEntity);
+            _dbContext.Users.Add(userEntity);
             await DbContext.SaveChangesAsync();
 
             return new WriteResult<CreateUserResult>(new CreateUserResult { UserId = userEntity.Id, IsSuccess = true });
@@ -52,7 +55,7 @@ namespace Theater.Sql.Repositories
 
         public async Task<WriteResult> UpdateUser(UserEntity userEntity)
         {
-            DbContext.Users.Update(userEntity);
+            _dbContext.Users.Update(userEntity);
             await DbContext.SaveChangesAsync();
 
             return WriteResult.Successful;
@@ -60,15 +63,15 @@ namespace Theater.Sql.Repositories
 
         public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
         {
-            var user = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
             if (user is null)
                 return UserAccountErrors.NotFound;
 
             user.Money += replenishmentAmount;
 
-            DbContext.Users.Update(user);
-            await DbContext.SaveChangesAsync();
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
 
             return WriteResult.Successful;
         }

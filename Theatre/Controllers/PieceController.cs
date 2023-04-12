@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
+using Theater.Abstractions;
+using Theater.Abstractions.Filter;
 using Theater.Abstractions.Piece;
-using Theater.Contracts;
+using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 
@@ -13,10 +16,15 @@ namespace Theater.Controllers
     public sealed class PieceController : BaseController<PieceParameters, PieceEntity>
     {
         private readonly IPieceService _pieceService;
+        private readonly IIndexReader<PieceEntity, PieceFilterSettings> _pieceIndexReader;
 
-        public PieceController(IPieceService service) : base(service)
+        public PieceController(
+            IPieceService service, 
+            IMapper mapper,
+            IIndexReader<PieceEntity, PieceFilterSettings> pieceIndexReader) : base(service, mapper)
         {
             _pieceService = service;
+            _pieceIndexReader = pieceIndexReader;
         }
 
         /// <summary>
@@ -38,13 +46,15 @@ namespace Theater.Controllers
         /// </summary>
         /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
-        [HttpGet]
-        [ProducesResponseType(typeof(DocumentCollection<PieceShortInformationModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPiecesShortInformation()
+        [HttpPost]
+        [ProducesResponseType(typeof(PagingResult<PieceShortInformationModel>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPiecesShortInformation([FromBody] PieceFilterParameters filterParameters)
         {
-            var piecesShortInformation = await _pieceService.GetPiecesShortInformation();
+            var pieceFilterSettings = Mapper.Map<PieceFilterSettings>(filterParameters);
 
-            return Ok(new DocumentCollection<PieceShortInformationModel>(piecesShortInformation));
+            var piecesShortInformation = await _pieceIndexReader.QueryItems(pieceFilterSettings);
+
+            return Ok(piecesShortInformation);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Theater.Abstractions.Ticket;
 using Theater.Abstractions.UserAccount.Models;
 using Theater.Common;
@@ -17,7 +18,9 @@ namespace Theater.Controllers
     {
         private readonly IPieceTicketService _pieceTicketService;
 
-        public TicketController(IPieceTicketService service) : base(service)
+        public TicketController(
+            IPieceTicketService service, 
+            IMapper mapper) : base(service, mapper)
         {
             _pieceTicketService = service;
         }

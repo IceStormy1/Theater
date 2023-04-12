@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Theater.Entities;
 
@@ -56,5 +57,7 @@ namespace Theater.Abstractions
         /// </summary>
         /// <param name="id">Идентификатор сущности</param>
         Task<bool> IsEntityExists(Guid id);
+
+        IQueryable<TEntity> AddIncludes(IQueryable<TEntity> query);
     }
 }

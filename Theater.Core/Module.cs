@@ -11,7 +11,11 @@ using Theater.Core.Theater;
 using Theater.Core.Theater.Validators;
 using Theater.Core.Ticket;
 using Theater.Core.UserAccount;
+using Theater.Entities.Theater;
+using Theater.Sql;
+using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
+using IndexReader = Theater.Sql.IndexReader<Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
 
 namespace Theater.Core
 {
@@ -68,6 +72,19 @@ namespace Theater.Core
             
             builder.RegisterType<PiecesDateValidator>()
                 .As<IDocumentValidator<PieceDateParameters>>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<PieceQueryBuilder>()
+                .AsSelf()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder
+                .Register(p => new IndexReader(
+                    p.Resolve<TheaterDbContext>(), 
+                    p.Resolve<PieceQueryBuilder>(), 
+                    p.Resolve<IPieceRepository>()))
+                .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }
     }

@@ -9,15 +9,20 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories
 {
-    public sealed class TheaterWorkerRepository : BaseCrudRepository<TheaterWorkerEntity, TheaterDbContext>, ITheaterWorkerRepository
+    public sealed class TheaterWorkerRepository : BaseCrudRepository<TheaterWorkerEntity>, ITheaterWorkerRepository
     {
-        public TheaterWorkerRepository(TheaterDbContext dbContext, ILogger<BaseCrudRepository<TheaterWorkerEntity, TheaterDbContext>> logger) : base(dbContext, logger)
+        private readonly TheaterDbContext _dbContext;
+
+        public TheaterWorkerRepository(
+            TheaterDbContext dbContext,
+            ILogger<BaseCrudRepository<TheaterWorkerEntity>> logger) : base(dbContext, logger)
         {
+            _dbContext = dbContext;
         }
 
         public async Task<IReadOnlyDictionary<int, int>> GetTotalWorkers()
         {
-            var totalWorkers = await DbContext.TheaterWorkers
+            var totalWorkers = await _dbContext.TheaterWorkers
                 .AsNoTracking()
                 .Include(x => x.Position)
                 .GroupBy(x => x.Position.PositionType)
@@ -32,7 +37,7 @@ namespace Theater.Sql.Repositories
 
         public async Task<IReadOnlyCollection<TheaterWorkerShortInformationDto>> GetShortInformationWorkersByPositionType(int positionType)
         {
-            var workersShortInformation = await DbContext.TheaterWorkers
+            var workersShortInformation = await _dbContext.TheaterWorkers
                 .AsNoTracking()
                 .Include(x => x.Position)
                 .Where(x=>(int)x.Position.PositionType == positionType)
@@ -48,7 +53,7 @@ namespace Theater.Sql.Repositories
             return workersShortInformation;
         }
 
-        protected override IQueryable<TheaterWorkerEntity> AddIncludes(IQueryable<TheaterWorkerEntity> query)
+        public override IQueryable<TheaterWorkerEntity> AddIncludes(IQueryable<TheaterWorkerEntity> query)
         {
             return query
                 .Include(x => x.Position)

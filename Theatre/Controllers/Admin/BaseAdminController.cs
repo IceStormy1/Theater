@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,7 +16,9 @@ namespace Theater.Controllers.Admin
         where TParameters : class
         where TEntity : class, IEntity
     {
-        public BaseAdminController(ICrudService<TParameters, TEntity> service) : base(service)
+        public BaseAdminController(
+            ICrudService<TParameters, TEntity> service, 
+            IMapper mapper) : base(service, mapper)
         {
         }
 

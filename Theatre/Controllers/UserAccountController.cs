@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserAccount.Models;
 using Theater.Contracts.Authorization;
@@ -20,7 +21,9 @@ namespace Theater.Controllers
     {
         private readonly IUserAccountService _userAccountService;
 
-        public UserAccountController(IUserAccountService userAccountService) : base(userAccountService)
+        public UserAccountController(
+            IUserAccountService userAccountService,
+            IMapper mapper) : base(userAccountService, mapper)
         {
             _userAccountService = userAccountService;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -15,7 +16,9 @@ namespace Theater.Controllers.Admin
     {
         private readonly IPieceTicketService _pieceTicketService;
 
-        public PieceTicketAdminController(IPieceTicketService pieceTicketService) : base(pieceTicketService)
+        public PieceTicketAdminController(
+            IPieceTicketService pieceTicketService, 
+            IMapper mapper) : base(pieceTicketService, mapper)
         {
             _pieceTicketService = pieceTicketService;
         }

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using System.Linq;
-using Theater.Abstractions.Piece.Constants;
 using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater
