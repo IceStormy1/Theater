@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions;
-using Theater.Abstractions.Piece.Models;
+using Theater.Abstractions.Piece.Errors;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Entities;
@@ -80,7 +80,7 @@ namespace Theater.Core
 
             var validationResult = await DocumentValidator.CheckIfCanUpdate(entityId.Value, model);
 
-            if (validationResult.IsSuccess)
+            if (!validationResult.IsSuccess)
                 return WriteResult<DocumentMeta>.FromError(validationResult.Error);
 
             Mapper.Map(model, entity);

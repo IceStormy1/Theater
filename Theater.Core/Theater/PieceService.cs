@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.Piece;
-using Theater.Abstractions.Piece.Models;
+using Theater.Abstractions.Piece.Errors;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
@@ -17,15 +17,18 @@ namespace Theater.Core.Theater
     {
         private readonly IPieceRepository _pieceRepository;
         private readonly IPieceDateRepository _pieceDateRepository;
+        private readonly ICrudRepository<PieceWorkerEntity> _pieceWorkerCrudRepository;
 
         public PieceService(
             IMapper mapper,
             IPieceRepository repository, 
             IDocumentValidator<PieceParameters> documentValidator,
-            IPieceDateRepository pieceDateRepository) : base(mapper, repository, documentValidator)
+            IPieceDateRepository pieceDateRepository,
+            ICrudRepository<PieceWorkerEntity> pieceWorkerCrudRepository) : base(mapper, repository, documentValidator)
         {
             _pieceRepository = repository;
             _pieceDateRepository = pieceDateRepository;
+            _pieceWorkerCrudRepository = pieceWorkerCrudRepository;
         }
 
         public async Task<IReadOnlyCollection<PieceShortInformationModel>> GetPiecesShortInformation()

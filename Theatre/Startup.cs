@@ -206,6 +206,7 @@ namespace Theater
         {
             services.AddRelationRepository<PieceEntity, TheaterDbContext>();
             services.AddRelationRepository<PieceDateEntity, TheaterDbContext>();
+            services.AddRelationRepository<PieceWorkerEntity, TheaterDbContext>();
         }
 
         private static void AddCrudServices(IServiceCollection services)

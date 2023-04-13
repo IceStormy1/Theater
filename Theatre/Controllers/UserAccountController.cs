@@ -5,12 +5,12 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Theater.Abstractions.UserAccount;
-using Theater.Abstractions.UserAccount.Models;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
+using Theater.Abstractions.Piece.Errors;
 
 namespace Theater.Controllers
 {

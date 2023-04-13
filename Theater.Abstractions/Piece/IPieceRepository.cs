@@ -17,6 +17,6 @@ namespace Theater.Abstractions.Piece
         /// Получить пьесу с датами
         /// </summary>
         /// <param name="pieceId">Идентификатор пьесы</param>
-        Task<PieceEntity> GetPieceWithDates(Guid  pieceId); 
+        Task<PieceEntity> GetPieceWithDates(Guid pieceId);
     }
 }

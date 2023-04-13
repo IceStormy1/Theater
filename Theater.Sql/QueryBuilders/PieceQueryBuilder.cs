@@ -1,12 +1,8 @@
 ﻿using LinqKit;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using Theater.Abstractions;
 using Theater.Abstractions.Filter;
-using Theater.Abstractions.Piece;
 using Theater.Entities.Theater;
 using Theater.Sql.Extensions;
 

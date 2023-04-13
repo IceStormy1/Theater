@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using System;
+using Theater.Abstractions;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Filter;
 using Theater.Abstractions.Piece.Models;
 using Theater.Common;
 using Theater.Common.Extensions;
+using Theater.Contracts;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
@@ -54,6 +56,10 @@ namespace Theater
             CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
             CreateMap<PiecesTicketModel, PiecesTicketEntity>();
             CreateMap<PieceFilterParameters, PieceFilterSettings>();
+
+            CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
+
+            CreateMap(typeof(PagingResult<>), typeof(Page<>));
         }
     }
 }

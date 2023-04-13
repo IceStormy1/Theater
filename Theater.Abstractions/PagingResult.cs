@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Theater.Abstractions
 {
@@ -12,6 +13,7 @@ namespace Theater.Abstractions
         /// <summary>
         /// Найденные записи.
         /// </summary>
+        [Required]
         public IReadOnlyCollection<T> Items { get; set; }
 
         /// <summary>

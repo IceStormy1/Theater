@@ -9,7 +9,9 @@ namespace Theater.Controllers.Admin
     [Route("api/admin/piece")]
     public sealed class PieceAdminController : BaseAdminController<PieceParameters, PieceEntity>
     {
-        public PieceAdminController(IPieceService service, IMapper mapper) : base(service, mapper)
+        public PieceAdminController(
+            IMapper mapper, 
+            IPieceService pieceService) : base(pieceService, mapper)
         {
         }
     }

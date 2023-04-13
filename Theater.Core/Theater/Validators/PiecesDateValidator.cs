@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.Piece;
-using Theater.Abstractions.Piece.Models;
+using Theater.Abstractions.Piece.Errors;
 using Theater.Common;
 using Theater.Contracts.Theater;
 
@@ -40,10 +40,9 @@ namespace Theater.Core.Theater.Validators
             if (pieceEntity is null)
                 return WriteResult.FromError(PieceErrors.NotFound.Error);
 
-            if (pieceEntity.PieceDates.Any(x => x.Date.Date == parameters.Date.Date))
-                return WriteResult.FromError(PieceErrors.DateAlreadyExists.Error);
-
-            return WriteResult.Successful;
+            return pieceEntity.PieceDates.Any(x => x.Date.Date == parameters.Date.Date) 
+                ? WriteResult.FromError(PieceErrors.DateAlreadyExists.Error)
+                : WriteResult.Successful;
         }
     }
 }

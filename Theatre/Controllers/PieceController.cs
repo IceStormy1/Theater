@@ -6,6 +6,7 @@ using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.Filter;
 using Theater.Abstractions.Piece;
+using Theater.Contracts;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
@@ -47,14 +48,14 @@ namespace Theater.Controllers
         /// <response code="200">В случае успешного запроса</response>
         /// <response code="400">В случае ошибок валидации</response>
         [HttpPost]
-        [ProducesResponseType(typeof(PagingResult<PieceShortInformationModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Page<PieceShortInformationModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPiecesShortInformation([FromBody] PieceFilterParameters filterParameters)
         {
             var pieceFilterSettings = Mapper.Map<PieceFilterSettings>(filterParameters);
 
             var piecesShortInformation = await _pieceIndexReader.QueryItems(pieceFilterSettings);
 
-            return Ok(piecesShortInformation);
+            return Ok(Mapper.Map<Page<PieceShortInformationModel>>(piecesShortInformation));
         }
     }
 }

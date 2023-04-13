@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,7 +9,9 @@ using Theater.Entities;
 
 namespace Theater.Controllers.Admin
 {
+#if !DEBUG
     [Authorize]
+#endif
     [Route("api/admin")]
     public class BaseAdminController<TParameters, TEntity> : BaseController<TParameters, TEntity>
         where TParameters : class

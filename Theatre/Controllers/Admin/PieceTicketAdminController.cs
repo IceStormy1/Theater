@@ -10,7 +10,6 @@ using Theater.Entities.Theater;
 
 namespace Theater.Controllers.Admin
 {
-   // [Authorize]
     [Route("api/admin/piece/{pieceId:guid}/ticket")]
     public class PieceTicketAdminController : BaseController<PiecesTicketParameters, PiecesTicketEntity>
     {

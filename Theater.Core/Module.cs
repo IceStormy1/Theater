@@ -2,16 +2,17 @@
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Piece;
+using Theater.Abstractions.PieceWorkers;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Abstractions.Ticket;
 using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Theater;
 using Theater.Core.Authorization;
 using Theater.Core.Theater;
+using Theater.Core.Theater.PieceWorkers;
 using Theater.Core.Theater.Validators;
 using Theater.Core.Ticket;
 using Theater.Core.UserAccount;
-using Theater.Entities.Theater;
 using Theater.Sql;
 using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
@@ -58,6 +59,10 @@ namespace Theater.Core
                 .As<ITheaterWorkerRepository>()
                 .InstancePerLifetimeScope();
             
+            builder.RegisterType<PieceWorkersRepository>()
+                .As<IPieceWorkersRepository>()
+                .InstancePerLifetimeScope();
+            
             builder.RegisterType<PieceTicketService>()
                 .As<IPieceTicketService>()
                 .InstancePerLifetimeScope(); 
@@ -70,8 +75,16 @@ namespace Theater.Core
                 .As<IPieceDateService>()
                 .InstancePerLifetimeScope();
             
+            builder.RegisterType<PieceWorkersService>()
+                .As<IPieceWorkersService>()
+                .InstancePerLifetimeScope();
+            
             builder.RegisterType<PiecesDateValidator>()
                 .As<IDocumentValidator<PieceDateParameters>>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<PieceWorkersValidator>()
+                .As<IDocumentValidator<PieceWorkerParameters>>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<PieceQueryBuilder>()

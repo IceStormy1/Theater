@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Theater.Abstractions.Filter;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.Piece.Models;
 using Theater.Entities.Theater;
@@ -61,7 +60,7 @@ namespace Theater.Sql.Repositories
             if(pieceId.HasValue)
                 pieceQuery = pieceQuery.Where(x=>x.Id == pieceId.Value);
 
-            return pieceQuery;
+            return pieceQuery.AsNoTracking();
         }
 
         public override IQueryable<PieceEntity> AddIncludes(IQueryable<PieceEntity> query)

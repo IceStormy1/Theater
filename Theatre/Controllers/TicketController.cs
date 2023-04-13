@@ -5,11 +5,11 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Theater.Abstractions.Ticket;
-using Theater.Abstractions.UserAccount.Models;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
+using Theater.Abstractions.Piece.Errors;
 
 namespace Theater.Controllers
 {
