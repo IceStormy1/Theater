@@ -1,6 +1,6 @@
 ﻿using Theater.Common;
 
-namespace Theater.Abstractions.UserAccount.Models
+namespace Theater.Abstractions.Piece.Errors
 {
     public static class UserAccountErrors
     {
@@ -31,7 +31,7 @@ namespace Theater.Abstractions.UserAccount.Models
         /// <summary>
         /// Недостаточно прав для совершения операции
         /// </summary>
-        public static WriteResult InsufficientRights 
+        public static WriteResult InsufficientRights
             => WriteResult.FromError(ErrorModel.Default("account/insufficient-rights ", "Недостаточно прав для совершения операции"));
     }
 }

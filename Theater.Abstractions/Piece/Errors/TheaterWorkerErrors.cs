@@ -1,6 +1,6 @@
 ﻿using Theater.Common;
 
-namespace Theater.Abstractions.TheaterWorker.Models
+namespace Theater.Abstractions.Piece.Errors
 {
     public static class TheaterWorkerErrors
     {
