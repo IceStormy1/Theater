@@ -1,6 +1,6 @@
 ﻿using Theater.Common;
 
-namespace Theater.Abstractions.Piece.Errors
+namespace Theater.Abstractions.Errors
 {
     public static class TicketErrors
     {

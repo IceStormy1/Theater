@@ -2,6 +2,7 @@
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Piece;
+using Theater.Abstractions.PieceDates;
 using Theater.Abstractions.PieceWorkers;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Abstractions.Ticket;

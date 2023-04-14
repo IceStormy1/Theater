@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Piece.Models;
 using Theater.Entities.Theater;
 
-namespace Theater.Abstractions.Piece
+namespace Theater.Abstractions.PieceDates
 {
     public interface IPieceRepository : ICrudRepository<PieceEntity>
     {

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Theater.Abstractions.Errors;
 using Theater.Abstractions.Ticket;
 using Theater.Common;
 using Theater.Entities.Authorization;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Authorization.Models;
-using Theater.Abstractions.Piece.Errors;
+using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
 using Theater.Contracts.Authorization;

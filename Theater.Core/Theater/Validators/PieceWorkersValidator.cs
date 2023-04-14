@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Theater.Abstractions;
-using Theater.Abstractions.Piece.Errors;
+using Theater.Abstractions.Errors;
 using Theater.Abstractions.PieceWorkers;
 using Theater.Common;
 using Theater.Contracts.Theater;

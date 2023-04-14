@@ -1,4 +1,4 @@
-﻿namespace Theater.Abstractions.Piece.Constants
+﻿namespace Theater.Abstractions.Constants
 {
     public static class PieceConstants
     {

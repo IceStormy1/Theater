@@ -10,7 +10,7 @@ using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
-using Theater.Abstractions.Piece.Errors;
+using Theater.Abstractions.Errors;
 
 namespace Theater.Controllers
 {

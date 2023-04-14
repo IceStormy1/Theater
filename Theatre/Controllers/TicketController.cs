@@ -9,7 +9,7 @@ using Theater.Common;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
-using Theater.Abstractions.Piece.Errors;
+using Theater.Abstractions.Errors;
 
 namespace Theater.Controllers
 {
