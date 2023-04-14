@@ -18,17 +18,17 @@ namespace Theater.Core.Theater.Validators
             _pieceRepository = pieceRepository;
         }
 
-        public async Task<WriteResult> CheckIfCanCreate(PieceDateParameters parameters)
+        public async Task<WriteResult> CheckIfCanCreate(PieceDateParameters parameters, Guid? userId = null)
         {
             return await CheckIfCanCreateOrUpdate(parameters);
         }
 
-        public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PieceDateParameters parameters)
+        public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PieceDateParameters parameters, Guid? userId = null)
         {
             return await CheckIfCanCreateOrUpdate(parameters);
         }
 
-        public Task<WriteResult> CheckIfCanDelete(Guid entityId)
+        public Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
         {
             return Task.FromResult(WriteResult.Successful);
         }

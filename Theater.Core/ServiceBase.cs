@@ -36,7 +36,7 @@ namespace Theater.Core
                 : WriteResult.FromValue(Mapper.Map<TModel>(entity));
         }
 
-        public async Task<WriteResult<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId)
+        public async Task<WriteResult<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null)
         {
             var entity = entityId.HasValue 
                 ? await Repository.GetByEntityId(entityId.Value) 
@@ -47,9 +47,9 @@ namespace Theater.Core
                 : await UpdateEntity(entity, model, entityId);
         }
 
-        public async Task<WriteResult> Delete(Guid id)
+        public async Task<WriteResult> Delete(Guid id, Guid? userId = null)
         {
-            var validationResult = await DocumentValidator.CheckIfCanDelete(id);
+            var validationResult = await DocumentValidator.CheckIfCanDelete(id, userId);
 
             if (!validationResult.IsSuccess)
                 return validationResult;
@@ -76,7 +76,10 @@ namespace Theater.Core
         private async Task<WriteResult<DocumentMeta>> UpdateEntity(TEntity entity, TModel model, Guid? entityId)
         {
             if (!entityId.HasValue)
-                return WriteResult<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "При обновлении сущности необходимо передавать идентификатор "));
+                return WriteResult<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "При обновлении сущности необходимо передавать идентификатор"));
+
+            if(entity is null)
+                return WriteResult<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "Указанная запись не найдена"));
 
             var validationResult = await DocumentValidator.CheckIfCanUpdate(entityId.Value, model);
 

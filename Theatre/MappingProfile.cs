@@ -56,6 +56,7 @@ namespace Theater
             CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
             CreateMap<PiecesTicketModel, PiecesTicketEntity>();
             CreateMap<PieceFilterParameters, PieceFilterSettings>();
+            CreateMap<UserReviewParameters, UserReviewEntity>();
 
             CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
 

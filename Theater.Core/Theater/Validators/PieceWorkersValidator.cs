@@ -17,7 +17,7 @@ namespace Theater.Core.Theater.Validators
             _pieceWorkersRepository = pieceWorkersRepository;
         }
 
-        public async Task<WriteResult> CheckIfCanCreate(PieceWorkerParameters parameters)
+        public async Task<WriteResult> CheckIfCanCreate(PieceWorkerParameters parameters, Guid? userId = null)
         {
             var alreadyAttached = await _pieceWorkersRepository.CheckWorkerRelation(parameters.TheaterWorkerId, parameters.PieceId);
 
@@ -26,7 +26,7 @@ namespace Theater.Core.Theater.Validators
                 : WriteResult.Successful;
         }
 
-        public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PieceWorkerParameters parameters)
+        public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PieceWorkerParameters parameters, Guid? userId = null)
         {
             var pieceWorkerEntity = await _pieceWorkersRepository.GetByEntityId(entityId);
 
@@ -38,7 +38,7 @@ namespace Theater.Core.Theater.Validators
                 : WriteResult.Successful;
         }
 
-        public Task<WriteResult> CheckIfCanDelete(Guid entityId)
+        public Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
         {
             return Task.FromResult(WriteResult.Successful);
         }
