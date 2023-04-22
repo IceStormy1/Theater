@@ -28,7 +28,7 @@ namespace Theater.Entities.Theater
         /// <summary>
         /// Идентификатор жанра пьесы
         /// </summary>
-        public ushort GenreId { get; set; }
+        public Guid GenreId { get; set; }
 
         /// <summary>
         /// Идентификаторы изображений 

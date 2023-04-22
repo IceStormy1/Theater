@@ -234,8 +234,8 @@ namespace Theater.Sql.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<int>("GenreId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid[]>("PhotoIds")
                         .HasColumnType("uuid[]");
@@ -278,10 +278,9 @@ namespace Theater.Sql.Migrations
 
             modelBuilder.Entity("Theater.Entities.Theater.PiecesGenreEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("GenreName")
                         .IsRequired()

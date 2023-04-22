@@ -11,15 +11,15 @@ using Theater.Sql;
 namespace Theater.Sql.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    [Migration("20230106130533_AddPieceShortDescription")]
-    partial class AddPieceShortDescription
+    [Migration("20230422200828_AddTheaterTables")]
+    partial class AddTheaterTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.16")
+                .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Theater.Entities.Authorization.UserEntity", b =>
@@ -197,11 +197,13 @@ namespace Theater.Sql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PiecesTicketId");
+                    b.HasIndex("PiecesTicketId")
+                        .IsUnique();
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "Id")
+                        .IsUnique();
 
-                    b.ToTable("BookedTicketsEntity");
+                    b.ToTable("BookedTickets");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.PieceDateEntity", b =>
@@ -234,8 +236,8 @@ namespace Theater.Sql.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<int>("GenreId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("GenreId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid[]>("PhotoIds")
                         .HasColumnType("uuid[]");
@@ -278,10 +280,9 @@ namespace Theater.Sql.Migrations
 
             modelBuilder.Entity("Theater.Entities.Theater.PiecesGenreEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("GenreName")
                         .IsRequired()
@@ -303,6 +304,9 @@ namespace Theater.Sql.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("TicketPlace")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TicketPrice")
                         .HasColumnType("integer");
 
                     b.Property<int>("TicketRow")
@@ -371,6 +375,9 @@ namespace Theater.Sql.Migrations
                     b.Property<string>("MiddleName")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
+
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("PositionId")
                         .HasColumnType("integer");
@@ -468,8 +475,8 @@ namespace Theater.Sql.Migrations
             modelBuilder.Entity("Theater.Entities.Theater.BookedTicketEntity", b =>
                 {
                     b.HasOne("Theater.Entities.Theater.PiecesTicketEntity", "PiecesTicket")
-                        .WithMany("BookedTickets")
-                        .HasForeignKey("PiecesTicketId")
+                        .WithOne("BookedTicket")
+                        .HasForeignKey("Theater.Entities.Theater.BookedTicketEntity", "PiecesTicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -508,7 +515,7 @@ namespace Theater.Sql.Migrations
 
             modelBuilder.Entity("Theater.Entities.Theater.PieceWorkerEntity", b =>
                 {
-                    b.HasOne("Theater.Entities.Theater.PieceDateEntity", "PieceDate")
+                    b.HasOne("Theater.Entities.Theater.PieceEntity", "Piece")
                         .WithMany("PieceWorkers")
                         .HasForeignKey("PieceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -520,7 +527,7 @@ namespace Theater.Sql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PieceDate");
+                    b.Navigation("Piece");
 
                     b.Navigation("TheaterWorker");
                 });
@@ -613,13 +620,13 @@ namespace Theater.Sql.Migrations
             modelBuilder.Entity("Theater.Entities.Theater.PieceDateEntity", b =>
                 {
                     b.Navigation("PiecesTickets");
-
-                    b.Navigation("PieceWorkers");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.PieceEntity", b =>
                 {
                     b.Navigation("PieceDates");
+
+                    b.Navigation("PieceWorkers");
 
                     b.Navigation("UserReviews");
                 });
@@ -631,7 +638,7 @@ namespace Theater.Sql.Migrations
 
             modelBuilder.Entity("Theater.Entities.Theater.PiecesTicketEntity", b =>
                 {
-                    b.Navigation("BookedTickets");
+                    b.Navigation("BookedTicket");
 
                     b.Navigation("TicketPriceEvents");
                 });

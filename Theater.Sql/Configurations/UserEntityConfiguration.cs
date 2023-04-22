@@ -19,7 +19,7 @@ namespace Theater.Sql.Configurations
             builder.Property(x=>x.LastName).IsRequired().HasMaxLength(128);
             builder.Property(x=>x.MiddleName).HasMaxLength(128);
 
-            builder.HasMany(s => s.Reviews)
+            builder.HasMany(s => s.UserReviews)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);

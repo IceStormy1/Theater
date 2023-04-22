@@ -81,7 +81,7 @@ namespace Theater.Entities.Authorization
         /// </summary>
         public UserRoleEntity UserRole { get; set; }
 
-        public List<UserReviewEntity> Reviews { get; set; }
+        public List<UserReviewEntity> UserReviews { get; set; }
         public List<BookedTicketEntity> BookedTickets { get; set; }
         public List<PurchasedUserTicketEntity> PurchasedUserTickets { get; set; }
     }
