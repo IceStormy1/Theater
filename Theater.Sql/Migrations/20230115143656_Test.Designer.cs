@@ -587,13 +587,13 @@ namespace Theater.Sql.Migrations
             modelBuilder.Entity("Theater.Entities.Theater.UserReviewEntity", b =>
                 {
                     b.HasOne("Theater.Entities.Theater.PieceEntity", "Piece")
-                        .WithMany("Reviews")
+                        .WithMany("UserReviews")
                         .HasForeignKey("PieceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Theater.Entities.Authorization.UserEntity", "User")
-                        .WithMany("Reviews")
+                        .WithMany("UserReviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -609,7 +609,7 @@ namespace Theater.Sql.Migrations
 
                     b.Navigation("PurchasedUserTickets");
 
-                    b.Navigation("Reviews");
+                    b.Navigation("UserReviews");
                 });
 
             modelBuilder.Entity("Theater.Entities.Authorization.UserRoleEntity", b =>
@@ -628,7 +628,7 @@ namespace Theater.Sql.Migrations
 
                     b.Navigation("PieceWorkers");
 
-                    b.Navigation("Reviews");
+                    b.Navigation("UserReviews");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.PiecesGenreEntity", b =>

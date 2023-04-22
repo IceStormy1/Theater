@@ -40,7 +40,7 @@ namespace Theater.Entities.Theater
         /// </summary>
         public PiecesGenreEntity Genre { get; set; }
 
-        public List<UserReviewEntity> Reviews { get; set; }
+        public List<UserReviewEntity> UserReviews { get; set; }
         public List<PieceDateEntity> PieceDates { get; set; }
         public List<PieceWorkerEntity> PieceWorkers { get; set; }
     }

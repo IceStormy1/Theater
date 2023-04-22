@@ -18,5 +18,10 @@ namespace Theater.Contracts.Theater
         /// Идентификаторы изображений 
         /// </summary>
         public IReadOnlyCollection<string> PhotoUrls { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Отзывы пользователей
+        /// </summary>
+        public IReadOnlyCollection<UserReviewModel> UserReviews { get; set; } = new List<UserReviewModel>();
     }
 }

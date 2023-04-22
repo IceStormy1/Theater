@@ -22,17 +22,20 @@ namespace Theater
             CreateMap<UserParameters, UserEntity>()
                 .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
                 .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
-                .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User));
+                .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
+                ;
 
             CreateMap<UserEntity, UserModel>()
-                .ForMember(destination => destination.Password, options => options.MapFrom(exp => exp.Password));
+                .ForMember(destination => destination.Password, options => options.MapFrom(exp => exp.Password))
+                ;
 
             CreateMap<UserEntity, AuthenticateResponse>();
 
             CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
             CreateMap<PieceDateDto, PieceDateModel>();
             CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
-                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionTypeName.GetEnumDisplayName()));
+                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionTypeName.GetEnumDisplayName()))
+                ;
 
             CreateMap<PieceDto, PieceModel>();
             CreateMap<PieceParameters, PieceEntity>();
@@ -41,22 +44,30 @@ namespace Theater
             CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
                 .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
-                .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType));
+                .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
+                ;
             CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
             CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
-                .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate));
+                .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate))
+                ;
             
             CreateMap<PiecesTicketEntity, PiecesTicketModel>();
             CreateMap<PieceDateParameters, PieceDateEntity>();
            
             CreateMap<PieceDateEntity, PieceDateModel>()
-                .ForMember(destination => destination.PiecesTickets, options => options.MapFrom(exp => exp.PiecesTickets));
+                .ForMember(destination => destination.PiecesTickets, options => options.MapFrom(exp => exp.PiecesTickets))
+                ;
 
             CreateMap<PiecesTicketEntity, PiecesTicketModel>();
             CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
             CreateMap<PiecesTicketModel, PiecesTicketEntity>();
+
             CreateMap<PieceFilterParameters, PieceFilterSettings>();
+
             CreateMap<UserReviewParameters, UserReviewEntity>();
+            CreateMap<UserReviewEntity, UserReviewModel>()
+                .ForMember(destination => destination.UserName, options => options.MapFrom(exp => exp.User == null ? null : exp.User.UserName))
+                ;
 
             CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
 

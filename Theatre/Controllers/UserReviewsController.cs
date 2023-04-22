@@ -42,7 +42,7 @@ namespace Theater.Controllers
         }
 
         /// <summary>
-        /// Добавить рецензию пользователя
+        /// Редактировать рецензию пользователя
         /// </summary>
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
@@ -59,7 +59,7 @@ namespace Theater.Controllers
         }
 
         /// <summary>
-        /// Добавить рецензию пользователя
+        /// Удалить рецензию пользователя
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]

@@ -1,1 +1,3 @@
 Add-Migration Test2 -Context TheaterDbContext -Verbose -OutputDir Migrations -Project Theater.Sql -StartupProject Theater -Debug
+remove-migration -Context TheaterDbContext -Verbose -Project Theater.Sql -StartupProject Theater -Debug -force
+update-database -Context TheaterDbContext -Verbose -Project Theater.Sql -StartupProject Theater -Debug
