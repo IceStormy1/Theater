@@ -12,12 +12,12 @@ namespace Theater.Sql.Repositories
     public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity> 
         where TEntity : class, IEntity
     {
-        protected readonly DbContext DbContext;
+        protected readonly TheaterDbContext DbContext;
         protected readonly DbSet<TEntity> DbSet;
         protected readonly ILogger<BaseCrudRepository<TEntity>> Logger;
 
         public BaseCrudRepository(
-            DbContext dbContext,
+            TheaterDbContext dbContext,
             ILogger<BaseCrudRepository<TEntity>> logger)
         {
             DbContext = dbContext;

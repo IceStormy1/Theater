@@ -70,6 +70,7 @@ namespace Theater
                 ;
 
             CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
+            CreateMap<PiecesGenreParameters, PiecesGenreEntity>();
 
             CreateMap(typeof(PagingResult<>), typeof(Page<>));
         }

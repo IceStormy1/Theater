@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Theater.Abstractions;
 using Theater.Core;
 using Theater.Entities;
+using Theater.Sql;
 using Theater.Sql.Repositories;
 
 namespace Theater
@@ -12,7 +13,7 @@ namespace Theater
     {
         public static IServiceCollection AddRelationRepository<TEntity, TDbContext>(this IServiceCollection services)
             where TEntity : class, IEntity 
-            where TDbContext : DbContext
+            where TDbContext : TheaterDbContext
         {
             return services.AddScoped<ICrudRepository<TEntity>>(p =>
                 new BaseCrudRepository<TEntity>(p.GetRequiredService<TDbContext>(), p.GetRequiredService<ILogger<BaseCrudRepository<TEntity>>>()));

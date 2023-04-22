@@ -3,6 +3,7 @@ using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.PieceDates;
+using Theater.Abstractions.PieceGenre;
 using Theater.Abstractions.PieceWorkers;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Abstractions.Ticket;
@@ -27,7 +28,7 @@ namespace Theater.Core
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // TODO: убрать Autofac и перейти на ServiceCollection
+            // TODO: убрать Autofac и перейти на ServiceCollection + разбить на отдельные модули для разных сущностей
             // TODO: после доработать AddCrudServices 
 
             builder.RegisterType<JwtHelper>()
@@ -44,6 +45,10 @@ namespace Theater.Core
             
             builder.RegisterType<PieceDateRepository>()
                 .As<IPieceDateRepository>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<PieceGenreRepository>()
+                .As<IPieceGenreRepository>()
                 .InstancePerLifetimeScope();
             
             builder.RegisterType<UserAccountService>()
@@ -78,6 +83,10 @@ namespace Theater.Core
                 .As<IPieceDateService>()
                 .InstancePerLifetimeScope();
             
+            builder.RegisterType<PieceGenreService>()
+                .As<IPieceGenreService>()
+                .InstancePerLifetimeScope();
+            
             builder.RegisterType<UserReviewsService>()
                 .As<IUserReviewsService>()
                 .InstancePerLifetimeScope();
@@ -96,6 +105,10 @@ namespace Theater.Core
             
             builder.RegisterType<UserReviewValidator>()
                 .As<IDocumentValidator<UserReviewParameters>>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<PieceGenreValidator>()
+                .As<IDocumentValidator<PiecesGenreParameters>>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<PieceQueryBuilder>()
