@@ -45,11 +45,15 @@ namespace Theater.Controllers
         /// <summary>
         /// Получить краткую информацию об актуальных пьесах
         /// </summary>
+        /// <remarks>
+        /// Доступна сортировка по полям:
+        /// * name
+        /// * genre
+        /// </remarks>
         /// <response code="200">В случае успешного запроса</response>
-        /// <response code="400">В случае ошибок валидации</response>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(typeof(Page<PieceShortInformationModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPiecesShortInformation([FromBody] PieceFilterParameters filterParameters)
+        public async Task<IActionResult> GetPiecesShortInformation([FromQuery] PieceFilterParameters filterParameters)
         {
             var pieceFilterSettings = Mapper.Map<PieceFilterSettings>(filterParameters);
 

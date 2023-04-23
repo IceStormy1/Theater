@@ -36,6 +36,11 @@ namespace Theater
             CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
                 .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionTypeName.GetEnumDisplayName()))
                 ;
+            CreateMap<TheaterWorkerEntity, TheaterWorkerShortInformationModel>()
+                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
+                .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
+                .ForMember(destination => destination.FullName, options => options.MapFrom(exp => $"{exp.LastName} {exp.FirstName} {exp.MiddleName}"))
+                ;
 
             CreateMap<PieceDto, PieceModel>();
             CreateMap<PieceParameters, PieceEntity>();
@@ -63,6 +68,7 @@ namespace Theater
             CreateMap<PiecesTicketModel, PiecesTicketEntity>();
 
             CreateMap<PieceFilterParameters, PieceFilterSettings>();
+            CreateMap<TheaterWorkerFilterParameters, TheaterWorkerFilterSettings>();
 
             CreateMap<UserReviewParameters, UserReviewEntity>();
             CreateMap<UserReviewEntity, UserReviewModel>()
@@ -71,7 +77,7 @@ namespace Theater
 
             CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
             CreateMap<PiecesGenreParameters, PiecesGenreEntity>();
-
+            
             CreateMap(typeof(PagingResult<>), typeof(Page<>));
         }
     }

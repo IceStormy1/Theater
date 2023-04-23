@@ -146,6 +146,13 @@ namespace Theater
             {
                 options.AddDefaultPolicy(builder =>
                 {
+                    var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+                    options.AddPolicy(name: MyAllowSpecificOrigins,
+                        policy =>
+                        {
+                            policy.WithOrigins("http://127.0.0.1:5173");
+                        });
+
                     builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader();

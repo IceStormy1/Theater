@@ -71,7 +71,7 @@ namespace Theater.Core.UserAccount
 
             var token = _jwtHelper.GenerateJwtToken(userEntity);
 
-            return new AuthenticateResponse { Token = token };
+            return new AuthenticateResponse { AccessToken = token };
         }
 
         public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)

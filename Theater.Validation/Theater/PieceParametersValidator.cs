@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using Theater.Contracts.Theater;
 
 namespace Theater.Validation.Theater
@@ -8,7 +9,7 @@ namespace Theater.Validation.Theater
         public PieceParametersValidator()
         {
             RuleFor(piece => piece.GenreId)
-                .GreaterThan((ushort)default)
+                .NotEqual(Guid.Empty)
                 .WithMessage("Указан некорректный жанр");
 
             RuleFor(piece => piece.PieceName)

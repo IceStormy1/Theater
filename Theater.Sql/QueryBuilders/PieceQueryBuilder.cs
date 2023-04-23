@@ -10,13 +10,6 @@ namespace Theater.Sql.QueryBuilders
 {
     public sealed class PieceQueryBuilder : QueryBuilderBase<PieceEntity, PieceFilterSettings>
     {
-        private readonly ICrudRepository<PieceEntity> _pieceRepository;
-
-        public PieceQueryBuilder(ICrudRepository<PieceEntity> pieceRepository)
-        {
-            _pieceRepository = pieceRepository;
-        }
-
         public override Expression<Func<PieceEntity, bool>> BuildQueryFilter(PieceFilterSettings filter)
         {
             var pb = PredicateBuilder.New<PieceEntity>(x => true);
@@ -28,7 +21,7 @@ namespace Theater.Sql.QueryBuilders
 
         protected override Expression<Func<PieceEntity, object>> ResolveSortingExpression(string sortColumn)
         {
-            return sortColumn.ToLowerInvariant() switch
+            return sortColumn?.ToLowerInvariant() switch
             {
                 "name" => x => x.PieceName,
                 "genre" => x => x.Genre.GenreName,

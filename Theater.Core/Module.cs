@@ -20,7 +20,8 @@ using Theater.Core.UserReviews;
 using Theater.Sql;
 using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
-using IndexReader = Theater.Sql.IndexReader<Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
+using PieceIndexReader = Theater.Sql.IndexReader<Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
+using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filter.TheaterWorkerFilterSettings>;
 
 namespace Theater.Core
 {
@@ -114,13 +115,26 @@ namespace Theater.Core
             builder.RegisterType<PieceQueryBuilder>()
                 .AsSelf()
                 .AsImplementedInterfaces()
+                .SingleInstance(); 
+            
+            builder.RegisterType<TheaterWorkerQueryBuilder>()
+                .AsSelf()
+                .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder
-                .Register(p => new IndexReader(
+                .Register(p => new PieceIndexReader(
                     p.Resolve<TheaterDbContext>(), 
                     p.Resolve<PieceQueryBuilder>(), 
                     p.Resolve<IPieceRepository>()))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+            
+            builder
+                .Register(p => new TheaterWorkerIndexReader(
+                    p.Resolve<TheaterDbContext>(), 
+                    p.Resolve<TheaterWorkerQueryBuilder>(), 
+                    p.Resolve<ITheaterWorkerRepository>()))
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }

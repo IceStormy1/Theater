@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Jwt;
+using Theater.Common.Extensions;
 using Theater.Entities.Authorization;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -32,10 +33,10 @@ namespace Theater.Core.Authorization
                 new (JwtRegisteredClaimNames.Email, user.Email),
                 new (JwtRegisteredClaimNames.PhoneNumber, user.Phone),
                 new (JwtRegisteredClaimNames.Name, string.Format(FullNameFormat, user.LastName, user.FirstName, user.MiddleName)),
-                new (JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("d/M/yyyy")),
+                new (JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("dd/MM/yyyy")),
                 new (JwtRegisteredClaimNames.Gender, user.Gender.ToString("D")),
                 new ("role", user.UserRole.RoleName.ToLower()),
-                new (nameof(UserEntity.UserName), user.UserName)
+                new (nameof(UserEntity.UserName).ToCamelCase(), user.UserName)
             };
 
             var token = new JwtSecurityToken(
