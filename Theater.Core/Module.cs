@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
+using Theater.Abstractions.FileStorage;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.PieceDates;
 using Theater.Abstractions.PieceGenre;
@@ -11,6 +12,7 @@ using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserReviews;
 using Theater.Contracts.Theater;
 using Theater.Core.Authorization;
+using Theater.Core.FileStorage;
 using Theater.Core.Theater;
 using Theater.Core.Theater.PieceWorkers;
 using Theater.Core.Theater.Validators;
@@ -31,7 +33,7 @@ namespace Theater.Core
         {
             // TODO: убрать Autofac и перейти на ServiceCollection + разбить на отдельные модули для разных сущностей
             // TODO: после доработать AddCrudServices 
-
+           
             builder.RegisterType<JwtHelper>()
                 .As<IJwtHelper>()
                 .InstancePerLifetimeScope();

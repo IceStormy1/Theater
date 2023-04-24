@@ -1,4 +1,5 @@
 ﻿using System;
+using Theater.Common;
 
 namespace Theater.Entities.FileStorage
 {
@@ -22,7 +23,7 @@ namespace Theater.Entities.FileStorage
         /// <summary>
         /// Идентификатор бакета
         /// </summary>
-        public BucketType BucketId { get; set; }
+        public BucketIdentifier BucketId { get; set; }
 
         /// <summary>
         /// Тип файла

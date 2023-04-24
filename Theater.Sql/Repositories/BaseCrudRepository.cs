@@ -61,7 +61,7 @@ namespace Theater.Sql.Repositories
 
             if (entityExists == false)
             {
-                Logger.LogWarning("Entity with entityIds {EntityId} of type '{EntityType}' was not found on update attempt.", 
+                Logger.LogWarning("Entity with entityIds {Id} of type '{EntityType}' was not found on update attempt.", 
                     entity.Id, typeof(TEntity));
                 
                 return;
@@ -83,7 +83,7 @@ namespace Theater.Sql.Repositories
 
             if (entity == null)
             {
-                Logger.LogWarning("Entity with {EntityId} of type '{EntityType}' was not found on delete attempt.",
+                Logger.LogWarning("Entity with {Id} of type '{EntityType}' was not found on delete attempt.",
                     id, typeof(TEntity));
                
                 return;

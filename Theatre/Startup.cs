@@ -20,6 +20,7 @@ using System.IO;
 using System.Reflection;
 using Theater.Abstractions;
 using Theater.Abstractions.Jwt;
+using Theater.Configuration;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Theater;
 using Theater.Core;
@@ -69,6 +70,7 @@ namespace Theater
                 });
 
             services.Configure<RoleModel>(Configuration.GetSection("RoleModel"));
+            services.Configure<FileStorageOptions>(Configuration.GetSection("FileStorageOptions"));
 
             var defaultPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
@@ -146,13 +148,6 @@ namespace Theater
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-                    options.AddPolicy(name: MyAllowSpecificOrigins,
-                        policy =>
-                        {
-                            policy.WithOrigins("http://127.0.0.1:5173");
-                        });
-
                     builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader();
@@ -207,6 +202,7 @@ namespace Theater
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule<Core.Module>();
+            builder.RegisterModule<Core.FileStorageModule>();
         }
 
         private static void AddRelationRepository(IServiceCollection services)

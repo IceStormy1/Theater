@@ -17,14 +17,14 @@ namespace Theater.Core.Theater.Validators
             _pieceGenreRepository = pieceGenreRepository;
         }
 
-        public async Task<WriteResult> CheckIfCanCreate(PiecesGenreParameters parameters, Guid? userId = null)
+        public Task<WriteResult> CheckIfCanCreate(PiecesGenreParameters parameters, Guid? userId = null)
         {
-            return WriteResult.Successful;
+            return Task.FromResult(WriteResult.Successful);
         }
 
-        public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PiecesGenreParameters parameters, Guid? userId = null)
+        public Task<WriteResult> CheckIfCanUpdate(Guid entityId, PiecesGenreParameters parameters, Guid? userId = null)
         {
-            return WriteResult.Successful;
+            return Task.FromResult(WriteResult.Successful);
         }
 
         public async Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)

@@ -23,16 +23,16 @@ namespace Theater.Core.Theater.Validators
             _userAccountRepository = userAccountRepository;
         }
 
-        public async Task<WriteResult> CheckIfCanCreate(UserReviewParameters parameters, Guid? userId = null)
+        public Task<WriteResult> CheckIfCanCreate(UserReviewParameters parameters, Guid? userId = null)
         {
             //TODO: Валидация на существование пьесы
-            return WriteResult.Successful;
+            return Task.FromResult(WriteResult.Successful); ;
         }
 
-        public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, UserReviewParameters parameters, Guid? userId = null)
+        public Task<WriteResult> CheckIfCanUpdate(Guid entityId, UserReviewParameters parameters, Guid? userId = null)
         {
             //TODO: Валидация на существование пьесы
-            return WriteResult.Successful;
+            return Task.FromResult(WriteResult.Successful); ;
         }
 
         public async Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)

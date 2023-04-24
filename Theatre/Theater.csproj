@@ -36,6 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Theater.Configuration\Theater.Configuration.csproj" />
 		<ProjectReference Include="..\Theater.Sql\Theater.Sql.csproj" />
 		<ProjectReference Include="..\Theater.Core\Theater.Core.csproj" />
 		<ProjectReference Include="..\Theater.Validation\Theater.Validation.csproj" />

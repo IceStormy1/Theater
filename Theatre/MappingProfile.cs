@@ -8,9 +8,11 @@ using Theater.Common;
 using Theater.Common.Extensions;
 using Theater.Contracts;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.FileStorage;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
 using Theater.Entities.Authorization;
+using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
 
 namespace Theater
@@ -77,7 +79,9 @@ namespace Theater
 
             CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
             CreateMap<PiecesGenreParameters, PiecesGenreEntity>();
-            
+
+            CreateMap<FileStorageEntity, StorageFileListItem>();
+
             CreateMap(typeof(PagingResult<>), typeof(Page<>));
         }
     }
