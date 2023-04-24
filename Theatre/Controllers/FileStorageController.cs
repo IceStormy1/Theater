@@ -10,7 +10,6 @@ using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers
 {
-    [ApiController]
     public class FileStorageController : TheaterBaseController
     {
         private readonly IFileStorageService _fileStorageService;
@@ -28,13 +27,13 @@ namespace Theater.Controllers
         /// <param name="bucketId">Идентификатор бакета</param>
         /// <param name="file">Файл</param>
         /// <returns></returns>
-        [HttpPost("{bucketId:int}/upload")]
+        [HttpPost]
         [ProducesResponseType(typeof(StorageFileListItem), StatusCodes.Status200OK)]
-        public async Task<StorageFileListItem> Upload([FromRoute] int bucketId,  IFormFile file)
+        public async Task<StorageFileListItem> Upload([FromQuery] BucketIdentifier bucketId,  IFormFile file)
         {
             await using var stream = file.OpenReadStream();
 
-            return await _fileStorageService.Upload((BucketIdentifier)bucketId, stream, file.FileName);
+            return await _fileStorageService.Upload(bucketId, stream, file.FileName);
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace Theater.Controllers
         /// </summary>
         /// <param name="id">Идентификатор файла</param>
         /// <returns></returns>
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}/url")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUrlById([FromRoute] Guid id)
@@ -55,11 +54,11 @@ namespace Theater.Controllers
         }
 
         /// <summary>
-        /// Получить полную информацию о файле
+        /// Получить полную информацию о файле (метаданные)
         /// </summary>
         /// <param name="id">Идентификатор файла</param>
         /// <returns></returns>
-        [HttpGet("getstoragefileinfo/{id:guid}")]
+        [HttpGet("{id:guid}/meta")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(StorageFileInfo), StatusCodes.Status200OK)]
         public Task<StorageFileInfo> GetStorageFileInfo([FromRoute] Guid id)
@@ -68,11 +67,11 @@ namespace Theater.Controllers
         }
 
         /// <summary>
-        /// Получить файл по идентификатору
+        /// Получить сам файл по идентификатору
         /// </summary>
         /// <param name="id">Идентификатор файла</param>
         /// <returns></returns>
-        [HttpGet("getfilebyid/{id:guid}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
         public async Task<FileStreamResult> GetFileById([FromRoute] Guid id)
