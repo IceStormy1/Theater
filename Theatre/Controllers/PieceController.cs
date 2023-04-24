@@ -10,11 +10,12 @@ using Theater.Contracts;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
+using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers
 {
     [ApiController]
-    public sealed class PieceController : BaseController<PieceParameters, PieceEntity>
+    public sealed class PieceController : CrudServiceBaseController<PieceParameters, PieceEntity>
     {
         private readonly IPieceService _pieceService;
         private readonly IIndexReader<PieceEntity, PieceFilterSettings> _pieceIndexReader;

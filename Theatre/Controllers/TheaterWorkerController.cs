@@ -10,12 +10,13 @@ using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.Filter;
 using Theater.Contracts.Filters;
+using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api")]
-    public sealed class TheaterWorkerController : BaseController<TheaterWorkerParameters, TheaterWorkerEntity>
+    public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters, TheaterWorkerEntity>
     {
         private readonly ITheaterWorkerService _theaterWorkerService;
         private readonly IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;

@@ -8,6 +8,7 @@ using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserReviews;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Theater;
+using Theater.Controllers.BaseControllers;
 using Theater.Entities.Theater;
 
 namespace Theater.Controllers
@@ -15,7 +16,7 @@ namespace Theater.Controllers
     [ApiController]
     [Route("api/review")]
     [Authorize]
-    public sealed class UserReviewsController : BaseController<UserReviewParameters, UserReviewEntity>
+    public sealed class UserReviewsController : CrudServiceBaseController<UserReviewParameters, UserReviewEntity>
     {
         private readonly IUserReviewsService _userReviewsService;
 

@@ -11,13 +11,14 @@ using Theater.Entities.Authorization;
 using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 using Theater.Abstractions.Errors;
+using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers
 {
     [ApiController]
     [Route("api/account")]
     [Authorize]
-    public sealed class UserAccountController : BaseController<UserParameters, UserEntity>
+    public sealed class UserAccountController : CrudServiceBaseController<UserParameters, UserEntity>
     {
         private readonly IUserAccountService _userAccountService;
 

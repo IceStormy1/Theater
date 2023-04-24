@@ -7,12 +7,13 @@ using Theater.Abstractions.PieceGenre;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
+using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers.Admin
 {
     [Route("api/admin/genre")]
     [ApiController]
-    public class PieceGenreAdminController : BaseAdminController<PiecesGenreParameters, PiecesGenreEntity>
+    public class PieceGenreAdminController : AdminBaseController<PiecesGenreParameters, PiecesGenreEntity>
     {
         public PieceGenreAdminController(
             IPieceGenreService pieceGenreService,

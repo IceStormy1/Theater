@@ -1,24 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using AutoMapper;
-using Theater.Abstractions;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
-using Theater.Entities;
 
-namespace Theater.Controllers
+namespace Theater.Controllers.BaseControllers
 {
+    /// <summary>
+    /// Базовый контроллер. Путь по умолчанию: <c>api/[controller]</c>.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseController<TParameters, TEntity> : ControllerBase
-        where TParameters : class
-        where TEntity : class, IEntity
+    public class TheaterBaseController : ControllerBase
     {
-        protected readonly ICrudService<TParameters, TEntity> Service;
-
         /// <summary>
         /// Идентификатор пользователя
         /// </summary>
@@ -31,9 +28,8 @@ namespace Theater.Controllers
 
         protected readonly IMapper Mapper;
 
-        public BaseController(ICrudService<TParameters, TEntity> service, IMapper mapper)
+        public TheaterBaseController(IMapper mapper)
         {
-            Service = service;
             Mapper = mapper;
         }
 

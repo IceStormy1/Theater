@@ -10,11 +10,12 @@ using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 using Theater.Abstractions.Errors;
+using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers
 {
     [ApiController]
-    public sealed class TicketController : BaseController<PiecesTicketParameters, PiecesTicketEntity>
+    public sealed class TicketController : CrudServiceBaseController<PiecesTicketParameters, PiecesTicketEntity>
     {
         private readonly IPieceTicketService _pieceTicketService;
 

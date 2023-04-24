@@ -7,18 +7,22 @@ using Theater.Abstractions;
 using Theater.Contracts;
 using Theater.Entities;
 
-namespace Theater.Controllers.Admin
+namespace Theater.Controllers.BaseControllers
 {
+    /// <summary>
+    /// Базовый контроллер в админке с реализацией CRUD. Путь по умолчанию: <c>api/admin</c>.
+    /// </summary>
 #if !DEBUG
     [Authorize]
 #endif
     [Route("api/admin")]
-    public class BaseAdminController<TParameters, TEntity> : BaseController<TParameters, TEntity>
+    [ApiController]
+    public class AdminBaseController<TParameters, TEntity> : CrudServiceBaseController<TParameters, TEntity>
         where TParameters : class
         where TEntity : class, IEntity
     {
-        public BaseAdminController(
-            ICrudService<TParameters, TEntity> service, 
+        public AdminBaseController(
+            ICrudService<TParameters, TEntity> service,
             IMapper mapper) : base(service, mapper)
         {
         }
