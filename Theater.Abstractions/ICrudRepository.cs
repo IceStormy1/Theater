@@ -4,60 +4,59 @@ using System.Linq;
 using System.Threading.Tasks;
 using Theater.Entities;
 
-namespace Theater.Abstractions
+namespace Theater.Abstractions;
+
+public interface ICrudRepository<TEntity> where TEntity : IEntity
 {
-    public interface ICrudRepository<TEntity> where TEntity : IEntity
-    {
-        /// <summary>
-        /// Получить сущность по идентификатору
-        /// </summary>
-        /// <param name="entityId">Идентификатор сущности</param>
-        /// <returns></returns>
-        Task<TEntity> GetByEntityId(Guid entityId);
+    /// <summary>
+    /// Получить сущность по идентификатору
+    /// </summary>
+    /// <param name="entityId">Идентификатор сущности</param>
+    /// <returns></returns>
+    Task<TEntity> GetByEntityId(Guid entityId);
 
-        /// <summary>
-        /// Получить сущности по идентификаторам
-        /// </summary>
-        /// <param name="entityIds">Идентификатор сущности</param>
-        Task<IReadOnlyCollection<TEntity>> GetByEntityIds(IReadOnlyCollection<Guid> entityIds);
+    /// <summary>
+    /// Получить сущности по идентификаторам
+    /// </summary>
+    /// <param name="entityIds">Идентификатор сущности</param>
+    Task<IReadOnlyCollection<TEntity>> GetByEntityIds(IReadOnlyCollection<Guid> entityIds);
 
-        /// <summary>
-        /// Добавить сущность
-        /// </summary>
-        /// <param name="entity">Добавляемая сущность</param>
-        /// <returns></returns>
-        Task Add(TEntity entity);
+    /// <summary>
+    /// Добавить сущность
+    /// </summary>
+    /// <param name="entity">Добавляемая сущность</param>
+    /// <returns></returns>
+    Task Add(TEntity entity);
 
-        /// <summary>
-        /// Добавляет сущности
-        /// </summary>
-        Task AddRange(IReadOnlyCollection<TEntity> entities);
+    /// <summary>
+    /// Добавляет сущности
+    /// </summary>
+    Task AddRange(IReadOnlyCollection<TEntity> entities);
 
-        /// <summary>
-        /// Обновить сущность
-        /// </summary>
-        /// <param name="entity">Обновляемая сущность</param>
-        /// <returns></returns>
-        Task Update(TEntity entity);
+    /// <summary>
+    /// Обновить сущность
+    /// </summary>
+    /// <param name="entity">Обновляемая сущность</param>
+    /// <returns></returns>
+    Task Update(TEntity entity);
 
-        /// <summary>
-        /// Обновляет сущности
-        /// </summary>
-        Task UpdateRange(IReadOnlyCollection<TEntity> entities);
+    /// <summary>
+    /// Обновляет сущности
+    /// </summary>
+    Task UpdateRange(IReadOnlyCollection<TEntity> entities);
 
-        /// <summary>
-        /// Удалить сущность
-        /// </summary>
-        /// <param name="id">Идентификатор удаляемой сущности</param>
-        /// <returns></returns>
-        Task Delete(Guid id);
+    /// <summary>
+    /// Удалить сущность
+    /// </summary>
+    /// <param name="id">Идентификатор удаляемой сущности</param>
+    /// <returns></returns>
+    Task Delete(Guid id);
 
-        /// <summary>
-        /// Проверяет, существует ли сущность с таким идентификатором 
-        /// </summary>
-        /// <param name="id">Идентификатор сущности</param>
-        Task<bool> IsEntityExists(Guid id);
+    /// <summary>
+    /// Проверяет, существует ли сущность с таким идентификатором 
+    /// </summary>
+    /// <param name="id">Идентификатор сущности</param>
+    Task<bool> IsEntityExists(Guid id);
 
-        IQueryable<TEntity> AddIncludes(IQueryable<TEntity> query);
-    }
+    IQueryable<TEntity> AddIncludes(IQueryable<TEntity> query);
 }

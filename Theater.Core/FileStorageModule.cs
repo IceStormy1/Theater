@@ -5,27 +5,26 @@ using Theater.Abstractions.FileStorage;
 using Theater.Configuration;
 using Theater.Core.FileStorage;
 
-namespace Theater.Core
+namespace Theater.Core;
+
+public class FileStorageModule : Autofac.Module
 {
-    public class FileStorageModule : Autofac.Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
+        builder.RegisterType<FileStorageService>().As<IFileStorageService>();
+
+        builder.Register(context =>
         {
-            builder.RegisterType<FileStorageService>().As<IFileStorageService>();
-
-            builder.Register(context =>
-            {
-                var options = context.Resolve<IOptions<FileStorageOptions>>();
+            var options = context.Resolve<IOptions<FileStorageOptions>>();
              
-                var config = new AmazonS3Config
-                {
-                    AuthenticationRegion = options.Value.Region, // Should match the `MINIO_REGION` environment variable.
-                    ServiceURL = options.Value.ServiceInnerUrl,
-                    ForcePathStyle = true // MUST be true to work correctly with MinIO server
-                };
+            var config = new AmazonS3Config
+            {
+                AuthenticationRegion = options.Value.Region, // Should match the `MINIO_REGION` environment variable.
+                ServiceURL = options.Value.ServiceInnerUrl,
+                ForcePathStyle = true // MUST be true to work correctly with MinIO server
+            };
 
-                return new AmazonS3Client(options.Value.AccessKey, options.Value.SecretKey, config);
-            }).As<IAmazonS3>().SingleInstance();
-        }
+            return new AmazonS3Client(options.Value.AccessKey, options.Value.SecretKey, config);
+        }).As<IAmazonS3>().SingleInstance();
     }
 }

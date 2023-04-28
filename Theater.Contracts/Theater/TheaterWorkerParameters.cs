@@ -2,48 +2,47 @@
 using Theater.Common;
 using Theater.Contracts.Authorization;
 
-namespace Theater.Contracts.Theater
+namespace Theater.Contracts.Theater;
+
+public class TheaterWorkerParameters : IUser
 {
-    public class TheaterWorkerParameters : IUser
-    {
-        /// <summary>
-        /// Имя 
-        /// </summary>
-        public string FirstName { get; set; }
+    /// <summary>
+    /// Имя 
+    /// </summary>
+    public string FirstName { get; set; }
 
-        /// <summary>
-        /// Фамилия 
-        /// </summary>
-        public string LastName { get; set; }
+    /// <summary>
+    /// Фамилия 
+    /// </summary>
+    public string LastName { get; set; }
 
-        /// <summary>
-        /// Отчество
-        /// </summary>
-        public string MiddleName { get; set; }
+    /// <summary>
+    /// Отчество
+    /// </summary>
+    public string MiddleName { get; set; }
 
-        /// <summary>
-        /// Пол
-        /// </summary>
-        public GenderType Gender { get; set; }
+    /// <summary>
+    /// Пол
+    /// </summary>
+    public GenderType Gender { get; set; }
 
-        /// <summary>
-        /// Дата рождения
-        /// </summary>
-        public DateTime BirthDate { get; set; }
+    /// <summary>
+    /// Дата рождения
+    /// </summary>
+    public DateTime BirthDate { get; set; }
 
-        /// <summary>
-        /// Описание работника
-        /// </summary>
-        public string Description { get; set; }
+    /// <summary>
+    /// Описание работника
+    /// </summary>
+    public string Description { get; set; }
 
-        /// <summary>
-        /// Идентификатор должности работника театра
-        /// </summary>
-        public ushort PositionId { get; set; }
+    /// <summary>
+    /// Идентификатор должности работника театра
+    /// </summary>
+    public ushort PositionId { get; set; }
 
-        /// <summary>
-        /// Тип должности
-        /// </summary>
-        public PositionType PositionType { get; set; }
-    }
+    /// <summary>
+    /// Тип должности
+    /// </summary>
+    public PositionType PositionType { get; set; }
 }

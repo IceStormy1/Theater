@@ -1,15 +1,14 @@
-﻿namespace Theater.Common
-{
-    public enum BucketIdentifier
-    {
-        /// <summary>
-        /// Файлы пьес
-        /// </summary>
-        Piece = 0,
+﻿namespace Theater.Common;
 
-        /// <summary>
-        /// Файлы пользователей
-        /// </summary>
-        User
-    }
+public enum BucketIdentifier
+{
+    /// <summary>
+    /// Файлы пьес
+    /// </summary>
+    Piece = 0,
+
+    /// <summary>
+    /// Файлы пользователей
+    /// </summary>
+    User
 }

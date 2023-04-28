@@ -1,47 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Theater.Entities.Theater
+namespace Theater.Entities.Theater;
+
+public sealed class PieceEntity : IEntity
 {
-    public sealed class PieceEntity : IEntity
-    {
-        /// <summary>
-        /// Идентификатор пьесы
-        /// </summary>
-        public Guid Id { get; set; }
+    /// <summary>
+    /// Идентификатор пьесы
+    /// </summary>
+    public Guid Id { get; set; }
 
-        /// <summary>
-        /// Наименование пьесы
-        /// </summary>
-        public string PieceName { get; set; }
+    /// <summary>
+    /// Наименование пьесы
+    /// </summary>
+    public string PieceName { get; set; }
 
-        /// <summary>
-        /// Описание пьесы
-        /// </summary>
-        public string Description { get; set; }
+    /// <summary>
+    /// Описание пьесы
+    /// </summary>
+    public string Description { get; set; }
 
-        /// <summary>
-        /// Краткое описание пьесы
-        /// </summary>
-        public string ShortDescription { get; set; }
+    /// <summary>
+    /// Краткое описание пьесы
+    /// </summary>
+    public string ShortDescription { get; set; }
 
-        /// <summary>
-        /// Идентификатор жанра пьесы
-        /// </summary>
-        public Guid GenreId { get; set; }
+    /// <summary>
+    /// Идентификатор жанра пьесы
+    /// </summary>
+    public Guid GenreId { get; set; }
 
-        /// <summary>
-        /// Идентификаторы изображений 
-        /// </summary>
-        public Guid[] PhotoIds { get; set; } = Array.Empty<Guid>();
+    /// <summary>
+    /// Идентификаторы изображений 
+    /// </summary>
+    public Guid[] PhotoIds { get; set; } = Array.Empty<Guid>();
 
-        /// <summary>
-        /// Ссылка на жанр пьесы
-        /// </summary>
-        public PiecesGenreEntity Genre { get; set; }
+    /// <summary>
+    /// Ссылка на жанр пьесы
+    /// </summary>
+    public PiecesGenreEntity Genre { get; set; }
 
-        public List<UserReviewEntity> UserReviews { get; set; }
-        public List<PieceDateEntity> PieceDates { get; set; }
-        public List<PieceWorkerEntity> PieceWorkers { get; set; }
-    }
+    public List<UserReviewEntity> UserReviews { get; set; }
+    public List<PieceDateEntity> PieceDates { get; set; }
+    public List<PieceWorkerEntity> PieceWorkers { get; set; }
 }

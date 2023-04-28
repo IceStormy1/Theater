@@ -1,8 +1,7 @@
 ﻿using Theater.Entities.Theater;
 
-namespace Theater.Abstractions.UserReviews
+namespace Theater.Abstractions.UserReviews;
+
+internal interface IUserReviewsRepository : ICrudRepository<UserReviewEntity>
 {
-    internal interface IUserReviewsRepository : ICrudRepository<UserReviewEntity>
-    {
-    }
 }

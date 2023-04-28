@@ -9,16 +9,15 @@ using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 using Theater.Controllers.BaseControllers;
 
-namespace Theater.Controllers.Admin
+namespace Theater.Controllers.Admin;
+
+[Route("api/admin/genre")]
+[ApiController]
+public class PieceGenreAdminController : AdminBaseController<PiecesGenreParameters, PiecesGenreEntity>
 {
-    [Route("api/admin/genre")]
-    [ApiController]
-    public class PieceGenreAdminController : AdminBaseController<PiecesGenreParameters, PiecesGenreEntity>
+    public PieceGenreAdminController(
+        IPieceGenreService pieceGenreService,
+        IMapper mapper) : base(pieceGenreService, mapper)
     {
-        public PieceGenreAdminController(
-            IPieceGenreService pieceGenreService,
-            IMapper mapper) : base(pieceGenreService, mapper)
-        {
-        }
     }
 }

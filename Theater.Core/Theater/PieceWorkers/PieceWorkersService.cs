@@ -4,15 +4,14 @@ using Theater.Abstractions.PieceWorkers;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 
-namespace Theater.Core.Theater.PieceWorkers
+namespace Theater.Core.Theater.PieceWorkers;
+
+internal class PieceWorkersService : ServiceBase<PieceWorkerParameters, PieceWorkerEntity>, IPieceWorkersService
 {
-    internal class PieceWorkersService : ServiceBase<PieceWorkerParameters, PieceWorkerEntity>, IPieceWorkersService
+    public PieceWorkersService(
+        IMapper mapper,
+        ICrudRepository<PieceWorkerEntity> repository,
+        IDocumentValidator<PieceWorkerParameters> documentValidator) : base(mapper, repository, documentValidator)
     {
-        public PieceWorkersService(
-            IMapper mapper,
-            ICrudRepository<PieceWorkerEntity> repository,
-            IDocumentValidator<PieceWorkerParameters> documentValidator) : base(mapper, repository, documentValidator)
-        {
-        }
     }
 }

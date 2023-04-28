@@ -6,48 +6,47 @@ using Theater.Common;
 using Theater.Contracts.Authorization;
 using Theater.Entities.Authorization;
 
-namespace Theater.Abstractions.UserAccount
+namespace Theater.Abstractions.UserAccount;
+
+public interface IUserAccountService : ICrudService<UserParameters, UserEntity>
 {
-    public interface IUserAccountService : ICrudService<UserParameters, UserEntity>
-    {
-        /// <summary>
-        /// Получить пользователя по уникальному идентификатору
-        /// </summary>
-        /// <param name="userId">Идентификатор пользователя</param>
-        /// <returns>Данные пользователя</returns>
-        Task<UserModel> GetUserById(Guid userId);
+    /// <summary>
+    /// Получить пользователя по уникальному идентификатору
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <returns>Данные пользователя</returns>
+    Task<UserModel> GetUserById(Guid userId);
 
-        /// <summary>
-        /// Получить список всех пользователей 
-        /// </summary>
-        /// <returns>Список пользователей</returns>
-        /// TODO: Добавить параметры фильтрации (пейджинация)
-        Task<IList<UserModel>> GetUsers();
+    /// <summary>
+    /// Получить список всех пользователей 
+    /// </summary>
+    /// <returns>Список пользователей</returns>
+    /// TODO: Добавить параметры фильтрации (пейджинация)
+    Task<IList<UserModel>> GetUsers();
 
-        /// <summary>
-        /// Создать пользователя
-        /// </summary>
-        /// <param name="user">Данные пользователя</param>
-        Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user);
+    /// <summary>
+    /// Создать пользователя
+    /// </summary>
+    /// <param name="user">Данные пользователя</param>
+    Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user);
 
-        /// <summary>
-        /// Обновить профиль пользователя
-        /// </summary>
-        /// <param name="user">Данные пользователя</param>
-        /// <param name="userId">Идентификатор пользователя</param>
-        Task<WriteResult> UpdateUser(UserParameters user, Guid userId);
+    /// <summary>
+    /// Обновить профиль пользователя
+    /// </summary>
+    /// <param name="user">Данные пользователя</param>
+    /// <param name="userId">Идентификатор пользователя</param>
+    Task<WriteResult> UpdateUser(UserParameters user, Guid userId);
 
-        /// <summary>
-        /// Авторизация пользователя
-        /// </summary>
-        /// <param name="authenticateParameters"></param>
-        Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters);
+    /// <summary>
+    /// Авторизация пользователя
+    /// </summary>
+    /// <param name="authenticateParameters"></param>
+    Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters);
 
-        /// <summary>
-        /// Пополнить баланс пользователя
-        /// </summary>
-        /// <param name="userId">Идентификатор пользователя</param>
-        /// <param name="replenishmentAmount">Сумма пополнения</param>
-        Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount);
-    }
+    /// <summary>
+    /// Пополнить баланс пользователя
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="replenishmentAmount">Сумма пополнения</param>
+    Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount);
 }

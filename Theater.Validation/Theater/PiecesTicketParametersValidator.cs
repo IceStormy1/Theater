@@ -1,21 +1,20 @@
 ﻿using FluentValidation;
 using Theater.Contracts.Theater;
 
-namespace Theater.Validation.Theater
+namespace Theater.Validation.Theater;
+
+public sealed class PiecesTicketParametersValidator : AbstractValidator<PiecesTicketParameters>
 {
-    public sealed class PiecesTicketParametersValidator : AbstractValidator<PiecesTicketParameters>
+    private const ushort MinimumValue = 1;
+
+    public PiecesTicketParametersValidator()
     {
-        private const ushort MinimumValue = 1;
+        RuleFor(ticket => ticket.TicketPlace)
+            .GreaterThanOrEqualTo(MinimumValue)
+            .WithName("Место");
 
-        public PiecesTicketParametersValidator()
-        {
-            RuleFor(ticket => ticket.TicketPlace)
-                .GreaterThanOrEqualTo(MinimumValue)
-                .WithName("Место");
-
-            RuleFor(ticket => ticket.TicketRow)
-                .GreaterThanOrEqualTo(MinimumValue)
-                .WithName("Ряд");
-        }
+        RuleFor(ticket => ticket.TicketRow)
+            .GreaterThanOrEqualTo(MinimumValue)
+            .WithName("Ряд");
     }
 }

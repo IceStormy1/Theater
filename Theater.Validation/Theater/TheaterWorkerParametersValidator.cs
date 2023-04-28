@@ -2,21 +2,20 @@
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 
-namespace Theater.Validation.Theater
+namespace Theater.Validation.Theater;
+
+public sealed class TheaterWorkerParametersValidator : AbstractValidator<TheaterWorkerParameters>
 {
-    public sealed class TheaterWorkerParametersValidator : AbstractValidator<TheaterWorkerParameters>
+    /// <param name="userValidator"><see cref="UserValidator"/></param>
+    public TheaterWorkerParametersValidator(IValidator<IUser> userValidator)
     {
-        /// <param name="userValidator"><see cref="UserValidator"/></param>
-        public TheaterWorkerParametersValidator(IValidator<IUser> userValidator)
-        {
-            Include(userValidator);
+        Include(userValidator);
 
-            RuleFor(worker => worker.PositionId)
-                .GreaterThan((ushort)default)
-                .WithMessage("Указана некорректная должность");
+        RuleFor(worker => worker.PositionId)
+            .GreaterThan((ushort)default)
+            .WithMessage("Указана некорректная должность");
 
-            RuleFor(worker => worker.Description)
-                .Description("Описание работника театра");
-        }
+        RuleFor(worker => worker.Description)
+            .Description("Описание работника театра");
     }
 }

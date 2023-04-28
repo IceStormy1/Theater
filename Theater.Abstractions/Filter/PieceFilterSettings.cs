@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Theater.Abstractions.Filter
+namespace Theater.Abstractions.Filter;
+
+public class PieceFilterSettings : PagingSortSettings
 {
-    public class PieceFilterSettings : PagingSortSettings
-    {
-        /// <summary>
-        /// Идентификатор жанра
-        /// </summary>
-        public Guid? GenreId { get; set; }
-    }
+    /// <summary>
+    /// Идентификатор жанра
+    /// </summary>
+    public Guid? GenreId { get; set; }
 }

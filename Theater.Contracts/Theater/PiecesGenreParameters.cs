@@ -1,10 +1,9 @@
-﻿namespace Theater.Contracts.Theater
+﻿namespace Theater.Contracts.Theater;
+
+public class PiecesGenreParameters
 {
-    public class PiecesGenreParameters
-    {
-        /// <summary>
-        /// Наименование роли
-        /// </summary>
-        public string GenreName { get; set; }
-    }
+    /// <summary>
+    /// Наименование роли
+    /// </summary>
+    public string GenreName { get; set; }
 }

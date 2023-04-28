@@ -6,36 +6,35 @@ using Theater.Abstractions.TheaterWorker;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 
-namespace Theater.Core.Theater
+namespace Theater.Core.Theater;
+
+public sealed class TheaterWorkerService : ServiceBase<TheaterWorkerParameters, TheaterWorkerEntity>, ITheaterWorkerService
 {
-    public sealed class TheaterWorkerService : ServiceBase<TheaterWorkerParameters, TheaterWorkerEntity>, ITheaterWorkerService
+    private readonly ITheaterWorkerRepository _theaterWorkerRepository;
+
+    public TheaterWorkerService(
+        IMapper mapper,
+        IDocumentValidator<TheaterWorkerParameters> documentValidator,
+        ITheaterWorkerRepository repository) 
+        : base(mapper, repository, documentValidator)
     {
-        private readonly ITheaterWorkerRepository _theaterWorkerRepository;
+        _theaterWorkerRepository = repository;
+    }
 
-        public TheaterWorkerService(
-            IMapper mapper,
-            IDocumentValidator<TheaterWorkerParameters> documentValidator,
-            ITheaterWorkerRepository repository) 
-            : base(mapper, repository, documentValidator)
+    public async Task<TotalWorkersModel> GetTotalWorkers()
+    {
+        var totalWorkers = await _theaterWorkerRepository.GetTotalWorkers();
+
+        return new TotalWorkersModel
         {
-            _theaterWorkerRepository = repository;
-        }
+            TotalWorkersByPositionType = totalWorkers
+        };
+    }
 
-        public async Task<TotalWorkersModel> GetTotalWorkers()
-        {
-            var totalWorkers = await _theaterWorkerRepository.GetTotalWorkers();
+    public async Task<IReadOnlyCollection<TheaterWorkerShortInformationModel>> GetShortInformationWorkersByPositionType(int positionType)
+    {
+        var workersShortInformation = await _theaterWorkerRepository.GetShortInformationWorkersByPositionType(positionType);
 
-            return new TotalWorkersModel
-            {
-                TotalWorkersByPositionType = totalWorkers
-            };
-        }
-
-        public async Task<IReadOnlyCollection<TheaterWorkerShortInformationModel>> GetShortInformationWorkersByPositionType(int positionType)
-        {
-            var workersShortInformation = await _theaterWorkerRepository.GetShortInformationWorkersByPositionType(positionType);
-
-            return Mapper.Map<IReadOnlyCollection<TheaterWorkerShortInformationModel>>(workersShortInformation);
-        }
+        return Mapper.Map<IReadOnlyCollection<TheaterWorkerShortInformationModel>>(workersShortInformation);
     }
 }

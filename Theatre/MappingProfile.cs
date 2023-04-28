@@ -15,74 +15,73 @@ using Theater.Entities.Authorization;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
 
-namespace Theater
+namespace Theater;
+
+internal sealed class MappingProfile : Profile
 {
-    internal sealed class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<UserParameters, UserEntity>()
-                .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
-                .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
-                .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
-                ;
+        CreateMap<UserParameters, UserEntity>()
+            .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
+            .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
+            .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
+            ;
 
-            CreateMap<UserEntity, UserModel>()
-                .ForMember(destination => destination.Password, options => options.MapFrom(exp => exp.Password))
-                ;
+        CreateMap<UserEntity, UserModel>()
+            .ForMember(destination => destination.Password, options => options.MapFrom(exp => exp.Password))
+            ;
 
-            CreateMap<UserEntity, AuthenticateResponse>();
+        CreateMap<UserEntity, AuthenticateResponse>();
 
-            CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
-            CreateMap<PieceDateDto, PieceDateModel>();
-            CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
-                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionTypeName.GetEnumDisplayName()))
-                ;
-            CreateMap<TheaterWorkerEntity, TheaterWorkerShortInformationModel>()
-                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
-                .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
-                .ForMember(destination => destination.FullName, options => options.MapFrom(exp => $"{exp.LastName} {exp.FirstName} {exp.MiddleName}"))
-                ;
+        CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
+        CreateMap<PieceDateDto, PieceDateModel>();
+        CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
+            .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionTypeName.GetEnumDisplayName()))
+            ;
+        CreateMap<TheaterWorkerEntity, TheaterWorkerShortInformationModel>()
+            .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
+            .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
+            .ForMember(destination => destination.FullName, options => options.MapFrom(exp => $"{exp.LastName} {exp.FirstName} {exp.MiddleName}"))
+            ;
 
-            CreateMap<PieceDto, PieceModel>();
-            CreateMap<PieceParameters, PieceEntity>();
-            CreateMap<PieceEntity, PieceModel>();
+        CreateMap<PieceDto, PieceModel>();
+        CreateMap<PieceParameters, PieceEntity>();
+        CreateMap<PieceEntity, PieceModel>();
 
-            CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
-                .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
-                .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
-                .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
-                ;
-            CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
-            CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
-                .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate))
-                ;
+        CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
+            .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
+            .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
+            .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
+            ;
+        CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
+        CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
+            .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate))
+            ;
             
-            CreateMap<PiecesTicketEntity, PiecesTicketModel>();
-            CreateMap<PieceDateParameters, PieceDateEntity>();
+        CreateMap<PiecesTicketEntity, PiecesTicketModel>();
+        CreateMap<PieceDateParameters, PieceDateEntity>();
            
-            CreateMap<PieceDateEntity, PieceDateModel>()
-                .ForMember(destination => destination.PiecesTickets, options => options.MapFrom(exp => exp.PiecesTickets))
-                ;
+        CreateMap<PieceDateEntity, PieceDateModel>()
+            .ForMember(destination => destination.PiecesTickets, options => options.MapFrom(exp => exp.PiecesTickets))
+            ;
 
-            CreateMap<PiecesTicketEntity, PiecesTicketModel>();
-            CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
-            CreateMap<PiecesTicketModel, PiecesTicketEntity>();
+        CreateMap<PiecesTicketEntity, PiecesTicketModel>();
+        CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
+        CreateMap<PiecesTicketModel, PiecesTicketEntity>();
 
-            CreateMap<PieceFilterParameters, PieceFilterSettings>();
-            CreateMap<TheaterWorkerFilterParameters, TheaterWorkerFilterSettings>();
+        CreateMap<PieceFilterParameters, PieceFilterSettings>();
+        CreateMap<TheaterWorkerFilterParameters, TheaterWorkerFilterSettings>();
 
-            CreateMap<UserReviewParameters, UserReviewEntity>();
-            CreateMap<UserReviewEntity, UserReviewModel>()
-                .ForMember(destination => destination.UserName, options => options.MapFrom(exp => exp.User == null ? null : exp.User.UserName))
-                ;
+        CreateMap<UserReviewParameters, UserReviewEntity>();
+        CreateMap<UserReviewEntity, UserReviewModel>()
+            .ForMember(destination => destination.UserName, options => options.MapFrom(exp => exp.User == null ? null : exp.User.UserName))
+            ;
 
-            CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
-            CreateMap<PiecesGenreParameters, PiecesGenreEntity>();
+        CreateMap<PieceWorkerParameters, PieceWorkerEntity>();
+        CreateMap<PiecesGenreParameters, PiecesGenreEntity>();
 
-            CreateMap<FileStorageEntity, StorageFileListItem>();
+        CreateMap<FileStorageEntity, StorageFileListItem>();
 
-            CreateMap(typeof(PagingResult<>), typeof(Page<>));
-        }
+        CreateMap(typeof(PagingResult<>), typeof(Page<>));
     }
 }

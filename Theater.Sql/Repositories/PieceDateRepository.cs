@@ -2,14 +2,13 @@
 using Theater.Abstractions.Piece;
 using Theater.Entities.Theater;
 
-namespace Theater.Sql.Repositories
+namespace Theater.Sql.Repositories;
+
+public sealed class PieceDateRepository : BaseCrudRepository<PieceDateEntity>, IPieceDateRepository
 {
-    public sealed class PieceDateRepository : BaseCrudRepository<PieceDateEntity>, IPieceDateRepository
+    public PieceDateRepository(
+        TheaterDbContext dbContext,
+        ILogger<BaseCrudRepository<PieceDateEntity>> logger) : base(dbContext, logger)
     {
-        public PieceDateRepository(
-            TheaterDbContext dbContext,
-            ILogger<BaseCrudRepository<PieceDateEntity>> logger) : base(dbContext, logger)
-        {
-        }
     }
 }

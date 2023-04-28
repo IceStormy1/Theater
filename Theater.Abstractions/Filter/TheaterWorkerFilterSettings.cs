@@ -1,12 +1,11 @@
 ﻿using Theater.Common;
 
-namespace Theater.Abstractions.Filter
+namespace Theater.Abstractions.Filter;
+
+public sealed class TheaterWorkerFilterSettings : PagingSortSettings
 {
-    public sealed class TheaterWorkerFilterSettings : PagingSortSettings
-    {
-        /// <summary>
-        /// Идентификатор должности работника
-        /// </summary>
-        public PositionType? PositionTypeId { get; set; }
-    }
+    /// <summary>
+    /// Идентификатор должности работника
+    /// </summary>
+    public PositionType? PositionTypeId { get; set; }
 }

@@ -5,15 +5,14 @@ using Theater.Contracts.Theater;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Theater;
 
-namespace Theater.Controllers.Admin
+namespace Theater.Controllers.Admin;
+
+[Route("api/admin/pieceWorker")]
+public class PieceWorkersAdminController : AdminBaseController<PieceWorkerParameters, PieceWorkerEntity>
 {
-    [Route("api/admin/pieceWorker")]
-    public class PieceWorkersAdminController : AdminBaseController<PieceWorkerParameters, PieceWorkerEntity>
+    public PieceWorkersAdminController(
+        IMapper mapper,
+        IPieceWorkersService pieceWorkersService) : base(pieceWorkersService, mapper)
     {
-        public PieceWorkersAdminController(
-            IMapper mapper,
-            IPieceWorkersService pieceWorkersService) : base(pieceWorkersService, mapper)
-        {
-        }
     }
 }

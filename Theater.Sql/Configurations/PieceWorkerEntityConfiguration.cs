@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Theater.Entities.Theater;
 
-namespace Theater.Sql.Configurations
+namespace Theater.Sql.Configurations;
+
+internal sealed class PieceWorkerEntityConfiguration : IEntityTypeConfiguration<PieceWorkerEntity>
 {
-    internal sealed class PieceWorkerEntityConfiguration : IEntityTypeConfiguration<PieceWorkerEntity>
+    public void Configure(EntityTypeBuilder<PieceWorkerEntity> builder)
     {
-        public void Configure(EntityTypeBuilder<PieceWorkerEntity> builder)
-        {
-            builder.HasKey(x => x.Id);
-        }
+        builder.HasKey(x => x.Id);
     }
 }

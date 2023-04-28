@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Theater.Entities
+namespace Theater.Entities;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-    }
+    /// <summary>
+    /// Идентификатор
+    /// </summary>
+    public Guid Id { get; set; }
 }

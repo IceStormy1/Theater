@@ -1,7 +1,6 @@
-﻿namespace Theater.Contracts.Authorization
+﻿namespace Theater.Contracts.Authorization;
+
+public sealed class AuthenticateParameters : UserBase
 {
-    public sealed class AuthenticateParameters : UserBase
-    {
         
-    }
 }

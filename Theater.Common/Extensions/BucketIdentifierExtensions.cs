@@ -1,16 +1,15 @@
-﻿namespace Theater.Common.Extensions
+﻿namespace Theater.Common.Extensions;
+
+public static class BucketIdentifierExtensions
 {
-    public static class BucketIdentifierExtensions
+    public static string ToBucketName(this BucketIdentifier type)
     {
-        public static string ToBucketName(this BucketIdentifier type)
+        return type switch
         {
-            return type switch
-            {
-                //only lowercase names
-                BucketIdentifier.Piece => "piece",
-                BucketIdentifier.User => "user",
-                _ => ""
-            };
-        }
+            //only lowercase names
+            BucketIdentifier.Piece => "piece",
+            BucketIdentifier.User => "user",
+            _ => ""
+        };
     }
 }

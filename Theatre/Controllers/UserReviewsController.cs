@@ -11,65 +11,64 @@ using Theater.Contracts.Theater;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Theater;
 
-namespace Theater.Controllers
+namespace Theater.Controllers;
+
+[ApiController]
+[Route("api/review")]
+[Authorize]
+public sealed class UserReviewsController : CrudServiceBaseController<UserReviewParameters, UserReviewEntity>
 {
-    [ApiController]
-    [Route("api/review")]
-    [Authorize]
-    public sealed class UserReviewsController : CrudServiceBaseController<UserReviewParameters, UserReviewEntity>
+    private readonly IUserReviewsService _userReviewsService;
+
+    public UserReviewsController(IUserReviewsService service, IMapper mapper) : base(service, mapper)
     {
-        private readonly IUserReviewsService _userReviewsService;
+        _userReviewsService = service;
+    }
 
-        public UserReviewsController(IUserReviewsService service, IMapper mapper) : base(service, mapper)
-        {
-            _userReviewsService = service;
-        }
+    /// <summary>
+    /// Добавить рецензию пользователя
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateReview([FromBody] UserReviewParameters parameters)
+    {
+        if (!UserId.HasValue)
+            return RenderResult(UserAccountErrors.Unauthorized);
 
-        /// <summary>
-        /// Добавить рецензию пользователя
-        /// </summary>
-        [HttpPost]
-        [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> CreateReview([FromBody] UserReviewParameters parameters)
-        {
-            if (!UserId.HasValue)
-                return RenderResult(UserAccountErrors.Unauthorized);
+        parameters.UserId = UserId.Value;
+        var result = await _userReviewsService.CreateOrUpdate(parameters, null);
 
-            parameters.UserId = UserId.Value;
-            var result = await _userReviewsService.CreateOrUpdate(parameters, null);
+        return RenderResult(result);
+    }
 
-            return RenderResult(result);
-        }
+    /// <summary>
+    /// Редактировать рецензию пользователя
+    /// </summary>
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateReview([FromRoute] Guid id, [FromBody] UserReviewParameters parameters)
+    {
+        if (!UserId.HasValue)
+            return RenderResult(UserAccountErrors.Unauthorized);
 
-        /// <summary>
-        /// Редактировать рецензию пользователя
-        /// </summary>
-        [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateReview([FromRoute] Guid id, [FromBody] UserReviewParameters parameters)
-        {
-            if (!UserId.HasValue)
-                return RenderResult(UserAccountErrors.Unauthorized);
+        parameters.UserId = UserId.Value;
+        var result = await _userReviewsService.CreateOrUpdate(parameters, id);
 
-            parameters.UserId = UserId.Value;
-            var result = await _userReviewsService.CreateOrUpdate(parameters, id);
+        return RenderResult(result);
+    }
 
-            return RenderResult(result);
-        }
+    /// <summary>
+    /// Удалить рецензию пользователя
+    /// </summary>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteReview([FromRoute] Guid id)
+    {
+        var result = await _userReviewsService.Delete(id, UserId);
 
-        /// <summary>
-        /// Удалить рецензию пользователя
-        /// </summary>
-        [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteReview([FromRoute] Guid id)
-        {
-            var result = await _userReviewsService.Delete(id, UserId);
-
-            return RenderResult(result);
-        }
+        return RenderResult(result);
     }
 }

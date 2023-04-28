@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Theater.Contracts.FileStorage
+namespace Theater.Contracts.FileStorage;
+
+public abstract class FileStorageParameters
 {
-    public abstract class FileStorageParameters
-    {
-        /// <summary>
-        /// Название бакета
-        /// </summary>
-        public string BucketName { get; set; }
-    }
+    /// <summary>
+    /// Название бакета
+    /// </summary>
+    public string BucketName { get; set; }
 }

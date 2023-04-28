@@ -1,10 +1,9 @@
-﻿namespace Theater.Contracts.Filters
+﻿namespace Theater.Contracts.Filters;
+
+public class PieceFilterParameters : PagingSortParameters
 {
-    public class PieceFilterParameters : PagingSortParameters
-    {
-        /// <summary>
-        /// Идентификатор жанра
-        /// </summary>
-        public int? GenreId { get; set; }
-    }
+    /// <summary>
+    /// Идентификатор жанра
+    /// </summary>
+    public int? GenreId { get; set; }
 }

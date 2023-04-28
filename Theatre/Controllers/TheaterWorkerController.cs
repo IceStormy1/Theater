@@ -12,69 +12,68 @@ using Theater.Abstractions.Filter;
 using Theater.Contracts.Filters;
 using Theater.Controllers.BaseControllers;
 
-namespace Theater.Controllers
+namespace Theater.Controllers;
+
+[ApiController]
+[Route("api")]
+public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters, TheaterWorkerEntity>
 {
-    [ApiController]
-    [Route("api")]
-    public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters, TheaterWorkerEntity>
+    private readonly ITheaterWorkerService _theaterWorkerService;
+    private readonly IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;
+
+    public TheaterWorkerController(
+        ITheaterWorkerService theaterWorkerService,
+        IMapper mapper, 
+        IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader) : base(theaterWorkerService, mapper)
     {
-        private readonly ITheaterWorkerService _theaterWorkerService;
-        private readonly IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;
+        _theaterWorkerService = theaterWorkerService;
+        _theaterWorkerIndexReader = theaterWorkerIndexReader;
+    }
 
-        public TheaterWorkerController(
-            ITheaterWorkerService theaterWorkerService,
-            IMapper mapper, 
-            IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader) : base(theaterWorkerService, mapper)
-        {
-            _theaterWorkerService = theaterWorkerService;
-            _theaterWorkerIndexReader = theaterWorkerIndexReader;
-        }
+    /// <summary>
+    /// Получить количество работников театра по каждому из типов должности 
+    /// </summary>
+    /// <response code="200">В случае успешного запроса</response>
+    [HttpPost("workers/total")]
+    [ProducesResponseType(typeof(TotalWorkersModel), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTotalWorkers()
+    {
+        var totalWorkers = await _theaterWorkerService.GetTotalWorkers();
 
-        /// <summary>
-        /// Получить количество работников театра по каждому из типов должности 
-        /// </summary>
-        /// <response code="200">В случае успешного запроса</response>
-        [HttpPost("workers/total")]
-        [ProducesResponseType(typeof(TotalWorkersModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTotalWorkers()
-        {
-            var totalWorkers = await _theaterWorkerService.GetTotalWorkers();
+        return Ok(totalWorkers);
+    }
 
-            return Ok(totalWorkers);
-        }
+    /// <summary>
+    /// Получить краткую информацию о работниках театра по типу должности
+    /// </summary>
+    /// <remarks>
+    /// Доступна сортировка по полям:
+    /// * name
+    /// * position
+    /// </remarks>
+    /// <response code="200">В случае успешного запроса</response>
+    [HttpGet("workers")]
+    [ProducesResponseType(typeof(DocumentCollection<TheaterWorkerShortInformationModel>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetShortInformationWorkersByPositionType([FromQuery] TheaterWorkerFilterParameters filter)
+    {
+        var filterSettings = Mapper.Map<TheaterWorkerFilterSettings>(filter);
+        var workersShortInformation = await _theaterWorkerIndexReader.QueryItems(filterSettings);
 
-        /// <summary>
-        /// Получить краткую информацию о работниках театра по типу должности
-        /// </summary>
-        /// <remarks>
-        /// Доступна сортировка по полям:
-        /// * name
-        /// * position
-        /// </remarks>
-        /// <response code="200">В случае успешного запроса</response>
-        [HttpGet("workers")]
-        [ProducesResponseType(typeof(DocumentCollection<TheaterWorkerShortInformationModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetShortInformationWorkersByPositionType([FromQuery] TheaterWorkerFilterParameters filter)
-        {
-            var filterSettings = Mapper.Map<TheaterWorkerFilterSettings>(filter);
-            var workersShortInformation = await _theaterWorkerIndexReader.QueryItems(filterSettings);
+        return Ok(Mapper.Map<Page<TheaterWorkerShortInformationModel>>(workersShortInformation));
+    }
 
-            return Ok(Mapper.Map<Page<TheaterWorkerShortInformationModel>>(workersShortInformation));
-        }
+    /// <summary>
+    /// Получить полную информацию о работнике театра по его идентификатору
+    /// </summary>
+    /// <response code="200">В случае успешного запроса</response>
+    /// <response code="404">В случае успешного запроса</response>
+    [HttpGet("worker/{theaterWorkerId:guid}")]
+    [ProducesResponseType(typeof(TheaterWorkerModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid theaterWorkerId)
+    {
+        var theaterWorker = await Service.GetById(theaterWorkerId);
 
-        /// <summary>
-        /// Получить полную информацию о работнике театра по его идентификатору
-        /// </summary>
-        /// <response code="200">В случае успешного запроса</response>
-        /// <response code="404">В случае успешного запроса</response>
-        [HttpGet("worker/{theaterWorkerId:guid}")]
-        [ProducesResponseType(typeof(TheaterWorkerModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid theaterWorkerId)
-        {
-            var theaterWorker = await Service.GetById(theaterWorkerId);
-
-            return RenderResult(theaterWorker);
-        }
+        return RenderResult(theaterWorker);
     }
 }
