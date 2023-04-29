@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Theater.Contracts.Authorization;
+namespace Theater.Contracts.UserAccount;
 
 public class UserParameters : UserBase, IUser
 {

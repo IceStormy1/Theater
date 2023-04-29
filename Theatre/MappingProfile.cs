@@ -11,6 +11,7 @@ using Theater.Contracts.Authorization;
 using Theater.Contracts.FileStorage;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
+using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
@@ -71,6 +72,7 @@ internal sealed class MappingProfile : Profile
 
         CreateMap<PieceFilterParameters, PieceFilterSettings>();
         CreateMap<TheaterWorkerFilterParameters, TheaterWorkerFilterSettings>();
+        CreateMap<UserAccountFilterParameters, UserAccountFilterSettings>();
 
         CreateMap<UserReviewParameters, UserReviewEntity>();
         CreateMap<UserReviewEntity, UserReviewModel>()
@@ -83,6 +85,7 @@ internal sealed class MappingProfile : Profile
         CreateMap<FileStorageEntity, StorageFileListItem>();
 
         CreateMap<WorkersPositionParameters, WorkersPositionEntity>();
+        CreateMap<UserEntity, UserShortItem>();
 
         CreateMap(typeof(PagingResult<>), typeof(Page<>));
     }

@@ -1,4 +1,4 @@
-﻿namespace Theater.Contracts.Authorization;
+﻿namespace Theater.Contracts.UserAccount;
 
 /// <summary>
 /// Пол

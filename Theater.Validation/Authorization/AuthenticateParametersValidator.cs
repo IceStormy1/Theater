@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.UserAccount;
 
 namespace Theater.Validation.Authorization;
 

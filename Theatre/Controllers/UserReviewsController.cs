@@ -7,8 +7,8 @@ using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserReviews;
-using Theater.Contracts.Authorization;
 using Theater.Contracts.Theater;
+using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Theater;
 

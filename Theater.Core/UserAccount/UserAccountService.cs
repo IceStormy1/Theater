@@ -9,6 +9,7 @@ using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 
 namespace Theater.Core.UserAccount;
@@ -35,15 +36,9 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
         return Mapper.Map<UserModel>(user);
     }
 
-    public async Task<IList<UserModel>> GetUsers()
-    {
-        var users = await _userAccountRepository.GetUsers();
-
-        return Mapper.Map<List<UserModel>>(users);
-    }
-
     public async Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user)
     {
+        // TODO: Валидация на уникальность пользователя в системе
         var userEntity = Mapper.Map<UserEntity>(user);
 
         return await _userAccountRepository.CreateUser(userEntity);

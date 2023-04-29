@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using System.Text.RegularExpressions;
 using Theater.Contracts;
-using Theater.Contracts.Authorization;
+using Theater.Contracts.UserAccount;
 
 namespace Theater.Validation.Authorization;
 

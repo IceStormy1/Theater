@@ -1,5 +1,5 @@
 ﻿using System;
-using Theater.Contracts.Authorization;
+using Theater.Contracts.UserAccount;
 
 namespace Theater.Contracts;
 

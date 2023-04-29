@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 
 namespace Theater.Abstractions.UserAccount;
@@ -16,13 +17,6 @@ public interface IUserAccountService : ICrudService<UserParameters, UserEntity>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <returns>Данные пользователя</returns>
     Task<UserModel> GetUserById(Guid userId);
-
-    /// <summary>
-    /// Получить список всех пользователей 
-    /// </summary>
-    /// <returns>Список пользователей</returns>
-    /// TODO: Добавить параметры фильтрации (пейджинация)
-    Task<IList<UserModel>> GetUsers();
 
     /// <summary>
     /// Создать пользователя

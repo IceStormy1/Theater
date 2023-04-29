@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
-using AutoMapper;
+using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
-using Theater.Entities.Authorization;
-using Theater.Policy;
-using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
-using Theater.Abstractions.Errors;
 using Theater.Controllers.BaseControllers;
-using Swashbuckle.AspNetCore.Annotations;
+using Theater.Entities.Authorization;
+using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 
 namespace Theater.Controllers;
 
@@ -64,24 +63,6 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
         return user is null
             ? RenderResult(UserAccountErrors.NotFound)
             : Ok(user);
-    }
-
-    //todo: переделать под параметры (пейджинация и поиск)
-    /// <summary>
-    /// Возвращает первые 300 пользователей отсортированные по никнейму
-    /// </summary>
-    /// <returns></returns>
-    /// <response code="200">В случае, если пользователь был найден в системе</response>
-    /// <response code="404">В случае если пользователь не был найден</response>
-    [Authorize(Policy = nameof(RoleModel.User.Policies.UserSearch))]
-    [HttpPost("users")]
-    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUsersByParameters()
-    {
-        var users = await _userAccountService.GetUsers();
-
-        return Ok(users);
     }
 
     /// <summary>

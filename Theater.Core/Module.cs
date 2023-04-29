@@ -24,6 +24,7 @@ using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
 using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
 using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filter.TheaterWorkerFilterSettings>;
+using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Authorization.UserEntity, Theater.Abstractions.Filter.UserAccountFilterSettings>;
 
 namespace Theater.Core;
 
@@ -135,6 +136,11 @@ public sealed class Module : Autofac.Module
             .AsSelf()
             .AsImplementedInterfaces()
             .SingleInstance();
+        
+        builder.RegisterType<UserQueryBuilder>()
+            .AsSelf()
+            .AsImplementedInterfaces()
+            .SingleInstance();
 
         builder
             .Register(p => new PieceIndexReader(
@@ -151,6 +157,16 @@ public sealed class Module : Autofac.Module
                 p.Resolve<TheaterDbContext>(), 
                 p.Resolve<TheaterWorkerQueryBuilder>(), 
                 p.Resolve<ITheaterWorkerRepository>(),
+                p.Resolve<IMapper>()
+                ))
+            .AsImplementedInterfaces()
+            .InstancePerLifetimeScope();
+        
+        builder
+            .Register(p => new UserIndexReader(
+                p.Resolve<TheaterDbContext>(), 
+                p.Resolve<UserQueryBuilder>(), 
+                p.Resolve<IUserAccountRepository>(),
                 p.Resolve<IMapper>()
                 ))
             .AsImplementedInterfaces()

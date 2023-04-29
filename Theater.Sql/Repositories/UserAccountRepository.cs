@@ -31,13 +31,6 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
                                          && (string.Equals(user.UserName, userName)
                                              || string.Equals(user.Email, userName)));
 
-    public async Task<IReadOnlyCollection<UserEntity>> GetUsers()
-        => await _dbContext.Users
-            .AsNoTracking()
-            .OrderBy(x => x.UserName)
-            .Take(300)
-            .ToListAsync();
-
     public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
     {
         var user = await _dbContext.Users

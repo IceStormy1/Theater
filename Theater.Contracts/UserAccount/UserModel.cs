@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Theater.Contracts.Authorization;
+namespace Theater.Contracts.UserAccount;
 
 public sealed class UserModel : UserParameters
 {

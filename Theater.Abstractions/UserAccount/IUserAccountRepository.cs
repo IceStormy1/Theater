@@ -17,14 +17,6 @@ public interface IUserAccountRepository : ICrudRepository<UserEntity>
     Task<UserEntity> FindUser(string userName, string password);
 
     /// <summary>
-    /// Получить список всех пользователей 
-    /// </summary>
-    /// <remarks>Возвращает первые 300 пользователей отсортированные по никнейму</remarks>
-    /// <returns>Список пользователей</returns>
-    /// TODO: Добавить параметры фильтрации (пейджинация)
-    Task<IReadOnlyCollection<UserEntity>> GetUsers();
-
-    /// <summary>
     /// Создать пользователя
     /// </summary>
     /// <param name="userEntity">Данные пользователя</param>

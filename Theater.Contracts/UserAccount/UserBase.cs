@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Theater.Contracts.Authorization;
+namespace Theater.Contracts.UserAccount;
 
 public abstract class UserBase
 {
@@ -36,7 +36,7 @@ public abstract class UserBase
 
         foreach (var b in hash)
             result.Append(b.ToString("X2"));
-            
+
         return result.ToString();
     }
 }
