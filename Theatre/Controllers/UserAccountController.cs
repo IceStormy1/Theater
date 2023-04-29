@@ -12,12 +12,14 @@ using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 using Theater.Abstractions.Errors;
 using Theater.Controllers.BaseControllers;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Theater.Controllers;
 
 [ApiController]
 [Route("api/account")]
 [Authorize]
+[SwaggerTag("Пользовательские методы для работы с аккаунтом")]
 public sealed class UserAccountController : CrudServiceBaseController<UserParameters, UserEntity>
 {
     private readonly IUserAccountService _userAccountService;

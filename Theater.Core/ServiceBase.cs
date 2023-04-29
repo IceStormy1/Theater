@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions;
-using Theater.Abstractions.Errors;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Entities;
@@ -27,15 +26,6 @@ public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel, TEntit
         DocumentValidator = documentValidator;
     }
 
-    public async Task<WriteResult<TModel>> GetById(Guid id)
-    {
-        var entity = await Repository.GetByEntityId(id);
-
-        return entity is null
-            ? WriteResult<TModel>.FromError(PieceErrors.NotFound.Error)
-            : WriteResult.FromValue(Mapper.Map<TModel>(entity));
-    }
-
     public async Task<WriteResult<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null)
     {
         var entity = entityId.HasValue 
@@ -49,6 +39,11 @@ public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel, TEntit
 
     public async Task<WriteResult> Delete(Guid id, Guid? userId = null)
     {
+        var isEntityExists = await Repository.IsEntityExists(id);
+
+        if(!isEntityExists)
+            return WriteResult.FromError(ErrorModel.Default("delete-conflict", "Указанная запись не найдена"));
+
         var validationResult = await DocumentValidator.CheckIfCanDelete(id, userId);
 
         if (!validationResult.IsSuccess)

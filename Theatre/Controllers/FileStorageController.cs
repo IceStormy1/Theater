@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.FileStorage;
@@ -10,6 +11,7 @@ using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers;
 
+[SwaggerTag("Пользовательские методы для работы с файловым хранилищем")]
 public class FileStorageController : TheaterBaseController
 {
     private readonly IFileStorageService _fileStorageService;

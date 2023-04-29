@@ -1,7 +1,6 @@
 ﻿using LinqKit;
 using System;
 using System.Linq.Expressions;
-using Theater.Abstractions;
 using Theater.Abstractions.Filter;
 using Theater.Entities.Theater;
 using Theater.Sql.Extensions;

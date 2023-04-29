@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
@@ -108,6 +109,7 @@ public sealed class Startup
             {
                 cfg.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 cfg.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                cfg.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 
         services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfile).Assembly));
@@ -207,6 +209,7 @@ public sealed class Startup
         services.AddRelationRepository<PieceWorkerEntity, TheaterDbContext>();
         services.AddRelationRepository<UserReviewEntity, TheaterDbContext>();
         services.AddRelationRepository<PiecesGenreEntity, TheaterDbContext>();
+        services.AddRelationRepository<WorkersPositionEntity, TheaterDbContext>();
     }
 
     private static void AddCrudServices(IServiceCollection services)

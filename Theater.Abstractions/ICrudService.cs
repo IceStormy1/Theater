@@ -11,13 +11,6 @@ public interface ICrudService<TModel, TEntity>
     where TModel : class
 {
     /// <summary>
-    /// Получить сущность по идентификатору
-    /// </summary>
-    /// <param name="id">Идентификатор сущности</param>
-    /// <returns></returns>
-    Task<WriteResult<TModel>> GetById(Guid id);
-
-    /// <summary>
     /// Добавить сущность
     /// </summary>
     /// <param name="model">Добавляемая/редактируемая сущность</param>

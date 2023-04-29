@@ -11,20 +11,22 @@ using Theater.Abstractions;
 using Theater.Abstractions.Filter;
 using Theater.Contracts.Filters;
 using Theater.Controllers.BaseControllers;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Theater.Controllers;
 
 [ApiController]
 [Route("api")]
+[SwaggerTag("Пользовательские методы для работы с работниками театра")]
 public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters, TheaterWorkerEntity>
 {
     private readonly ITheaterWorkerService _theaterWorkerService;
-    private readonly IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;
+    private readonly IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;
 
     public TheaterWorkerController(
         ITheaterWorkerService theaterWorkerService,
         IMapper mapper, 
-        IIndexReader<TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader) : base(theaterWorkerService, mapper)
+        IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader) : base(theaterWorkerService, mapper)
     {
         _theaterWorkerService = theaterWorkerService;
         _theaterWorkerIndexReader = theaterWorkerIndexReader;
@@ -69,10 +71,10 @@ public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterW
     /// <response code="404">В случае успешного запроса</response>
     [HttpGet("worker/{theaterWorkerId:guid}")]
     [ProducesResponseType(typeof(TheaterWorkerModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid theaterWorkerId)
     {
-        var theaterWorker = await Service.GetById(theaterWorkerId);
+        var theaterWorker = await _theaterWorkerIndexReader.GetById(theaterWorkerId);
 
         return RenderResult(theaterWorker);
     }

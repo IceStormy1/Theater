@@ -11,10 +11,12 @@ using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 using Theater.Abstractions.Errors;
 using Theater.Controllers.BaseControllers;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Theater.Controllers;
 
 [ApiController]
+[SwaggerTag("Пользовательские методы для работы с билетами пьес")]
 public sealed class TicketController : CrudServiceBaseController<PiecesTicketParameters, PiecesTicketEntity>
 {
     private readonly IPieceTicketService _pieceTicketService;

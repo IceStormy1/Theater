@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Ticket;
@@ -12,6 +13,7 @@ using Theater.Entities.Theater;
 namespace Theater.Controllers.Admin;
 
 [Route("api/admin/piece/{pieceId:guid}/ticket")]
+[SwaggerTag("Админ. Методы для работы с билетами пьес")]
 public class PieceTicketAdminController : CrudServiceBaseController<PiecesTicketParameters, PiecesTicketEntity>
 {
     private readonly IPieceTicketService _pieceTicketService;

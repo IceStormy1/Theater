@@ -11,19 +11,21 @@ using Theater.Contracts.Filters;
 using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 using Theater.Controllers.BaseControllers;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Theater.Controllers;
 
 [ApiController]
+[SwaggerTag("Пользовательские методы для работы с пьесами")]
 public sealed class PieceController : CrudServiceBaseController<PieceParameters, PieceEntity>
 {
     private readonly IPieceService _pieceService;
-    private readonly IIndexReader<PieceEntity, PieceFilterSettings> _pieceIndexReader;
+    private readonly IIndexReader<PieceModel, PieceEntity, PieceFilterSettings> _pieceIndexReader;
 
     public PieceController(
         IPieceService service, 
         IMapper mapper,
-        IIndexReader<PieceEntity, PieceFilterSettings> pieceIndexReader) : base(service, mapper)
+        IIndexReader<PieceModel, PieceEntity, PieceFilterSettings> pieceIndexReader) : base(service, mapper)
     {
         _pieceService = service;
         _pieceIndexReader = pieceIndexReader;

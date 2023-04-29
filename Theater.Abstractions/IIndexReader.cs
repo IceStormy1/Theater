@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Theater.Abstractions.Filter;
+using Theater.Common;
 using Theater.Entities;
 
 namespace Theater.Abstractions;
@@ -9,7 +11,9 @@ namespace Theater.Abstractions;
 /// </summary>
 /// <typeparam name="TIndex">Тип записей.</typeparam>
 /// <typeparam name="TFilter">Тип фильтра</typeparam>
-public interface IIndexReader<TIndex, in TFilter>
+/// <typeparam name="TModel">Полная модель записи</typeparam>
+public interface IIndexReader<TModel, TIndex, in TFilter>
+    where TModel : class
     where TIndex : class, IEntity
     where TFilter : PagingSortSettings
 {
@@ -18,4 +22,11 @@ public interface IIndexReader<TIndex, in TFilter>
     /// </summary>
     /// <param name="filter">Фильтр записей.</param>
     Task<PagingResult<TIndex>> QueryItems(TFilter filter);
+
+    /// <summary>
+    /// Возвращает запись по идентификатору
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<WriteResult<TModel>> GetById(Guid id);
 }

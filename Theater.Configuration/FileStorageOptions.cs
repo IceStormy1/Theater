@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Theater.Configuration;
+﻿namespace Theater.Configuration;
 
 public class FileStorageOptions
 {

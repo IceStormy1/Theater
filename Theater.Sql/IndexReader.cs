@@ -3,13 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.Filter;
+using Theater.Common;
 using Theater.Entities;
 
 namespace Theater.Sql;
 
-public class IndexReader<TEntity, TFilter> : IIndexReader<TEntity, TFilter>
+public class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntity, TFilter>
+    where TModel : class
     where TEntity : class, IEntity
     where TFilter : PagingSortSettings
 {
@@ -17,6 +20,7 @@ public class IndexReader<TEntity, TFilter> : IIndexReader<TEntity, TFilter>
     private readonly DbSet<TEntity> _dbSet;
     private readonly bool _useAsExpandable;
     private readonly ICrudRepository<TEntity> _crudRepository;
+    private readonly IMapper _mapper;
 
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="queryBuilder">Реализация <see cref="IQueryBuilder{TEntity, TFilter}"/></param>
@@ -29,11 +33,12 @@ public class IndexReader<TEntity, TFilter> : IIndexReader<TEntity, TFilter>
     /// </remarks>
     public IndexReader(DbContext dbContext,
         IQueryBuilder<TEntity, TFilter> queryBuilder, 
-        ICrudRepository<TEntity> crudRepository,
-        bool useAsExpandable = false)
+        ICrudRepository<TEntity> crudRepository, 
+        IMapper mapper, bool useAsExpandable = false)
     {
         _queryBuilder = queryBuilder;
         _crudRepository = crudRepository;
+        _mapper = mapper;
         _dbSet = dbContext.Set<TEntity>();
         _useAsExpandable = useAsExpandable;
     }
@@ -71,6 +76,15 @@ public class IndexReader<TEntity, TFilter> : IIndexReader<TEntity, TFilter>
             Total = total,
             Items = items
         };
+    }
+
+    public async Task<WriteResult<TModel>> GetById(Guid id)
+    {
+        var entity = await _crudRepository.GetByEntityId(id);
+
+        return entity is null 
+            ? WriteResult<TModel>.FromError(ErrorModel.Default("delete-conflict", "Указанная запись не найдена")) 
+            : WriteResult.FromValue(_mapper.Map<TModel>(entity));
     }
 
     private async Task<PagingResult<TEntity>> QueryItemsWithEmptyFilter()

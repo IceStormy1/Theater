@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
@@ -16,6 +17,7 @@ namespace Theater.Controllers;
 [ApiController]
 [Route("api/review")]
 [Authorize]
+[SwaggerTag("Пользовательские методы для работы с рецензиями")]
 public sealed class UserReviewsController : CrudServiceBaseController<UserReviewParameters, UserReviewEntity>
 {
     private readonly IUserReviewsService _userReviewsService;
