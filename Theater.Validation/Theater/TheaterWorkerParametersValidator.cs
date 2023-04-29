@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 
@@ -12,7 +13,7 @@ public sealed class TheaterWorkerParametersValidator : AbstractValidator<Theater
         Include(userValidator);
 
         RuleFor(worker => worker.PositionId)
-            .GreaterThan((ushort)default)
+            .NotEqual(Guid.Empty)
             .WithMessage("Указана некорректная должность");
 
         RuleFor(worker => worker.Description)

@@ -1,7 +1,7 @@
 ﻿using Autofac;
+using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
-using Theater.Abstractions.FileStorage;
 using Theater.Abstractions.Piece;
 using Theater.Abstractions.PieceDates;
 using Theater.Abstractions.PieceGenre;
@@ -10,9 +10,9 @@ using Theater.Abstractions.TheaterWorker;
 using Theater.Abstractions.Ticket;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserReviews;
+using Theater.Abstractions.WorkersPosition;
 using Theater.Contracts.Theater;
 using Theater.Core.Authorization;
-using Theater.Core.FileStorage;
 using Theater.Core.Theater;
 using Theater.Core.Theater.PieceWorkers;
 using Theater.Core.Theater.Validators;
@@ -22,8 +22,8 @@ using Theater.Core.UserReviews;
 using Theater.Sql;
 using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
-using PieceIndexReader = Theater.Sql.IndexReader<Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
-using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filter.TheaterWorkerFilterSettings>;
+using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
+using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filter.TheaterWorkerFilterSettings>;
 
 namespace Theater.Core;
 
@@ -81,6 +81,10 @@ public sealed class Module : Autofac.Module
         builder.RegisterType<TicketRepository>()
             .As<ITicketRepository>()
             .InstancePerLifetimeScope();
+        
+        builder.RegisterType<WorkersPositionRepository>()
+            .As<IWorkersPositionRepository>()
+            .InstancePerLifetimeScope();
             
         builder.RegisterType<PieceDateService>()
             .As<IPieceDateService>()
@@ -88,6 +92,10 @@ public sealed class Module : Autofac.Module
             
         builder.RegisterType<PieceGenreService>()
             .As<IPieceGenreService>()
+            .InstancePerLifetimeScope();
+        
+        builder.RegisterType<WorkersPositionService>()
+            .As<IWorkersPositionService>()
             .InstancePerLifetimeScope();
             
         builder.RegisterType<UserReviewsService>()
@@ -113,6 +121,10 @@ public sealed class Module : Autofac.Module
         builder.RegisterType<PieceGenreValidator>()
             .As<IDocumentValidator<PiecesGenreParameters>>()
             .InstancePerLifetimeScope();
+        
+        builder.RegisterType<WorkersPositionValidator>()
+            .As<IDocumentValidator<WorkersPositionParameters>>()
+            .InstancePerLifetimeScope();
 
         builder.RegisterType<PieceQueryBuilder>()
             .AsSelf()
@@ -128,7 +140,9 @@ public sealed class Module : Autofac.Module
             .Register(p => new PieceIndexReader(
                 p.Resolve<TheaterDbContext>(), 
                 p.Resolve<PieceQueryBuilder>(), 
-                p.Resolve<IPieceRepository>()))
+                p.Resolve<IPieceRepository>(),
+                p.Resolve<IMapper>()
+                ))
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
             
@@ -136,7 +150,9 @@ public sealed class Module : Autofac.Module
             .Register(p => new TheaterWorkerIndexReader(
                 p.Resolve<TheaterDbContext>(), 
                 p.Resolve<TheaterWorkerQueryBuilder>(), 
-                p.Resolve<ITheaterWorkerRepository>()))
+                p.Resolve<ITheaterWorkerRepository>(),
+                p.Resolve<IMapper>()
+                ))
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
     }

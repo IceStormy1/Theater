@@ -39,7 +39,7 @@ public class TheaterWorkerParameters : IUser
     /// <summary>
     /// Идентификатор должности работника театра
     /// </summary>
-    public ushort PositionId { get; set; }
+    public Guid PositionId { get; set; }
 
     /// <summary>
     /// Тип должности

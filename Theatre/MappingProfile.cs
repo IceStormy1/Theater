@@ -82,6 +82,8 @@ internal sealed class MappingProfile : Profile
 
         CreateMap<FileStorageEntity, StorageFileListItem>();
 
+        CreateMap<WorkersPositionParameters, WorkersPositionEntity>();
+
         CreateMap(typeof(PagingResult<>), typeof(Page<>));
     }
 }
