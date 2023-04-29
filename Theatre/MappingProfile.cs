@@ -86,6 +86,7 @@ internal sealed class MappingProfile : Profile
 
         CreateMap<WorkersPositionParameters, WorkersPositionEntity>();
         CreateMap<UserEntity, UserShortItem>();
+        CreateMap<WorkersPositionEntity, WorkersPositionModel>();
 
         CreateMap(typeof(PagingResult<>), typeof(Page<>));
     }
