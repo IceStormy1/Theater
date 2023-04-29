@@ -49,7 +49,7 @@ public sealed class TheaterWorkerEntity : IEntity
     /// <summary>
     /// Идентификатор должности работника театра
     /// </summary>
-    public ushort PositionId { get; set; }
+    public Guid PositionId { get; set; }
 
     /// <summary>
     /// Ссылка на должность 

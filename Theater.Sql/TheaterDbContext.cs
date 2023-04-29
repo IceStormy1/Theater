@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Reflection;
 using Theater.Entities.Authorization;
 using Theater.Entities.FileStorage;
@@ -84,6 +85,7 @@ public class TheaterDbContext : DbContext
 
     public TheaterDbContext(DbContextOptions<TheaterDbContext> options) : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

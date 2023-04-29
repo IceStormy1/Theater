@@ -1,11 +1,18 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Theater.Entities.Theater;
+
+#nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Theater.Sql.Migrations
 {
+    /// <inheritdoc />
     public partial class AddTheaterTables : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTime>(
@@ -61,7 +68,8 @@ namespace Theater.Sql.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RoleName = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false)
                 },
                 constraints: table =>
@@ -73,7 +81,7 @@ namespace Theater.Sql.Migrations
                 name: "WorkersPositions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     PositionName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     PositionType = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -116,7 +124,7 @@ namespace Theater.Sql.Migrations
                     DateOfBirth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     PhotoId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PositionId = table.Column<int>(type: "integer", nullable: false)
+                    PositionId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -304,6 +312,17 @@ namespace Theater.Sql.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "WorkersPositions",
+                columns: new[] { "Id", "PositionName", "PositionType" },
+                values: new object[,]
+                {
+                    { new Guid("060b1905-0d40-483d-8462-32193864db03"), "Заслуженный актер", 2 },
+                    { new Guid("3f60120a-ac2e-4636-ac65-85f01172b787"), "Режиссер-постановщик", 1 },
+                    { new Guid("973e5bca-1f6e-4c50-b988-872aa2db5377"), "Гитарист", 4 },
+                    { new Guid("f08238c8-0f7f-467d-a8c7-468ca76c4235"), "Художник", 3 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "BirthDate", "DateOfCreate", "Email", "FirstName", "Gender", "LastName", "MiddleName", "Money", "Password", "Phone", "PhotoId", "RoleId", "UserName" },
                 values: new object[,]
@@ -393,6 +412,7 @@ namespace Theater.Sql.Migrations
                 onDelete: ReferentialAction.SetNull);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

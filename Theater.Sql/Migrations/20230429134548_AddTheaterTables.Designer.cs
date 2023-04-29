@@ -8,19 +8,23 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Theater.Entities.Theater;
 using Theater.Sql;
 
+#nullable disable
+
 namespace Theater.Sql.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    [Migration("20230424211704_DisableGeneratingFileStorageId")]
-    partial class DisableGeneratingFileStorageId
+    [Migration("20230429134548_AddTheaterTables")]
+    partial class AddTheaterTables
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.10")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Theater.Entities.Authorization.UserEntity", b =>
                 {
@@ -66,7 +70,7 @@ namespace Theater.Sql.Migrations
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("character(11)")
-                        .IsFixedLength(true);
+                        .IsFixedLength();
 
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uuid");
@@ -124,8 +128,9 @@ namespace Theater.Sql.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -378,8 +383,8 @@ namespace Theater.Sql.Migrations
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("PositionId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -442,10 +447,9 @@ namespace Theater.Sql.Migrations
 
             modelBuilder.Entity("Theater.Entities.Theater.WorkersPositionEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("PositionName")
                         .IsRequired()
@@ -458,6 +462,32 @@ namespace Theater.Sql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkersPositions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("060b1905-0d40-483d-8462-32193864db03"),
+                            PositionName = "Заслуженный актер",
+                            PositionType = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("f08238c8-0f7f-467d-a8c7-468ca76c4235"),
+                            PositionName = "Художник",
+                            PositionType = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("973e5bca-1f6e-4c50-b988-872aa2db5377"),
+                            PositionName = "Гитарист",
+                            PositionType = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("3f60120a-ac2e-4636-ac65-85f01172b787"),
+                            PositionName = "Режиссер-постановщик",
+                            PositionType = 1
+                        });
                 });
 
             modelBuilder.Entity("Theater.Entities.Authorization.UserEntity", b =>
