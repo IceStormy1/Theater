@@ -71,7 +71,7 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
 
         var token = _jwtHelper.GenerateJwtToken(userEntity);
 
-        return new AuthenticateResponse { AccessToken = token };
+        return new AuthenticateResponse { AccessToken = token, Id = userEntity.Id };
     }
 
     public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)

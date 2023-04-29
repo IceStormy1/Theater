@@ -1,4 +1,6 @@
-﻿namespace Theater.Contracts.Authorization;
+﻿using System;
+
+namespace Theater.Contracts.Authorization;
 
 public sealed class AuthenticateResponse
 {
@@ -6,4 +8,9 @@ public sealed class AuthenticateResponse
     /// Токен
     /// </summary>
     public string AccessToken { get; set; }
+
+    /// <summary>
+    /// Идентификатор пользователя
+    /// </summary>
+    public Guid Id { get; set; }
 }
