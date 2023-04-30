@@ -53,6 +53,7 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
             .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
             .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
+            .ForMember(destination => destination.BirthDate, options => options.MapFrom(exp => exp.DateOfBirth))
             ;
         CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
         CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
