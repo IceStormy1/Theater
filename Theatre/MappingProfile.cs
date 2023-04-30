@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Filter;
@@ -34,20 +36,34 @@ internal sealed class MappingProfile : Profile
 
         CreateMap<UserEntity, AuthenticateResponse>();
 
-        CreateMap<PieceShortInformationDto, PieceShortInformationModel>();
+        CreateMap<PieceEntity, PieceShortInformationModel>()
+            .ForMember(destination => destination.MainPicture, options => options.MapFrom(exp => new StorageFileListItem { Id = exp.MainPhotoId }))
+            .ForMember(destination => destination.WorkerShortInformation, options => options.MapFrom(exp => exp.PieceWorkers.Select(x=>x.TheaterWorker).ToList()))
+            ;
+
         CreateMap<PieceDateDto, PieceDateModel>();
         CreateMap<TheaterWorkerShortInformationDto, TheaterWorkerShortInformationModel>()
             .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionTypeName.GetEnumDisplayName()))
             ;
+
         CreateMap<TheaterWorkerEntity, TheaterWorkerShortInformationModel>()
             .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
+            .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
             .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
             .ForMember(destination => destination.FullName, options => options.MapFrom(exp => $"{exp.LastName} {exp.FirstName} {exp.MiddleName}"))
             ;
 
         CreateMap<PieceDto, PieceModel>();
-        CreateMap<PieceParameters, PieceEntity>();
-        CreateMap<PieceEntity, PieceModel>();
+        CreateMap<PieceParameters, PieceEntity>()
+            .ForMember(destination => destination.MainPhotoId, options => options.MapFrom(exp => exp.MainPhoto.Id))
+            .ForMember(destination => destination.PhotoIds, options => options.MapFrom(exp => exp.AdditionalPhotos != null ? exp.AdditionalPhotos.Select(x=>x.Id) : new List<Guid>()))
+            .ForMember(destination => destination.MainPhoto, options => options.Ignore())
+            ;
+
+        CreateMap<PieceEntity, PieceModel>()
+            .ForMember(destination => destination.MainPicture, options => options.MapFrom(exp => new StorageFileListItem { Id = exp.MainPhotoId }))
+            .ForMember(destination => destination.AdditionalPhotos, options => options.MapFrom(exp => exp.PhotoIds.Select(x => new StorageFileListItem { Id = x }).ToList()))
+            ;
 
         CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
             .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))

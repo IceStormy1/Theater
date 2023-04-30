@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Theater.Contracts.FileStorage;
 
 namespace Theater.Contracts.Theater;
 
@@ -15,9 +17,9 @@ public sealed class PieceModel : PieceShortInformationModel
     public string ShortDescription { get; set; }
 
     /// <summary>
-    /// Идентификаторы изображений 
+    /// Мета-данные доп.изображений 
     /// </summary>
-    public IReadOnlyCollection<string> PhotoUrls { get; set; } = new List<string>();
+    public IReadOnlyCollection<StorageFileListItem> AdditionalPhotos { get; set; } = Array.Empty<StorageFileListItem>();
 
     /// <summary>
     /// Отзывы пользователей

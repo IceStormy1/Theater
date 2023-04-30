@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
-using System;
 using Theater.Abstractions.WorkersPosition;
 using Theater.Common;
 using Theater.Contracts;

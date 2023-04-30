@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions.WorkersPosition;
 using Theater.Common;
-using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories;

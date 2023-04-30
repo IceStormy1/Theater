@@ -11,7 +11,7 @@ public class FileStorageModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterType<FileStorageService>().As<IFileStorageService>();
+        builder.RegisterType<FileStorageService>().As<IFileStorageService>().InstancePerLifetimeScope();
 
         builder.Register(context =>
         {

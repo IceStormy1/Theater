@@ -1,5 +1,6 @@
 ﻿using System;
 using Theater.Common;
+using Theater.Entities.Theater;
 
 namespace Theater.Entities.FileStorage;
 
@@ -39,4 +40,6 @@ public sealed class FileStorageEntity
     /// Дата и время загрузки файла
     /// </summary>
     public DateTime UploadAt { get; set; }
+
+    public PieceEntity Piece { get; set; }
 }

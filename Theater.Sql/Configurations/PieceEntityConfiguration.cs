@@ -26,5 +26,10 @@ internal sealed class PieceEntityConfiguration : IEntityTypeConfiguration<PieceE
             .WithOne(x => x.Piece)
             .HasForeignKey(x => x.PieceId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(s => s.MainPhoto)
+            .WithOne(x => x.Piece)
+            .HasForeignKey<PieceEntity>(x=>x.MainPhotoId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

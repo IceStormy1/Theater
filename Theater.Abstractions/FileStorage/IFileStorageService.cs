@@ -32,7 +32,7 @@ public interface IFileStorageService
     /// </summary>
     /// <param name="entityId">Уникальный идентификатор файла</param>
     /// <returns></returns>
-    Task<StorageFileInfo> GetStorageFileInfo(Guid entityId);
+    Task<StorageFileInfo> GetStorageFileInfoById(Guid entityId);
 
     /// <summary>
     /// Получить поток на файл для скачивания

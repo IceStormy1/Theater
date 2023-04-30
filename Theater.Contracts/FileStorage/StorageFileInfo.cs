@@ -11,7 +11,7 @@ public class StorageFileInfo : StorageFileListItem
     public string Bucket { get; set; }
 
     /// <summary>
-    /// Bucket
+    /// Полный путь до файла в хранилище
     /// </summary>
     public string StorageFileName { get; set; }
 

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Theater.Contracts.FileStorage;
 
 namespace Theater.Contracts.Theater;
 
 public class PieceParameters
-{//todo: добавить работников театра и возможно исправить модели пьес
+{
     /// <summary>
     /// Наименование пьесы
     /// </summary>
@@ -26,7 +27,12 @@ public class PieceParameters
     public Guid GenreId { get; set; }
 
     /// <summary>
-    /// Идентификаторы изображений 
+    /// Мета-данные основного изображения пьесы
     /// </summary>
-    public IReadOnlyCollection<Guid> PhotoIds { get; set; } = Array.Empty<Guid>();
+    public StorageFileListItem MainPhoto { get; set; }
+
+    /// <summary>
+    /// Мета-данные доп.изображений 
+    /// </summary>
+    public IReadOnlyCollection<StorageFileListItem> AdditionalPhotos { get; set; } = Array.Empty<StorageFileListItem>();
 }

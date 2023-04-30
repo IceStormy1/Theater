@@ -125,7 +125,7 @@ public class FileStorageService : IFileStorageService
     private string GetFileUrl(FileStorageEntity fileEntity)
         => $"{_fileStorageOptions?.ServiceUrl}/{fileEntity.BucketId.ToBucketName()}/{fileEntity.FileStorageName}";
 
-    public async Task<StorageFileInfo> GetStorageFileInfo(Guid entityId)
+    public async Task<StorageFileInfo> GetStorageFileInfoById(Guid entityId)
     {
         var fileEntity = await GetFileEntity(entityId);
 

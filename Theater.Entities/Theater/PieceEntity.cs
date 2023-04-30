@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Theater.Entities.FileStorage;
 
 namespace Theater.Entities.Theater;
 
@@ -31,14 +32,24 @@ public sealed class PieceEntity : IEntity
     public Guid GenreId { get; set; }
 
     /// <summary>
-    /// Идентификаторы изображений 
-    /// </summary>
-    public Guid[] PhotoIds { get; set; } = Array.Empty<Guid>();
-
-    /// <summary>
     /// Ссылка на жанр пьесы
     /// </summary>
     public PiecesGenreEntity Genre { get; set; }
+
+    /// <summary>
+    /// Основная фотография пьесы
+    /// </summary>
+    public FileStorageEntity MainPhoto { get; set; }
+    
+    /// <summary>
+    /// Идентификатор основной фотографии
+    /// </summary>
+    public Guid MainPhotoId { get; set; }
+
+    /// <summary>
+    /// Дополнительные фотографии пьесы
+    /// </summary>
+    public List<Guid> PhotoIds { get; set; }
 
     public List<UserReviewEntity> UserReviews { get; set; }
     public List<PieceDateEntity> PieceDates { get; set; }

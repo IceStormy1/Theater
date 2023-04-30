@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Common;

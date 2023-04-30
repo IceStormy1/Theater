@@ -62,6 +62,11 @@ public sealed class PieceController : CrudServiceBaseController<PieceParameters,
 
         var piecesShortInformation = await _pieceIndexReader.QueryItems(pieceFilterSettings);
 
-        return Ok(Mapper.Map<Page<PieceShortInformationModel>>(piecesShortInformation));
+        var result = Mapper.Map<Page<PieceShortInformationModel>>(piecesShortInformation);
+
+        //TODO: добавить в QueryItems обогащение модели
+        await _pieceService.EnrichPieceShortInformation(result);
+
+        return Ok(result);
     }
 }

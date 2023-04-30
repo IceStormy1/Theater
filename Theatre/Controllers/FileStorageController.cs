@@ -65,7 +65,7 @@ public class FileStorageController : TheaterBaseController
     [ProducesResponseType(typeof(StorageFileInfo), StatusCodes.Status200OK)]
     public Task<StorageFileInfo> GetStorageFileInfo([FromRoute] Guid id)
     {
-        return _fileStorageService.GetStorageFileInfo(id);
+        return _fileStorageService.GetStorageFileInfoById(id);
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class FileStorageController : TheaterBaseController
     [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
     public async Task<FileStreamResult> GetFileById([FromRoute] Guid id)
     {
-        var storageFileInfo = await _fileStorageService.GetStorageFileInfo(id);
+        var storageFileInfo = await _fileStorageService.GetStorageFileInfoById(id);
         var stream = await _fileStorageService.GetFileStreamById(id, storageFileInfo.Bucket, storageFileInfo.StorageFileName);
         return File(stream, storageFileInfo.ContentType, storageFileInfo.FileName);
     }
