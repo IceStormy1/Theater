@@ -5,7 +5,7 @@ using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.UserReview;
 using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Validators;

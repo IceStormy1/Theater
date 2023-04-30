@@ -1,4 +1,4 @@
-﻿using Theater.Contracts.Theater;
+﻿using Theater.Contracts.Theater.UserReview;
 
 namespace Theater.Abstractions.UserReviews;
 

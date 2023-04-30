@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 using Theater.Contracts;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.TheaterWorker;
 
 namespace Theater.Validation.Theater;
 

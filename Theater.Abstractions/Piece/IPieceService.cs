@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Theater.Common;
 using Theater.Contracts;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.Piece;
 
 namespace Theater.Abstractions.Piece;
 

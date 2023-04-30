@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Common;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.PiecesTicket;
 
 namespace Theater.Abstractions.Ticket;
 

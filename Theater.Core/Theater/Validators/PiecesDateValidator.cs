@@ -5,7 +5,7 @@ using Theater.Abstractions;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.PieceDates;
 using Theater.Common;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.PieceDate;
 
 namespace Theater.Core.Theater.Validators;
 

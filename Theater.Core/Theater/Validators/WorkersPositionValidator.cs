@@ -4,7 +4,7 @@ using Theater.Abstractions;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.WorkersPosition;
 using Theater.Common;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.WorkersPosition;
 
 namespace Theater.Core.Theater.Validators;
 

@@ -1,4 +1,4 @@
-﻿using Theater.Contracts.Theater;
+﻿using Theater.Contracts.Theater.PieceWorker;
 
 namespace Theater.Abstractions.PieceWorkers;
 

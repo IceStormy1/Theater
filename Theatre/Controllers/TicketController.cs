@@ -7,10 +7,10 @@ using AutoMapper;
 using Theater.Abstractions.Ticket;
 using Theater.Common;
 using Theater.Contracts;
-using Theater.Contracts.Theater;
 using Theater.Abstractions.Errors;
 using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
+using Theater.Contracts.Theater.PiecesTicket;
 
 namespace Theater.Controllers;
 

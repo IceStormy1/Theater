@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Contracts;
-using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 using AutoMapper;
 using Theater.Abstractions;
@@ -12,6 +11,7 @@ using Theater.Abstractions.Filter;
 using Theater.Contracts.Filters;
 using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
+using Theater.Contracts.Theater.TheaterWorker;
 
 namespace Theater.Controllers;
 

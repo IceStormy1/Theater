@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.TheaterWorker;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers.Admin;

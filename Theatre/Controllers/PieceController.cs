@@ -8,10 +8,10 @@ using Theater.Abstractions.Filter;
 using Theater.Abstractions.Piece;
 using Theater.Contracts;
 using Theater.Contracts.Filters;
-using Theater.Contracts.Theater;
 using Theater.Entities.Theater;
 using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
+using Theater.Contracts.Theater.Piece;
 
 namespace Theater.Controllers;
 

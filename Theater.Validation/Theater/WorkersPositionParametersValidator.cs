@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Theater.Contracts.Theater;
+using Theater.Contracts.Theater.WorkersPosition;
 
 namespace Theater.Validation.Theater;
 
