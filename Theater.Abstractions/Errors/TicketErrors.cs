@@ -39,4 +39,10 @@ public static class TicketErrors
     /// </summary>
     public static WriteResult TicketsAlreadyCreated =>
         WriteResult.FromError(ErrorModel.Default("ticket/already-created", "Билеты на указанную дату уже существуют"));
+
+    /// <summary>
+    /// Указана дата от другой пьесы
+    /// </summary>
+    public static WriteResult WrongPieceDate =>
+        WriteResult.FromError(ErrorModel.Default("ticket/wrong-date", "Указана дата от другой пьесы"));
 }

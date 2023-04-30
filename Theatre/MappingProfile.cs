@@ -71,12 +71,16 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
             .ForMember(destination => destination.BirthDate, options => options.MapFrom(exp => exp.DateOfBirth))
             ;
+
         CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
         CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
             .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate))
             ;
             
-        CreateMap<PiecesTicketEntity, PiecesTicketModel>();
+        CreateMap<PiecesTicketEntity, PiecesTicketModel>()
+            .ForMember(destination => destination.IsBooked, options => options.MapFrom(exp => exp.BookedTicket == null))
+            ;
+
         CreateMap<PieceDateParameters, PieceDateEntity>();
            
         CreateMap<PieceDateEntity, PieceDateModel>()

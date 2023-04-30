@@ -51,8 +51,20 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
 
     public async Task AddRange(IReadOnlyCollection<TEntity> entities)
     {
-        DbSet.AddRange(entities);
-        await DbContext.SaveChangesAsync();
+        var transaction = await DbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            DbSet.AddRange(entities);
+            await DbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Произошла ошибка при добавлении записей {Type}", typeof(TEntity).Name);
+           
+            throw;
+        }
     }
 
     public virtual async Task Update(TEntity entity)
@@ -61,7 +73,7 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
 
         if (entityExists == false)
         {
-            Logger.LogWarning("Entity with entityIds {Id} of type '{EntityType}' was not found on update attempt.", 
+            Logger.LogWarning("Сущность с идентификатором {Id} с типом '{EntityType}' не найдена при обновлении.", 
                 entity.Id, typeof(TEntity));
                 
             return;
@@ -73,8 +85,20 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
 
     public async Task UpdateRange(IReadOnlyCollection<TEntity> entities)
     {
-        DbSet.UpdateRange(entities);
-        await DbContext.SaveChangesAsync();
+        var transaction = await DbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            DbSet.UpdateRange(entities);
+            await DbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Произошла ошибка при обновлении записей {Type}", typeof(TEntity).Name);
+           
+            throw;
+        }
     }
 
     public async Task Delete(Guid id)
@@ -83,7 +107,7 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
 
         if (entity == null)
         {
-            Logger.LogWarning("Entity with {Id} of type '{EntityType}' was not found on delete attempt.",
+            Logger.LogWarning("Сущность с идентификатором {Id} типа '{EntityType}' не найдена при удалении.",
                 id, typeof(TEntity));
                
             return;

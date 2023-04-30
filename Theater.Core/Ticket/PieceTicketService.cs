@@ -95,9 +95,12 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         if (pieceEntity is null)
             return WriteResult.FromError(PieceErrors.NotFound.Error);
 
+        if(!pieceEntity.PieceDates.Any(x=>x.Id == ticketsParameters.PieceDateId))
+            return WriteResult.FromError(TicketErrors.WrongPieceDate.Error);
+
         var piecesTicketEntities = await _ticketRepository.GetPieceTicketsByDate(pieceId, ticketsParameters.PieceDateId);
 
-        if(piecesTicketEntities.Count == default)
+        if(piecesTicketEntities.Count != default)
             return WriteResult.FromError(TicketErrors.TicketsAlreadyCreated.Error);
 
         var ticketEntities = Mapper.Map<List<PiecesTicketEntity>>(ticketsParameters.PiecesTickets);

@@ -24,7 +24,7 @@ public sealed class PieceTicketCreateParametersValidator : AbstractValidator<Pie
                 return !hasDuplicates;
             })
             .WithMessage("Билеты пьесы не должны повторятся")
-            .Must(x => x.Count >= PieceConstants.NumberOfSeatsInHall)
+            .Must(x => x.Count == PieceConstants.NumberOfSeatsInHall)
             .WithMessage(x => $"Необходимо заполнить все билеты. Вы ввели {x.PiecesTickets.Count} из {PieceConstants.NumberOfSeatsInHall}");
 
         RuleForEach(x => x.PiecesTickets)
