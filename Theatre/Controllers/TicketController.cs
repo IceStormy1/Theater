@@ -34,7 +34,7 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     /// <param name="pieceId">Идентификатор пьесы</param>
     /// <param name="dateId">Идентификатор даты пьесы</param>
     /// <response code="200">В случае успешной регистрации</response>
-    [HttpGet("piece/{pieceId:guid}/date/{dateId:guid}")]
+    [HttpGet("ticket/{pieceId:guid}/date/{dateId:guid}")]
     [ProducesResponseType(typeof(DocumentCollection<PiecesTicketModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPieceTicketsByDate([FromRoute] Guid pieceId, [FromRoute] Guid dateId)
     {
@@ -50,7 +50,7 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     /// <response code="200">В случае успешной регистрации</response>
     /// <response code="400">В случае ошибок валидации</response>
     [Authorize]
-    [HttpPost("piece/{ticketId:guid}/buy")]
+    [HttpPost("ticket/{ticketId:guid}/buy")]
     [ProducesResponseType(typeof(WriteResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(WriteResult), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> BuyTicket([FromRoute] Guid ticketId)
@@ -70,7 +70,7 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     /// <response code="200">В случае успешной регистрации</response>
     /// <response code="400">В случае ошибок валидации</response>
     [Authorize]
-    [HttpPost("piece/{ticketId:guid}/book")]
+    [HttpPost("ticket/{ticketId:guid}/book")]
     [ProducesResponseType(typeof(WriteResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(WriteResult), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> BookTicket([FromRoute] Guid ticketId)

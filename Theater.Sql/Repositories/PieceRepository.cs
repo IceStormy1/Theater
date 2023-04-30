@@ -27,22 +27,11 @@ public sealed class PieceRepository : BaseCrudRepository<PieceEntity>, IPieceRep
             .FirstOrDefaultAsync(x => x.Id == pieceId);
     }
 
-    private IQueryable<PieceEntity> GetPieceQueryWithIncludes(Guid? pieceId = null)
-    {
-        var pieceQuery = AddIncludes(query: _dbContext.Pieces.AsQueryable()).AsQueryable();
-
-        if(pieceId.HasValue)
-            pieceQuery = pieceQuery.Where(x=>x.Id == pieceId.Value);
-
-        return pieceQuery.AsNoTracking();
-    }
-
     public override IQueryable<PieceEntity> AddIncludes(IQueryable<PieceEntity> query)
     {
         return query
             .Include(piece => piece.Genre)
             .Include(piece => piece.PieceDates)
-            .ThenInclude(x => x.PiecesTickets)
             .Include(piece => piece.PieceWorkers)
             .ThenInclude(x => x.TheaterWorker)
             .ThenInclude(x => x.Position)
