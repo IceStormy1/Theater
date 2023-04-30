@@ -1,20 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Common;
 using Theater.Contracts;
-using Theater.Entities;
 
 namespace Theater.Abstractions;
 
-public interface ICrudService<TModel, TEntity> 
-    where TEntity : class, IEntity 
-    where TModel : class
+public interface ICrudService<in TModel> where TModel : class
 {
     /// <summary>
     /// Добавить сущность
     /// </summary>
     /// <param name="model">Добавляемая/редактируемая сущность</param>
     /// <param name="entityId">Идентификатор сущности</param>
+    /// <param name="userId">Идентификатор пользователя</param>
     /// <remarks>
     /// Идентификатор<paramref name="entityId"/> заполняется при редактировании сущности
     /// </remarks>

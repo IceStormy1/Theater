@@ -28,10 +28,13 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
             .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
             .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
+            .ForMember(destination => destination.PhotoId, options => options.MapFrom(x => x.Photo == null ? (Guid?)null : x.Photo.Id))
+            .ForMember(destination => destination.Photo, options => options.Ignore())
             ;
 
         CreateMap<UserEntity, UserModel>()
             .ForMember(destination => destination.Password, options => options.MapFrom(exp => exp.Password))
+            .ForMember(destination => destination.Photo, options => options.MapFrom(exp => exp.PhotoId.HasValue ? new StorageFileListItem{Id = exp.PhotoId.Value} : null))
             ;
 
         CreateMap<UserEntity, AuthenticateResponse>();

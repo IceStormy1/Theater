@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Contracts.Theater;
-using Theater.Entities.Theater;
 
 namespace Theater.Abstractions.TheaterWorker;
 
-public interface ITheaterWorkerService : ICrudService<TheaterWorkerParameters, TheaterWorkerEntity>
+public interface ITheaterWorkerService : ICrudService<TheaterWorkerParameters>
 {
     /// <summary>
     /// Получить количество работников театра по каждому из типов должности 

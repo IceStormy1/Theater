@@ -5,6 +5,7 @@ using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Errors;
+using Theater.Abstractions.FileStorage;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
 using Theater.Contracts.Authorization;
@@ -17,22 +18,18 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
 {
     private readonly IJwtHelper _jwtHelper;
     private readonly IUserAccountRepository _userAccountRepository;
+    private readonly IFileStorageService _fileStorageService;
 
     public UserAccountService(
         IMapper mapper, 
         IUserAccountRepository repository,
         IDocumentValidator<UserParameters> documentValidator,
-        IJwtHelper jwtHelper) : base(mapper, repository, documentValidator)
+        IJwtHelper jwtHelper, 
+        IFileStorageService fileStorageService) : base(mapper, repository, documentValidator)
     {
         _jwtHelper = jwtHelper;
+        _fileStorageService = fileStorageService;
         _userAccountRepository = repository;
-    }
-
-    public async Task<UserModel> GetUserById(Guid userId)
-    {
-        var user = await Repository.GetByEntityId(userId);
-
-        return Mapper.Map<UserModel>(user);
     }
 
     public async Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user)

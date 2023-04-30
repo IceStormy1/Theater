@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Common;
@@ -8,7 +9,7 @@ using Theater.Entities;
 
 namespace Theater.Core;
 
-public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel, TEntity>
+public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel>
     where TEntity : class, IEntity, new()
     where TModel : class
 {

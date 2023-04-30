@@ -18,7 +18,7 @@ namespace Theater.Controllers;
 [ApiController]
 [Route("api")]
 [SwaggerTag("Пользовательские методы для работы с работниками театра")]
-public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters, TheaterWorkerEntity>
+public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters>
 {
     private readonly ITheaterWorkerService _theaterWorkerService;
     private readonly IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;

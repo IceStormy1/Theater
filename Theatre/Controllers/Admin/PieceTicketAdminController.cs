@@ -8,13 +8,12 @@ using Theater.Abstractions.Ticket;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Controllers.BaseControllers;
-using Theater.Entities.Theater;
 
 namespace Theater.Controllers.Admin;
 
 [Route("api/admin/piece/{pieceId:guid}/ticket")]
 [SwaggerTag("Админ. Методы для работы с билетами пьес")]
-public class PieceTicketAdminController : CrudServiceBaseController<PiecesTicketParameters, PiecesTicketEntity>
+public class PieceTicketAdminController : CrudServiceBaseController<PiecesTicketParameters>
 {
     private readonly IPieceTicketService _pieceTicketService;
 

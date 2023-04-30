@@ -4,19 +4,11 @@ using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
-using Theater.Entities.Authorization;
 
 namespace Theater.Abstractions.UserAccount;
 
-public interface IUserAccountService : ICrudService<UserParameters, UserEntity>
+public interface IUserAccountService : ICrudService<UserParameters>
 {
-    /// <summary>
-    /// Получить пользователя по уникальному идентификатору
-    /// </summary>
-    /// <param name="userId">Идентификатор пользователя</param>
-    /// <returns>Данные пользователя</returns>
-    Task<UserModel> GetUserById(Guid userId);
-
     /// <summary>
     /// Создать пользователя
     /// </summary>

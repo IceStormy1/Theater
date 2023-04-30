@@ -5,7 +5,6 @@ using System;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Contracts;
-using Theater.Entities;
 
 namespace Theater.Controllers.BaseControllers;
 
@@ -17,12 +16,11 @@ namespace Theater.Controllers.BaseControllers;
 #endif
 [Route("api/admin")]
 [ApiController]
-public class AdminBaseController<TParameters, TEntity> : CrudServiceBaseController<TParameters, TEntity>
+public class AdminBaseController<TParameters> : CrudServiceBaseController<TParameters>
     where TParameters : class
-    where TEntity : class, IEntity
 {
     public AdminBaseController(
-        ICrudService<TParameters, TEntity> service,
+        ICrudService<TParameters> service,
         IMapper mapper) : base(service, mapper)
     {
     }

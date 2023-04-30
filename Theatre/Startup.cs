@@ -214,7 +214,7 @@ public sealed class Startup
 
     private static void AddCrudServices(IServiceCollection services)
     {
-        services.AddScoped(typeof(ICrudService<,>), typeof(ServiceBase<,>));
+        services.AddScoped(typeof(ICrudService<>), typeof(ServiceBase<,>));
         //services.AddCrudService<PieceDateParameters, PieceDateEntity>();
     }
 

@@ -1,9 +1,9 @@
-﻿using LinqKit;
+﻿using AutoMapper;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.Filter;
 using Theater.Common;
@@ -25,6 +25,7 @@ public class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntit
     /// <param name="dbContext">Контекст БД</param>
     /// <param name="queryBuilder">Реализация <see cref="IQueryBuilder{TEntity, TFilter}"/></param>
     /// <param name="crudRepository">Репозиторий сущности</param>
+    /// <param name="mapper">Маппер</param>
     /// <param name="useAsExpandable">
     /// Использовать ли <see cref="Extensions.AsExpandable{T}(IQueryable{T})"/> вместо <see cref="Queryable.AsQueryable"/>.
     /// </param>
@@ -33,8 +34,9 @@ public class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntit
     /// </remarks>
     public IndexReader(DbContext dbContext,
         IQueryBuilder<TEntity, TFilter> queryBuilder, 
-        ICrudRepository<TEntity> crudRepository, 
-        IMapper mapper, bool useAsExpandable = false)
+        ICrudRepository<TEntity> crudRepository,
+        IMapper mapper,
+        bool useAsExpandable = false)
     {
         _queryBuilder = queryBuilder;
         _crudRepository = crudRepository;

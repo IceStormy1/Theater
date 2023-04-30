@@ -4,13 +4,12 @@ using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Contracts.Theater;
 using Theater.Controllers.BaseControllers;
-using Theater.Entities.Theater;
 
 namespace Theater.Controllers.Admin;
 
 [Route("api/admin/theaterWorker")]
 [SwaggerTag("Админ. Методы для работы работниками театра")]
-public sealed class TheaterWorkerAdminController : AdminBaseController<TheaterWorkerParameters, TheaterWorkerEntity>
+public sealed class TheaterWorkerAdminController : AdminBaseController<TheaterWorkerParameters>
 {
     public TheaterWorkerAdminController(
         ITheaterWorkerService service,

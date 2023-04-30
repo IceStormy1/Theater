@@ -22,7 +22,7 @@ internal static class ServiceCollectionExtensions
         where TDocumentModel : class
         where TEntity : class, IEntity, new()
     {
-        return services.AddScoped<ICrudService<TDocumentModel, TEntity>, ServiceBase<TDocumentModel, TEntity>>();
+        return services.AddScoped<ICrudService<TDocumentModel>, ServiceBase<TDocumentModel, TEntity>>();
     }
         
     public static IServiceCollection AddStubValidator<T>(this IServiceCollection services) where T : class

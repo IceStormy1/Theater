@@ -10,7 +10,6 @@ using Theater.Abstractions.UserReviews;
 using Theater.Contracts.Theater;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
-using Theater.Entities.Theater;
 
 namespace Theater.Controllers;
 
@@ -18,7 +17,7 @@ namespace Theater.Controllers;
 [Route("api/review")]
 [Authorize]
 [SwaggerTag("Пользовательские методы для работы с рецензиями")]
-public sealed class UserReviewsController : CrudServiceBaseController<UserReviewParameters, UserReviewEntity>
+public sealed class UserReviewsController : CrudServiceBaseController<UserReviewParameters>
 {
     private readonly IUserReviewsService _userReviewsService;
 

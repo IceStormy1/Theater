@@ -34,6 +34,11 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasOne(s => s.Photo)
+            .WithOne(x => x.User)
+            .HasForeignKey<UserEntity>(x => x.PhotoId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasData(GetPrimaryUsersData());
     }
 

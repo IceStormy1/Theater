@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Errors;
@@ -65,5 +66,12 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
         await _dbContext.SaveChangesAsync();
 
         return WriteResult.Successful;
+    }
+
+    public override IQueryable<UserEntity> AddIncludes(IQueryable<UserEntity> query)
+    {
+        return query.Include(x => x.Photo)
+            .Include(x => x.BookedTickets)
+            .Include(x => x.PurchasedUserTickets);
     }
 }

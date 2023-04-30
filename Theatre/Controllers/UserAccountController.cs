@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
+using Theater.Abstractions;
 using Theater.Abstractions.Errors;
+using Theater.Abstractions.FileStorage;
+using Theater.Abstractions.Filter;
 using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
@@ -19,15 +22,21 @@ namespace Theater.Controllers;
 [Route("api/account")]
 [Authorize]
 [SwaggerTag("Пользовательские методы для работы с аккаунтом")]
-public sealed class UserAccountController : CrudServiceBaseController<UserParameters, UserEntity>
+public sealed class UserAccountController : CrudServiceBaseController<UserParameters>
 {
     private readonly IUserAccountService _userAccountService;
+    private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
+    private readonly IFileStorageService _fileStorageService;
 
-    public UserAccountController(
+        public UserAccountController(
         IUserAccountService userAccountService,
-        IMapper mapper) : base(userAccountService, mapper)
+        IMapper mapper, 
+        IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader,
+        IFileStorageService fileStorageService) : base(userAccountService, mapper)
     {
         _userAccountService = userAccountService;
+        _userIndexReader = userIndexReader;
+        _fileStorageService = fileStorageService;
     }
 
     /// <summary>
@@ -53,16 +62,18 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     /// <param name="userId">Идентификатор пользователя</param>
     /// <response code="200">В случае, если пользователь был найден в системе</response>
     /// <response code="404">В случае если пользователь не был найден</response>
+    [AllowAnonymous]
     [HttpGet("user/{userId:guid}")]
     [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
     {
-        var user = await _userAccountService.GetUserById(userId);
+        var user = await _userIndexReader.GetById(userId);
 
-        return user is null
-            ? RenderResult(UserAccountErrors.NotFound)
-            : Ok(user);
+        if(user.IsSuccess && user.ResultData.Photo != null)
+            user.ResultData.Photo = await _fileStorageService.GetStorageFileInfoById(user.ResultData.Photo.Id);
+
+        return RenderResult(user);
     }
 
     /// <summary>

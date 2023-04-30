@@ -8,13 +8,12 @@ using Theater.Common;
 using Theater.Contracts;
 using Theater.Contracts.Theater;
 using Theater.Controllers.BaseControllers;
-using Theater.Entities.Theater;
 
 namespace Theater.Controllers
 {
     [Route("api")]
     [SwaggerTag("Пользовательские методы для работы с должностями работников театра")]
-    public sealed class WorkersPositionController : CrudServiceBaseController<WorkersPositionParameters, WorkersPositionEntity>
+    public sealed class WorkersPositionController : CrudServiceBaseController<WorkersPositionParameters>
     {
         private readonly IWorkersPositionService _workersPositionService;
 

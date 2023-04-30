@@ -1,4 +1,5 @@
 ﻿using System;
+using Theater.Contracts.FileStorage;
 
 namespace Theater.Contracts.UserAccount;
 
@@ -40,7 +41,7 @@ public class UserParameters : UserBase, IUser
     public DateTime BirthDate { get; set; }
 
     /// <summary>
-    /// Идентификатор фотографии пользователя в ЛК 
+    /// Мета-данные фотографии пользователя в ЛК 
     /// </summary>
-    public Guid? PhotoId { get; set; }
+    public StorageFileListItem Photo { get; set; }
 }

@@ -12,11 +12,6 @@ public sealed class PieceModel : PieceShortInformationModel
     public string Description { get; set; }
 
     /// <summary>
-    /// Краткое описание пьесы
-    /// </summary>
-    public string ShortDescription { get; set; }
-
-    /// <summary>
     /// Мета-данные доп.изображений 
     /// </summary>
     public IReadOnlyCollection<StorageFileListItem> AdditionalPhotos { get; set; } = Array.Empty<StorageFileListItem>();

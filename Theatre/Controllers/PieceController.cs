@@ -17,7 +17,7 @@ namespace Theater.Controllers;
 
 [ApiController]
 [SwaggerTag("Пользовательские методы для работы с пьесами")]
-public sealed class PieceController : CrudServiceBaseController<PieceParameters, PieceEntity>
+public sealed class PieceController : CrudServiceBaseController<PieceParameters>
 {
     private readonly IPieceService _pieceService;
     private readonly IIndexReader<PieceModel, PieceEntity, PieceFilterSettings> _pieceIndexReader;

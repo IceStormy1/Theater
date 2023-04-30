@@ -16,9 +16,10 @@ namespace Theater.Controllers.Admin
 {
     [Route("api/admin/user")]
     [SwaggerTag("Админ. Методы для работы с пользователями")]
-    public class UserAccountAdminController : AdminBaseController<UserParameters, UserEntity>
+    public class UserAccountAdminController : AdminBaseController<UserParameters>
     {
         private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
+
         public UserAccountAdminController(
             IUserAccountService service,
             IMapper mapper,

@@ -1,5 +1,6 @@
 ﻿using System;
 using Theater.Common;
+using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
 
 namespace Theater.Entities.FileStorage;
@@ -42,4 +43,5 @@ public sealed class FileStorageEntity
     public DateTime UploadAt { get; set; }
 
     public PieceEntity Piece { get; set; }
+    public UserEntity User { get; set; }
 }

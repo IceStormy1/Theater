@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
 
 namespace Theater.Entities.Authorization;
@@ -75,6 +76,11 @@ public sealed class UserEntity : IEntity
     /// Идентификатор фотографии пользователя в ЛК 
     /// </summary>
     public Guid? PhotoId { get; set; }
+
+    /// <summary>
+    /// Основная фотография пьесы
+    /// </summary>
+    public FileStorageEntity Photo { get; set; }
 
     /// <summary>
     /// Ссылка на роль пользователя
