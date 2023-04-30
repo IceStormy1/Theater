@@ -9,6 +9,7 @@ public static class BucketIdentifierExtensions
             //only lowercase names
             BucketIdentifier.Piece => "piece",
             BucketIdentifier.User => "user",
+            BucketIdentifier.TheaterWorker => "theater-worker",
             _ => ""
         };
     }
