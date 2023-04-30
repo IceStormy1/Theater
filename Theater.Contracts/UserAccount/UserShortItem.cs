@@ -5,6 +5,11 @@ namespace Theater.Contracts.UserAccount
     public class UserShortItem
     {
         /// <summary>
+        /// Идентификатор пользователя
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Email пользователя
         /// </summary>
         public string Email { get; set; }
