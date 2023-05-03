@@ -27,11 +27,11 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
 
     public async Task<TEntity> GetByEntityId(Guid entityId)
     {
-        var query = DbSet.AsNoTracking().Where(x => x.Id == entityId);
+        var query = DbSet.AsQueryable();
 
         query = AddIncludes(query);
 
-        return await query.FirstOrDefaultAsync();
+        return await query.FirstOrDefaultAsync(x => x.Id == entityId);
     }
 
     public async Task<IReadOnlyCollection<TEntity>> GetByEntityIds(IReadOnlyCollection<Guid> entityIds)
