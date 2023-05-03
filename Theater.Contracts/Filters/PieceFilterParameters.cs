@@ -1,4 +1,6 @@
-﻿namespace Theater.Contracts.Filters;
+﻿using System;
+
+namespace Theater.Contracts.Filters;
 
 public class PieceFilterParameters : PagingSortParameters
 {
@@ -6,4 +8,9 @@ public class PieceFilterParameters : PagingSortParameters
     /// Идентификатор жанра
     /// </summary>
     public int? GenreId { get; set; }
+
+    /// <summary>
+    /// Дата на которую нужно выбрать пьесы
+    /// </summary>
+    public DateTime? Date { get; set; }
 }

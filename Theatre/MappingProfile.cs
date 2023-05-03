@@ -49,6 +49,7 @@ internal sealed class MappingProfile : Profile
         CreateMap<PieceEntity, PieceShortInformationModel>()
             .ForMember(destination => destination.MainPicture, options => options.MapFrom(exp => new StorageFileListItem { Id = exp.MainPhotoId }))
             .ForMember(destination => destination.WorkerShortInformation, options => options.MapFrom(exp => exp.PieceWorkers.Select(x=>x.TheaterWorker).ToList()))
+            .ForMember(destination => destination.PieceGenre, options => options.MapFrom(exp => exp.Genre.GenreName))
             ;
 
         CreateMap<PieceDateDto, PieceDateModel>();
@@ -73,6 +74,8 @@ internal sealed class MappingProfile : Profile
         CreateMap<PieceEntity, PieceModel>()
             .ForMember(destination => destination.MainPicture, options => options.MapFrom(exp => new StorageFileListItem { Id = exp.MainPhotoId }))
             .ForMember(destination => destination.AdditionalPhotos, options => options.MapFrom(exp => exp.PhotoIds.Select(x => new StorageFileListItem { Id = x }).ToList()))
+            .ForMember(destination => destination.PieceGenre, options => options.MapFrom(exp => exp.Genre.GenreName))
+
             ;
 
         CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()

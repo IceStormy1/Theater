@@ -1,5 +1,6 @@
 ﻿using LinqKit;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Theater.Abstractions.Filter;
 using Theater.Entities.Theater;
@@ -14,6 +15,7 @@ public sealed class PieceQueryBuilder : QueryBuilderBase<PieceEntity, PieceFilte
         var pb = PredicateBuilder.New<PieceEntity>(x => true);
 
         pb.And(filter.GenreId, x => x.GenreId == filter.GenreId);
+        pb.And(filter.Date, x => x.PieceDates.Any(x=>x.Date.Date == filter.Date.Value.Date));
 
         return pb;
     }
