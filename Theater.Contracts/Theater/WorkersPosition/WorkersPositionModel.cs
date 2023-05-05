@@ -8,5 +8,10 @@ namespace Theater.Contracts.Theater.WorkersPosition
         /// Идентификатор должности
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Наименование типа должности
+        /// </summary>
+        public string PositionTypeName { get; set; }
     }
 }

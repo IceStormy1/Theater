@@ -118,7 +118,9 @@ internal sealed class MappingProfile : Profile
 
         CreateMap<WorkersPositionParameters, WorkersPositionEntity>();
         CreateMap<UserEntity, UserShortItem>();
-        CreateMap<WorkersPositionEntity, WorkersPositionModel>();
+        CreateMap<WorkersPositionEntity, WorkersPositionModel>()
+            .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.PositionType.GetEnumDisplayName()))
+            ;
 
         CreateMap(typeof(PagingResult<>), typeof(Page<>));
     }

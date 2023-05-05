@@ -30,6 +30,6 @@ public sealed class WorkersPositionRepository : BaseCrudRepository<WorkersPositi
         if (positionType.HasValue)
             query = query.Where(x => x.PositionType == positionType.Value);
 
-        return await query.ToListAsync();
+        return await query.OrderBy(x=>x.Id).ToListAsync();
     }
 }

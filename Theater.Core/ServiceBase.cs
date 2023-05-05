@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Common;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Theater.Common;
 
 namespace Theater.Contracts.Theater.TheaterWorker;
 
@@ -13,6 +14,11 @@ public sealed class TheaterWorkerModel : TheaterWorkerParameters
     /// Наименование должности работника театра
     /// </summary>
     public string PositionName { get; set; }
+
+    /// <summary>
+    /// Тип должности
+    /// </summary>
+    public PositionType PositionType { get; set; }
 
     /// <summary>
     /// Наименование типа должности

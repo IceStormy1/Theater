@@ -1,5 +1,4 @@
 ﻿using System;
-using Theater.Common;
 using Theater.Contracts.UserAccount;
 
 namespace Theater.Contracts.Theater.TheaterWorker;
@@ -40,9 +39,4 @@ public class TheaterWorkerParameters : IUser
     /// Идентификатор должности работника театра
     /// </summary>
     public Guid PositionId { get; set; }
-
-    /// <summary>
-    /// Тип должности
-    /// </summary>
-    public PositionType PositionType { get; set; }
 }

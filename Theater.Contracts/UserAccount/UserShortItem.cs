@@ -30,6 +30,11 @@ namespace Theater.Contracts.UserAccount
         public string MiddleName { get; set; }
 
         /// <summary>
+        /// ФИО
+        /// </summary>
+        public string FullName => $"{LastName} {FirstName} {MiddleName}";
+
+        /// <summary>
         /// Телефон пользователя
         /// </summary>
         public string Phone { get; set; }
