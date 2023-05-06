@@ -13,9 +13,9 @@ internal sealed class TicketPriceEventsEntityConfiguration : IEntityTypeConfigur
         builder.Property(x => x.Version).ValueGeneratedNever();
         builder.Property(x => x.PiecesTicketId).ValueGeneratedNever();
 
-        builder.HasMany(s => s.PurchasedUserTicket)
+        builder.HasOne(s => s.PurchasedUserTicket)
             .WithOne(x => x.TicketPriceEvents)
-            .HasForeignKey(x => new {x.TicketPriceEventsVersion, x.TicketPriceEventsId})
+            .HasForeignKey<PurchasedUserTicketEntity>(x => new { x.TicketPriceEventsVersion, x.TicketPriceEventsId })
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

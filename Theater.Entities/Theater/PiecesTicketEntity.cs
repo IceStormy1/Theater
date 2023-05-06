@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Theater.Entities.Theater;
 
@@ -36,5 +37,7 @@ public sealed class PiecesTicketEntity : IEntity
     public PieceDateEntity PieceDate { get; set; }
 
     public BookedTicketEntity BookedTicket { get; set; }
+
+    [JsonIgnore]
     public List<TicketPriceEventsEntity> TicketPriceEvents { get; set; }
 }
