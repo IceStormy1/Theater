@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 using Theater.Abstractions;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
 using Theater.Contracts.Filters;

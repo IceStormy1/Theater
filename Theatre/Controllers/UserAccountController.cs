@@ -10,11 +10,16 @@ using Theater.Abstractions.Errors;
 using Theater.Abstractions.FileStorage;
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.UserAccount;
+using Theater.Contracts;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Filters;
+using Theater.Contracts.Theater.PiecesTicket;
+using Theater.Contracts.Theater.PurchasedUserTicket;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Authorization;
+using Theater.Entities.Theater;
+using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 
 namespace Theater.Controllers;
@@ -27,17 +32,20 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
 {
     private readonly IUserAccountService _userAccountService;
     private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
+    private readonly IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> _pieceTicketIndexReader;
     private readonly IFileStorageService _fileStorageService;
 
         public UserAccountController(
         IUserAccountService userAccountService,
         IMapper mapper, 
         IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader,
+        IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> pieceTicketIndexReader,
         IFileStorageService fileStorageService) : base(userAccountService, mapper)
     {
         _userAccountService = userAccountService;
         _userIndexReader = userIndexReader;
         _fileStorageService = fileStorageService;
+        _pieceTicketIndexReader = pieceTicketIndexReader;
     }
 
     /// <summary>
@@ -83,12 +91,20 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     /// <param name="filterParameters">Параметры запроса</param>
     /// <response code="200">В случае успешного запроса</response>
     /// <response code="400">В случае ошибок валидации</response>
-    [AllowAnonymous]
     [HttpGet("user/tickets")]
-    [ProducesResponseType(typeof(Doc), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Page<PurchasedUserTicketModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserTickets([FromQuery] PieceTicketFilterParameters filterParameters)
     {
-        
+        if (!UserId.HasValue)
+            return RenderResult(UserAccountErrors.Unauthorized);
+
+        if (UserId.Value != filterParameters.UserId && UserRole != RoleUser.Admin)
+            return RenderResult(UserAccountErrors.InsufficientRights);
+
+        var filterSettings = Mapper.Map<PieceTicketFilterSettings>(filterParameters);
+        var tickets = await _pieceTicketIndexReader.QueryItems(filterSettings);
+
+        return Ok(Mapper.Map<Page<PurchasedUserTicketModel>>(tickets));
     }
 
     /// <summary>

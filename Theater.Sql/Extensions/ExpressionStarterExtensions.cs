@@ -26,6 +26,7 @@ public static class ExpressionStarterExtensions
             null => false,
             string str => !string.IsNullOrWhiteSpace(str),
             IList list => list.Count > 0,
+            Guid guid => guid != Guid.Empty,
             _ => true
         };
     }

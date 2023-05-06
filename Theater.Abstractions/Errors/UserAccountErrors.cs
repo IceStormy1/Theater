@@ -32,5 +32,5 @@ public static class UserAccountErrors
     /// Недостаточно прав для совершения операции
     /// </summary>
     public static WriteResult InsufficientRights
-        => WriteResult.FromError(ErrorModel.Default("account/insufficient-rights ", "Недостаточно прав для совершения операции"));
+        => WriteResult.FromError(ErrorModel.Forbidden("account/insufficient-rights ", "Недостаточно прав для совершения операции"));
 }

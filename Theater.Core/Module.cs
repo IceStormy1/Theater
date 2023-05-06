@@ -26,6 +26,8 @@ using Theater.Sql.Repositories;
 using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.Piece.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filters.PieceFilterSettings>;
 using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorker.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filters.TheaterWorkerFilterSettings>;
 using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Authorization.UserEntity, Theater.Abstractions.Filters.UserAccountFilterSettings>;
+using TicketIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PurchasedUserTicket.PurchasedUserTicketModel, Theater.Entities.Theater.PurchasedUserTicketEntity, Theater.Abstractions.Filters.PieceTicketFilterSettings>;
+using Theater.Abstractions.PurchasedUserTicket;
 
 namespace Theater.Core;
 
@@ -82,6 +84,10 @@ public sealed class Module : Autofac.Module
             
         builder.RegisterType<TicketRepository>()
             .As<ITicketRepository>()
+            .InstancePerLifetimeScope();
+        
+        builder.RegisterType<PurchasedUserTicketRepository>()
+            .As<IPurchasedUserTicketRepository>()
             .InstancePerLifetimeScope();
         
         builder.RegisterType<WorkersPositionRepository>()
@@ -142,6 +148,11 @@ public sealed class Module : Autofac.Module
             .AsSelf()
             .AsImplementedInterfaces()
             .SingleInstance();
+        
+        builder.RegisterType<PurchasedUserTicketQueryBuilder>()
+            .AsSelf()
+            .AsImplementedInterfaces()
+            .SingleInstance();
 
         builder
             .Register(p => new PieceIndexReader(
@@ -168,6 +179,16 @@ public sealed class Module : Autofac.Module
                 p.Resolve<TheaterDbContext>(), 
                 p.Resolve<UserQueryBuilder>(), 
                 p.Resolve<IUserAccountRepository>(),
+                p.Resolve<IMapper>()
+                ))
+            .AsImplementedInterfaces()
+            .InstancePerLifetimeScope();
+        
+        builder
+            .Register(p => new TicketIndexReader(
+                p.Resolve<TheaterDbContext>(), 
+                p.Resolve<PurchasedUserTicketQueryBuilder>(), 
+                p.Resolve<IPurchasedUserTicketRepository>(),
                 p.Resolve<IMapper>()
                 ))
             .AsImplementedInterfaces()

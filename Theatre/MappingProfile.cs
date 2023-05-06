@@ -17,6 +17,7 @@ using Theater.Contracts.Theater.PieceDate;
 using Theater.Contracts.Theater.PiecesGenre;
 using Theater.Contracts.Theater.PiecesTicket;
 using Theater.Contracts.Theater.PieceWorker;
+using Theater.Contracts.Theater.PurchasedUserTicket;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Contracts.Theater.UserReview;
 using Theater.Contracts.Theater.WorkersPosition;
@@ -45,6 +46,12 @@ internal sealed class MappingProfile : Profile
             ;
 
         CreateMap<UserEntity, AuthenticateResponse>();
+        CreateMap<PurchasedUserTicketEntity, PurchasedUserTicketModel>()
+            .ForMember(destination => destination.PieceDate, options => options.MapFrom(exp => exp.TicketPriceEvents.PiecesTicket.PieceDate.Date))
+            .ForMember(destination => destination.PieceDateId, options => options.MapFrom(exp => exp.TicketPriceEvents.PiecesTicket.PieceDateId))
+            .ForMember(destination => destination.PieceName, options => options.MapFrom(exp => exp.TicketPriceEvents.PiecesTicket.PieceDate.Piece.PieceName))
+            .ForMember(destination => destination.PieceId, options => options.MapFrom(exp => exp.TicketPriceEvents.PiecesTicket.PieceDate.PieceId))
+            ;
 
         CreateMap<PieceEntity, PieceShortInformationModel>()
             .ForMember(destination => destination.MainPicture, options => options.MapFrom(exp => new StorageFileListItem { Id = exp.MainPhotoId }))
@@ -104,6 +111,7 @@ internal sealed class MappingProfile : Profile
         CreateMap<PieceFilterParameters, PieceFilterSettings>();
         CreateMap<TheaterWorkerFilterParameters, TheaterWorkerFilterSettings>();
         CreateMap<UserAccountFilterParameters, UserAccountFilterSettings>();
+        CreateMap<PieceTicketFilterParameters, PieceTicketFilterSettings>();
 
         CreateMap<UserReviewParameters, UserReviewEntity>();
         CreateMap<UserReviewEntity, UserReviewModel>()

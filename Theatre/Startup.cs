@@ -212,6 +212,7 @@ public sealed class Startup
         services.AddRelationRepository<UserReviewEntity, TheaterDbContext>();
         services.AddRelationRepository<PiecesGenreEntity, TheaterDbContext>();
         services.AddRelationRepository<WorkersPositionEntity, TheaterDbContext>();
+        services.AddRelationRepository<PurchasedUserTicketEntity, TheaterDbContext>();
     }
 
     private static void AddCrudServices(IServiceCollection services)

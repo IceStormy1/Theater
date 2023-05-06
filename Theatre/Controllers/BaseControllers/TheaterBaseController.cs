@@ -19,7 +19,7 @@ public class TheaterBaseController : ControllerBase
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
-    protected Guid? UserId => Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+    protected Guid? UserId => GetUserId();
 
     /// <summary>
     /// Роль пользователя
@@ -100,4 +100,11 @@ public class TheaterBaseController : ControllerBase
         => Enum.TryParse<UserRole>(User.Claims.First(x => x.Type == ClaimTypes.Role).Value, true, out var userRole)
             ? userRole
             : null;
+
+    private Guid? GetUserId()
+    {
+        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        return Guid.TryParse(userId, out var userIdResult) ? userIdResult : null;
+    }
 }
