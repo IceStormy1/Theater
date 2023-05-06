@@ -28,5 +28,20 @@ namespace Theater.Contracts.Theater.PurchasedUserTicket
         /// Дата пьесы
         /// </summary>
         public DateTime PieceDate { get; set; }
+
+        /// <summary>
+        /// Ряд
+        /// </summary>
+        public ushort TicketRow { get; set; }
+
+        /// <summary>
+        /// Место
+        /// </summary>
+        public ushort TicketPlace { get; set; }
+
+        /// <summary>
+        /// Стоимость билета
+        /// </summary>
+        public ushort TicketPrice { get; set; }
     }
 }

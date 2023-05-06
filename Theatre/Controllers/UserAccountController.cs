@@ -86,7 +86,7 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     }
 
     /// <summary>
-    /// Возвращает билеты пользователя 
+    /// Возвращает купленные билеты пользователя 
     /// </summary>
     /// <param name="filterParameters">Параметры запроса</param>
     /// <response code="200">В случае успешного запроса</response>
