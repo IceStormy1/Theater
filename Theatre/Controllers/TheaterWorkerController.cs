@@ -7,10 +7,10 @@ using Theater.Contracts;
 using Theater.Entities.Theater;
 using AutoMapper;
 using Theater.Abstractions;
-using Theater.Abstractions.Filter;
 using Theater.Contracts.Filters;
 using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
+using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.TheaterWorker;
 
 namespace Theater.Controllers;

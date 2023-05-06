@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 
 namespace Theater.Abstractions;
 

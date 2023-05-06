@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization.Models;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 using Theater.Abstractions.Piece.Models;
 using Theater.Common;
 using Theater.Common.Extensions;

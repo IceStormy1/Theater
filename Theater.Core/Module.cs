@@ -23,9 +23,9 @@ using Theater.Core.UserAccount;
 using Theater.Sql;
 using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
-using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.Piece.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filter.PieceFilterSettings>;
-using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorker.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filter.TheaterWorkerFilterSettings>;
-using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Authorization.UserEntity, Theater.Abstractions.Filter.UserAccountFilterSettings>;
+using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.Piece.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filters.PieceFilterSettings>;
+using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorker.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filters.TheaterWorkerFilterSettings>;
+using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Authorization.UserEntity, Theater.Abstractions.Filters.UserAccountFilterSettings>;
 
 namespace Theater.Core;
 

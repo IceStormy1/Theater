@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 using Theater.Common;
 using Theater.Entities;
 

@@ -1,4 +1,4 @@
-﻿namespace Theater.Abstractions.Filter;
+﻿namespace Theater.Abstractions.Filters;
 
 /// <summary>
 /// Настройки пагинации.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Theater.Abstractions.Filter;
+namespace Theater.Abstractions.Filters;
 
 public class PieceFilterSettings : PagingSortSettings
 {

@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.FileStorage;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Authorization;
+using Theater.Contracts.Filters;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Authorization;
@@ -74,6 +75,20 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
             user.ResultData.Photo = await _fileStorageService.GetStorageFileInfoById(user.ResultData.Photo.Id);
 
         return RenderResult(user);
+    }
+
+    /// <summary>
+    /// Возвращает билеты пользователя 
+    /// </summary>
+    /// <param name="filterParameters">Параметры запроса</param>
+    /// <response code="200">В случае успешного запроса</response>
+    /// <response code="400">В случае ошибок валидации</response>
+    [AllowAnonymous]
+    [HttpGet("user/tickets")]
+    [ProducesResponseType(typeof(Doc), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserTickets([FromQuery] PieceTicketFilterParameters filterParameters)
+    {
+        
     }
 
     /// <summary>

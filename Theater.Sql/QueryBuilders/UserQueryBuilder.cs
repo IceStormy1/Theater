@@ -1,7 +1,7 @@
 ﻿using LinqKit;
 using System;
 using System.Linq.Expressions;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 using Theater.Entities.Authorization;
 using Theater.Sql.Extensions;
 

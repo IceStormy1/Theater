@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
-using Theater.Abstractions.Filter;
+using Theater.Abstractions.Filters;
 using Theater.Common;
 using Theater.Entities;
 
