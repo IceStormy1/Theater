@@ -18,12 +18,6 @@ public interface ITicketRepository : ICrudRepository<PiecesTicketEntity>
     Task<IReadOnlyCollection<PiecesTicketEntity>> GetPieceTicketsByDate(Guid pieceId, Guid dateId);
 
     /// <summary>
-    /// Получить билет по его идентификатору
-    /// </summary>
-    /// <param name="ticketId">Идентификатор билета</param>
-    Task<PiecesTicketEntity> GetPieceTicketById(Guid ticketId);
-
-    /// <summary>
     /// Купить билет
     /// </summary>
     /// <param name="ticket">Сущность билета</param>

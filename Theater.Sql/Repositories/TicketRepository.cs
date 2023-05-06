@@ -25,40 +25,40 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
 
     public async Task<IReadOnlyCollection<PiecesTicketEntity>> GetPieceTicketsByDate(Guid pieceId, Guid dateId)
     {
-        var piecesDates = await _dbContext.PieceDates
-            .AsNoTracking()
-            .Where(x => x.Id == dateId && x.PieceId == pieceId)
-            .Include(x => x.PiecesTickets)
-            .SelectMany(x => x.PiecesTickets)
+        var piecesDates = await _dbContext.PiecesTickets.AsNoTracking()
+            .Where(x => x.PieceDateId == dateId && x.PieceDate.PieceId == pieceId)
+            .Include(x => x.BookedTicket)
+            .Include(x => x.TicketPriceEvents).ThenInclude(x => x.PurchasedUserTicket)
             .ToListAsync();
 
         return piecesDates;
     }
 
-    public async Task<PiecesTicketEntity> GetPieceTicketById(Guid ticketId)
+    public override IQueryable<PiecesTicketEntity> AddIncludes(IQueryable<PiecesTicketEntity> query)
     {
-        return await _dbContext.PiecesTickets
-            .AsNoTracking()
+        return query
             .Include(x => x.BookedTicket)
             .Include(x => x.TicketPriceEvents)
-            .ThenInclude(x => x.PurchasedUserTicket)
-            .FirstOrDefaultAsync(x => x.Id == ticketId);
+            .ThenInclude(x => x.PurchasedUserTicket);
     }
 
     public async Task<WriteResult> BuyTicket(PiecesTicketEntity ticket, UserEntity user)
     {
-        user.Money -= ticket.TicketPrice;
-        var ticketPriceEvent = ticket.TicketPriceEvents.OrderByDescending(x => x.Timestamp).FirstOrDefault();
+        var ticketPriceEvent = ticket.TicketPriceEvents.MaxBy(x => x.Version);
 
-        if(ticketPriceEvent is null)
+        if (ticketPriceEvent is null)
             return WriteResult.FromError(TicketErrors.NotFound.Error);
+
+        user.Money -= ticketPriceEvent.Model.TicketPrice;
 
         var transaction = await DbContext.Database.BeginTransactionAsync();
 
         try
         {
             _dbContext.Users.Update(user);
-            _dbContext.BookedTickets.RemoveRange(ticket.BookedTicket);
+
+            if(ticket.BookedTicket != null)
+                _dbContext.BookedTickets.RemoveRange(ticket.BookedTicket);
 
             var purchasedUserTicket = BuildPurchasedUserTicketEntity(ticketPriceEvent.PiecesTicketId, ticketPriceEvent.Version, user.Id);
             _dbContext.PurchasedUserTickets.Add(purchasedUserTicket);
@@ -68,9 +68,10 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
 
             return WriteResult.Successful;
         }
-        catch (Exception)
+        catch (Exception e)
         {
             await transaction.RollbackAsync();
+            Logger.LogError(e, "Произошла ошибка при покупке билета. UserId = {UserId}, TicketId = {TicketId}", user.Id, ticket.Id);
                
             return WriteResult.FromError(TicketErrors.BuyTicketConflict.Error);
         }

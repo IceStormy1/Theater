@@ -18,6 +18,8 @@ namespace Theater.Core.Theater.Services;
 
 public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, PiecesTicketEntity>, IPieceTicketService
 {
+    private const int DefaultTicketVersion = 1;
+
     private readonly IUserAccountRepository _userAccountRepository;
     private readonly ITicketRepository _ticketRepository;
     private readonly IPieceRepository _pieceRepository;
@@ -54,7 +56,7 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         if (user.Money == default)
             return WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error);
 
-        var ticket = await _ticketRepository.GetPieceTicketById(ticketId);
+        var ticket = await _ticketRepository.GetByEntityId(ticketId);
 
         if (ticket is null)
             return WriteResult.FromError(TicketErrors.NotFound.Error);
@@ -76,7 +78,7 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         if (user.Money == default)
             return WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error);
 
-        var ticket = await _ticketRepository.GetPieceTicketById(ticketId);
+        var ticket = await _ticketRepository.GetByEntityId(ticketId);
 
         if (ticket is null)
             return WriteResult.FromError(TicketErrors.NotFound.Error);
@@ -104,7 +106,20 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
             return WriteResult.FromError(TicketErrors.TicketsAlreadyCreated.Error);
 
         var ticketEntities = Mapper.Map<List<PiecesTicketEntity>>(ticketsParameters.PiecesTickets);
-        ticketEntities.ForEach(x => x.PieceDateId = ticketsParameters.PieceDateId);
+        ticketEntities.ForEach(x =>
+        {
+            x.PieceDateId = ticketsParameters.PieceDateId;
+            x.TicketPriceEvents = new List<TicketPriceEventsEntity>
+            {
+                new()
+                {
+                    Model = x,
+                    PiecesTicket = x,
+                    Timestamp = DateTime.UtcNow,
+                    Version = DefaultTicketVersion
+                }
+            };
+        });
 
         try
         {
@@ -137,6 +152,17 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         {
             var ticketModel = ticketsParameters.PiecesTickets.First(x => x.Id == piecesTicketEntity.Id);
             Mapper.Map(ticketModel, piecesTicketEntity);
+            piecesTicketEntity.TicketPriceEvents ??= new List<TicketPriceEventsEntity>();
+
+            var lastTicketPrice = piecesTicketEntity.TicketPriceEvents.MaxBy(x => x.Version);
+
+            piecesTicketEntity.TicketPriceEvents.Add(new TicketPriceEventsEntity
+            {
+                Model = piecesTicketEntity,
+                PiecesTicket = piecesTicketEntity,
+                Timestamp = DateTime.UtcNow,
+                Version = lastTicketPrice is null ? DefaultTicketVersion : lastTicketPrice.Version + 1,
+            });
         }
 
         try
@@ -155,7 +181,7 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
 
     private static WriteResult CheckIfCanBuyTicket(PiecesTicketEntity ticket, UserEntity user)
     {
-        if (ticket.BookedTicket.UserId != user.Id)
+        if (ticket.BookedTicket != null && ticket.BookedTicket.UserId != user.Id)
             return WriteResult.FromError(TicketErrors.AlreadyBooked.Error);
 
         // TODO: валидация на уже купленный билет

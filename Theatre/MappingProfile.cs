@@ -91,14 +91,13 @@ internal sealed class MappingProfile : Profile
             ;
             
         CreateMap<PiecesTicketEntity, PiecesTicketModel>()
-            .ForMember(destination => destination.IsBooked, options => options.MapFrom(exp => exp.BookedTicket == null))
+            .ForMember(destination => destination.IsBooked, options => options.MapFrom(exp => exp.BookedTicket != null || exp.TicketPriceEvents.Any(c=>c.PurchasedUserTicket != null)))
             ;
 
         CreateMap<PieceDateParameters, PieceDateEntity>();
            
         CreateMap<PieceDateEntity, PieceDateModel>();
 
-        CreateMap<PiecesTicketEntity, PiecesTicketModel>();
         CreateMap<PiecesTicketParameters, PiecesTicketEntity>();
         CreateMap<PiecesTicketModel, PiecesTicketEntity>();
 

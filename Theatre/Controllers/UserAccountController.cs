@@ -87,7 +87,7 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] AuthenticateParameters parameters)
     {
-        var authenticateResult = await _userAccountService.Authorize(parameters);
+        var authenticateResult = await _userAccountService.Authorize(parameters);       
 
         return authenticateResult is null
             ? RenderResult(UserAccountErrors.NotFound)
@@ -99,7 +99,7 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     /// </summary>
     /// <response code="200">В случае успешного запроса</response>
     /// <response code="400">В случае ошибок валидации</response>
-    [HttpPost("{userId:guid}/update")]
+    [HttpPut("{userId:guid}/update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UserParameters parameters)
