@@ -12,7 +12,7 @@ internal sealed class TheaterWorkersEntityConfiguration : IEntityTypeConfigurati
         builder.Property(x => x.FirstName).IsRequired().HasMaxLength(128);
         builder.Property(x => x.LastName).IsRequired().HasMaxLength(128);
         builder.Property(x => x.MiddleName).HasMaxLength(128);
-        builder.Property(x => x.Description).HasMaxLength(512);
+        builder.Property(x => x.Description).HasMaxLength(8000);
 
         builder.HasMany(s => s.PieceWorkers)
             .WithOne(x => x.TheaterWorker)

@@ -10,7 +10,7 @@ internal sealed class PieceEntityConfiguration : IEntityTypeConfiguration<PieceE
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.PieceName).IsRequired().HasMaxLength(128);
-        builder.Property(x => x.Description).IsRequired().HasMaxLength(512);
+        builder.Property(x => x.Description).IsRequired().HasMaxLength(8000);
 
         builder.HasMany(s => s.UserReviews)
             .WithOne(x => x.Piece)

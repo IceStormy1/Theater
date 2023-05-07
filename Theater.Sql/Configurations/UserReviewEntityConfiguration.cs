@@ -10,6 +10,6 @@ internal sealed class UserReviewEntityConfiguration : IEntityTypeConfiguration<U
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Title).IsRequired().HasMaxLength(256);
-        builder.Property(x => x.Description).IsRequired().HasMaxLength(1024);
+        builder.Property(x => x.Description).IsRequired().HasMaxLength(9000);
     }
 }

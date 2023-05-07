@@ -85,7 +85,7 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.MainPicture, options => options.MapFrom(exp => new StorageFileListItem { Id = exp.MainPhotoId }))
             .ForMember(destination => destination.AdditionalPhotos, options => options.MapFrom(exp => exp.PhotoIds.Select(x => new StorageFileListItem { Id = x }).ToList()))
             .ForMember(destination => destination.PieceGenre, options => options.MapFrom(exp => exp.Genre.GenreName))
-
+            .ForMember(destination => destination.WorkerShortInformation, options => options.MapFrom(exp => exp.PieceWorkers.Select(x => x.TheaterWorker).ToList()))
             ;
 
         CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()

@@ -13,7 +13,7 @@ public static class RuleBuilderExtensions
         return ruleBuilder
             .Cascade(CascadeMode.Continue)
             .NotEmpty()
-            .MaximumLength(512)
+            .MaximumLength(9000)
             .MinimumLength(5)
             .WithName(overridenName);
     }

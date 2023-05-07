@@ -37,10 +37,13 @@ public sealed class PieceParametersValidator : AbstractValidator<PieceParameters
             .Description("Описание пьесы");
 
         RuleFor(worker => worker.ShortDescription)
-            .Description("Краткое описание пьесы");
+            .NotEmpty()
+            .MaximumLength(1024)
+            .MinimumLength(5)
+            .WithName("Краткое описание пьесы");
     }
 
-    private void ValidatePhoto(InlineValidator<StorageFileListItem> context)
+    private static void ValidatePhoto(InlineValidator<StorageFileListItem> context)
     {
         context.RuleFor(x => x.Id).NotEqual(Guid.Empty);
         context.RuleFor(x => x.FileName).NotEmpty();
