@@ -12,40 +12,39 @@ using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Authorization;
 
-namespace Theater.Controllers.Admin
+namespace Theater.Controllers.Admin;
+
+[Route("api/admin/user")]
+[SwaggerTag("Админ. Методы для работы с пользователями")]
+public class UserAccountAdminController : AdminBaseController<UserParameters>
 {
-    [Route("api/admin/user")]
-    [SwaggerTag("Админ. Методы для работы с пользователями")]
-    public class UserAccountAdminController : AdminBaseController<UserParameters>
+    private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
+
+    public UserAccountAdminController(
+        IUserAccountService service,
+        IMapper mapper,
+        IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader) : base(service, mapper)
     {
-        private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
+        _userIndexReader = userIndexReader;
+    }
 
-        public UserAccountAdminController(
-            IUserAccountService service,
-            IMapper mapper,
-            IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader) : base(service, mapper)
-        {
-            _userIndexReader = userIndexReader;
-        }
+    /// <summary>
+    /// Возвращает пользователей по параметрам запроса
+    /// </summary>
+    ///<remarks>
+    /// Доступна сортировка по полям:
+    /// * firstname
+    /// * middlename
+    /// * lastname
+    /// </remarks>
+    [HttpGet("parameters")]
+    [ProducesResponseType(typeof(Page<UserShortItem>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUsersByParameters([FromQuery] UserAccountFilterParameters filterParameters)
+    {
+        var filterSettings = Mapper.Map<UserAccountFilterSettings>(filterParameters);
 
-        /// <summary>
-        /// Возвращает пользователей по параметрам запроса
-        /// </summary>
-        ///<remarks>
-        /// Доступна сортировка по полям:
-        /// * firstname
-        /// * middlename
-        /// * lastname
-        /// </remarks>
-        [HttpGet("parameters")]
-        [ProducesResponseType(typeof(Page<UserShortItem>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetUsersByParameters([FromQuery] UserAccountFilterParameters filterParameters)
-        {
-            var filterSettings = Mapper.Map<UserAccountFilterSettings>(filterParameters);
+        var users = await _userIndexReader.QueryItems(filterSettings);
 
-            var users = await _userIndexReader.QueryItems(filterSettings);
-
-            return Ok(Mapper.Map<Page<UserShortItem>>(users));
-        }
+        return Ok(Mapper.Map<Page<UserShortItem>>(users));
     }
 }

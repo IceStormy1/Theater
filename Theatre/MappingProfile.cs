@@ -105,6 +105,7 @@ internal sealed class MappingProfile : Profile
             ;
 
         CreateMap<PieceDateParameters, PieceDateEntity>();
+        CreateMap<PiecesGenreEntity, PiecesGenreModel>();
            
         CreateMap<PieceDateEntity, PieceDateModel>();
 

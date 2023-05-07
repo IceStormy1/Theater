@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Theater.Abstractions.Filters
+namespace Theater.Abstractions.Filters;
+
+public sealed class PieceTicketFilterSettings : PagingSortSettings
 {
-    public sealed class PieceTicketFilterSettings : PagingSortSettings
-    {
-        /// <summary>
-        /// Идентификатор пользователя
-        /// </summary>
-        public Guid UserId { get; set; }
-    }
+    /// <summary>
+    /// Идентификатор пользователя
+    /// </summary>
+    public Guid UserId { get; set; }
 }

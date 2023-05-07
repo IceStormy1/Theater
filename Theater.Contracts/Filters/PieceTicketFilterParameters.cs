@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Theater.Contracts.Filters
+namespace Theater.Contracts.Filters;
+
+public sealed class PieceTicketFilterParameters : PagingSortParameters
 {
-    public sealed class PieceTicketFilterParameters : PagingSortParameters
-    {
-        /// <summary>
-        /// Идентификатор пользователя
-        /// </summary>
-        public Guid UserId { get; set; }
-    }
+    /// <summary>
+    /// Идентификатор пользователя
+    /// </summary>
+    public Guid UserId { get; set; }
 }
