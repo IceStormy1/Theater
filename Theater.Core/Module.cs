@@ -27,6 +27,7 @@ using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.Piece
 using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorker.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filters.TheaterWorkerFilterSettings>;
 using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Authorization.UserEntity, Theater.Abstractions.Filters.UserAccountFilterSettings>;
 using TicketIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PurchasedUserTicket.PurchasedUserTicketModel, Theater.Entities.Theater.PurchasedUserTicketEntity, Theater.Abstractions.Filters.PieceTicketFilterSettings>;
+using UserReviewIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.UserReview.UserReviewModel, Theater.Entities.Theater.UserReviewEntity, Theater.Abstractions.Filters.UserReviewFilterSettings>;
 using Theater.Abstractions.PurchasedUserTicket;
 
 namespace Theater.Core;
@@ -93,6 +94,10 @@ public sealed class Module : Autofac.Module
         builder.RegisterType<WorkersPositionRepository>()
             .As<IWorkersPositionRepository>()
             .InstancePerLifetimeScope();
+        
+        builder.RegisterType<UserReviewsRepository>()
+            .As<IUserReviewsRepository>()
+            .InstancePerLifetimeScope();
             
         builder.RegisterType<PieceDateService>()
             .As<IPieceDateService>()
@@ -153,6 +158,11 @@ public sealed class Module : Autofac.Module
             .AsSelf()
             .AsImplementedInterfaces()
             .SingleInstance();
+        
+        builder.RegisterType<UserReviewQueryBuilder>()
+            .AsSelf()
+            .AsImplementedInterfaces()
+            .SingleInstance();
 
         builder
             .Register(p => new PieceIndexReader(
@@ -179,6 +189,16 @@ public sealed class Module : Autofac.Module
                 p.Resolve<TheaterDbContext>(), 
                 p.Resolve<UserQueryBuilder>(), 
                 p.Resolve<IUserAccountRepository>(),
+                p.Resolve<IMapper>()
+                ))
+            .AsImplementedInterfaces()
+            .InstancePerLifetimeScope();
+        
+        builder
+            .Register(p => new UserReviewIndexReader(
+                p.Resolve<TheaterDbContext>(), 
+                p.Resolve<UserReviewQueryBuilder>(), 
+                p.Resolve<IUserReviewsRepository>(),
                 p.Resolve<IMapper>()
                 ))
             .AsImplementedInterfaces()

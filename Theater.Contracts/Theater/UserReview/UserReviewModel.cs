@@ -5,7 +5,7 @@ namespace Theater.Contracts.Theater.UserReview;
 public sealed class UserReviewModel : UserReviewParameters
 {
     /// <summary>
-    /// Идентификатор работника театра
+    /// Идентификатор рецензии
     /// </summary>
     public Guid Id { get; set; }
 
@@ -13,4 +13,9 @@ public sealed class UserReviewModel : UserReviewParameters
     /// Имя пользователя
     /// </summary>
     public string UserName { get; set; }
+
+    /// <summary>
+    /// Наименование пьесы
+    /// </summary>
+    public string PieceName { get; set; }
 }

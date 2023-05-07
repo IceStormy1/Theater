@@ -88,6 +88,12 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     /// <summary>
     /// Возвращает купленные билеты пользователя 
     /// </summary>
+    /// <remarks>
+    /// Доступна сортировка по полям:
+    /// * pieceName
+    /// * pieceDate
+    /// * dateOfPurchase
+    /// </remarks>
     /// <param name="filterParameters">Параметры запроса</param>
     /// <response code="200">В случае успешного запроса</response>
     /// <response code="400">В случае ошибок валидации</response>

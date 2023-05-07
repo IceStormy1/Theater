@@ -2,6 +2,6 @@
 
 namespace Theater.Abstractions.UserReviews;
 
-internal interface IUserReviewsRepository : ICrudRepository<UserReviewEntity>
+public interface IUserReviewsRepository : ICrudRepository<UserReviewEntity>
 {
 }

@@ -116,10 +116,12 @@ internal sealed class MappingProfile : Profile
         CreateMap<TheaterWorkerFilterParameters, TheaterWorkerFilterSettings>();
         CreateMap<UserAccountFilterParameters, UserAccountFilterSettings>();
         CreateMap<PieceTicketFilterParameters, PieceTicketFilterSettings>();
+        CreateMap<UserReviewFilterParameters, UserReviewFilterSettings>();
 
         CreateMap<UserReviewParameters, UserReviewEntity>();
         CreateMap<UserReviewEntity, UserReviewModel>()
             .ForMember(destination => destination.UserName, options => options.MapFrom(exp => exp.User == null ? null : exp.User.UserName))
+            .ForMember(destination => destination.PieceName, options => options.MapFrom(exp => exp.User == null ? null : exp.Piece.PieceName))
             ;
 
         CreateMap<PieceWorkerParameters, PieceWorkerEntity>();

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Theater.Abstractions.PieceGenre;
 using Theater.Contracts;
 using Theater.Contracts.Theater.PiecesGenre;
-using Theater.Contracts.Theater.WorkersPosition;
 using Theater.Controllers.BaseControllers;
 
 namespace Theater.Controllers;
