@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Theater.Common;
+using Theater.Contracts.Theater.Piece;
 
 namespace Theater.Contracts.Theater.TheaterWorker;
 
@@ -24,4 +26,14 @@ public sealed class TheaterWorkerModel : TheaterWorkerParameters
     /// Наименование типа должности
     /// </summary>
     public string PositionTypeName { get; set; }
+
+    /// <summary>
+    /// ФИО
+    /// </summary>
+    public string FullName => $"{LastName} {FirstName} {MiddleName}";
+
+    /// <summary>
+    /// Пьесы, в которых участовал актер
+    /// </summary>
+    public IReadOnlyCollection<PieceBase> Pieces { get; set; }
 }

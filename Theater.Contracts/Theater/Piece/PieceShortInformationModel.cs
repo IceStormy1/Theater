@@ -6,18 +6,8 @@ using Theater.Contracts.Theater.TheaterWorker;
 
 namespace Theater.Contracts.Theater.Piece;
 
-public class PieceShortInformationModel
+public class PieceShortInformationModel : PieceBase
 {
-    /// <summary>
-    /// Идентификатор пьесы
-    /// </summary>
-    public Guid Id { get; set; }
-
-    /// <summary>
-    /// Наименование пьесы
-    /// </summary>
-    public string PieceName { get; set; }
-
     /// <summary>
     /// Жанр пьесы
     /// </summary>

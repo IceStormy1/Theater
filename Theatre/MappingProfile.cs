@@ -88,11 +88,14 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.WorkerShortInformation, options => options.MapFrom(exp => exp.PieceWorkers.Select(x => x.TheaterWorker).ToList()))
             ;
 
+        CreateMap<PieceEntity, PieceBase>();
+
         CreateMap<TheaterWorkerEntity, TheaterWorkerModel>()
             .ForMember(destination => destination.PositionTypeName, options => options.MapFrom(exp => exp.Position.PositionType.GetEnumDisplayName()))
             .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
             .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
             .ForMember(destination => destination.BirthDate, options => options.MapFrom(exp => exp.DateOfBirth))
+            .ForMember(destination => destination.Pieces, options => options.MapFrom(exp => exp.PieceWorkers.Select(x=>x.Piece)))
             ;
 
         CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
