@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Theater.Contracts;
 using Theater.Contracts.Theater.TheaterWorker;
 
 namespace Theater.Abstractions.TheaterWorker;
@@ -15,4 +16,9 @@ public interface ITheaterWorkerService : ICrudService<TheaterWorkerParameters>
     /// Получить краткую информацию о работниках театра по типу должности 
     /// </summary>
     Task<IReadOnlyCollection<TheaterWorkerShortInformationModel>> GetShortInformationWorkersByPositionType(int positionType);
+
+    /// <summary>
+    /// Обогатить краткие модели работника театра
+    /// </summary>
+    Task EnrichTheaterWorkerShortInfo(Page<TheaterWorkerShortInformationModel> theaterWorkerShortInformationModels);
 }

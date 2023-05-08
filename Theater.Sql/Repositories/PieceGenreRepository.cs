@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.PieceGenre;
-using Theater.Contracts.Theater.PiecesGenre;
 using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories;

@@ -13,13 +13,11 @@ using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Filters;
-using Theater.Contracts.Theater.PiecesTicket;
 using Theater.Contracts.Theater.PurchasedUserTicket;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
-using Theater.Policy;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 
 namespace Theater.Controllers;
@@ -35,9 +33,9 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     private readonly IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> _pieceTicketIndexReader;
     private readonly IFileStorageService _fileStorageService;
 
-        public UserAccountController(
+    public UserAccountController(
         IUserAccountService userAccountService,
-        IMapper mapper, 
+        IMapper mapper,
         IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader,
         IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> pieceTicketIndexReader,
         IFileStorageService fileStorageService) : base(userAccountService, mapper)

@@ -12,6 +12,8 @@ using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.TheaterWorker;
+using Theater.Abstractions.FileStorage;
+using Theater.Policy;
 
 namespace Theater.Controllers;
 
@@ -21,15 +23,18 @@ namespace Theater.Controllers;
 public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterWorkerParameters>
 {
     private readonly ITheaterWorkerService _theaterWorkerService;
+    private readonly IFileStorageService _fileStorageService;
     private readonly IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> _theaterWorkerIndexReader;
 
     public TheaterWorkerController(
         ITheaterWorkerService theaterWorkerService,
         IMapper mapper, 
-        IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader) : base(theaterWorkerService, mapper)
+        IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader, 
+        IFileStorageService fileStorageService) : base(theaterWorkerService, mapper)
     {
         _theaterWorkerService = theaterWorkerService;
         _theaterWorkerIndexReader = theaterWorkerIndexReader;
+        _fileStorageService = fileStorageService;
     }
 
     /// <summary>
@@ -59,9 +64,12 @@ public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterW
     public async Task<IActionResult> GetShortInformationWorkersByPositionType([FromQuery] TheaterWorkerFilterParameters filter)
     {
         var filterSettings = Mapper.Map<TheaterWorkerFilterSettings>(filter);
-        var workersShortInformation = await _theaterWorkerIndexReader.QueryItems(filterSettings);
+        var theaterWorkers = await _theaterWorkerIndexReader.QueryItems(filterSettings);
+        var theaterWorkerShortInformation = Mapper.Map<Page<TheaterWorkerShortInformationModel>>(theaterWorkers);
 
-        return Ok(Mapper.Map<Page<TheaterWorkerShortInformationModel>>(workersShortInformation));
+        await _theaterWorkerService.EnrichTheaterWorkerShortInfo(theaterWorkerShortInformation);
+
+        return Ok(Mapper.Map<Page<TheaterWorkerShortInformationModel>>(theaterWorkers));
     }
 
     /// <summary>
@@ -75,6 +83,9 @@ public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterW
     public async Task<IActionResult> GetTheaterWorkerById([FromRoute] Guid theaterWorkerId)
     {
         var theaterWorker = await _theaterWorkerIndexReader.GetById(theaterWorkerId);
+        
+        if(theaterWorker.IsSuccess && theaterWorker.ResultData.MainPhoto != null)
+            theaterWorker.ResultData.MainPhoto = await _fileStorageService.GetStorageFileInfoById(theaterWorker.ResultData.MainPhoto.Id);
 
         return RenderResult(theaterWorker);
     }

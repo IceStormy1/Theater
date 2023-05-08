@@ -72,6 +72,7 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
             .ForMember(destination => destination.PositionName, options => options.MapFrom(exp => exp.Position.PositionName))
             .ForMember(destination => destination.FullName, options => options.MapFrom(exp => $"{exp.LastName} {exp.FirstName} {exp.MiddleName}"))
+            .ForMember(destination => destination.MainPhoto, options => options.MapFrom(exp => exp.PhotoId.HasValue ? new StorageFileListItem { Id = exp.PhotoId.Value } : null))
             ;
 
         CreateMap<PieceDto, PieceModel>();
@@ -96,13 +97,15 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.PositionType, options => options.MapFrom(exp => exp.Position.PositionType))
             .ForMember(destination => destination.BirthDate, options => options.MapFrom(exp => exp.DateOfBirth))
             .ForMember(destination => destination.Pieces, options => options.MapFrom(exp => exp.PieceWorkers.Select(x=>x.Piece)))
+            .ForMember(destination => destination.MainPhoto, options => options.MapFrom(exp => exp.PhotoId.HasValue ? new StorageFileListItem { Id = exp.PhotoId.Value } : null))
             ;
 
         CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
         CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
             .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate))
+            .ForMember(destination => destination.PhotoId, options => options.MapFrom(exp => exp.MainPhoto.Id))
             ;
-            
+
         CreateMap<PiecesTicketEntity, PiecesTicketModel>()
             .ForMember(destination => destination.IsBooked, options => options.MapFrom(exp => exp.BookedTicket != null || exp.TicketPriceEvents.Any(c=>c.PurchasedUserTicket != null)))
             ;

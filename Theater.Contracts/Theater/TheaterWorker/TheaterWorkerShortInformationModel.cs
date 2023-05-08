@@ -1,5 +1,6 @@
 ﻿using System;
 using Theater.Common;
+using Theater.Contracts.FileStorage;
 
 namespace Theater.Contracts.Theater.TheaterWorker;
 
@@ -32,4 +33,9 @@ public sealed class TheaterWorkerShortInformationModel
     /// Наименование типа должности
     /// </summary>
     public string PositionTypeName { get; set; }
+
+    /// <summary>
+    /// Основная фотография пьесы
+    /// </summary>
+    public StorageFileListItem MainPhoto { get; set; }
 }

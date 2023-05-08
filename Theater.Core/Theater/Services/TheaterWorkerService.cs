@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Theater.Abstractions;
+using Theater.Abstractions.FileStorage;
 using Theater.Abstractions.TheaterWorker;
+using Theater.Contracts;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Entities.Theater;
 
@@ -11,14 +13,17 @@ namespace Theater.Core.Theater.Services;
 public sealed class TheaterWorkerService : ServiceBase<TheaterWorkerParameters, TheaterWorkerEntity>, ITheaterWorkerService
 {
     private readonly ITheaterWorkerRepository _theaterWorkerRepository;
+    private readonly IFileStorageService _fileStorageService;
 
     public TheaterWorkerService(
         IMapper mapper,
         IDocumentValidator<TheaterWorkerParameters> documentValidator,
-        ITheaterWorkerRepository repository)
+        ITheaterWorkerRepository repository,
+        IFileStorageService fileStorageService)
         : base(mapper, repository, documentValidator)
     {
         _theaterWorkerRepository = repository;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<TotalWorkersModel> GetTotalWorkers()
@@ -36,5 +41,19 @@ public sealed class TheaterWorkerService : ServiceBase<TheaterWorkerParameters, 
         var workersShortInformation = await _theaterWorkerRepository.GetShortInformationWorkersByPositionType(positionType);
 
         return Mapper.Map<IReadOnlyCollection<TheaterWorkerShortInformationModel>>(workersShortInformation);
+    }
+
+    public async Task EnrichTheaterWorkerShortInfo(Page<TheaterWorkerShortInformationModel> theaterWorkerShortInformationModels)
+    {
+        foreach (var pieceShortInformationModel in theaterWorkerShortInformationModels.Items)
+            await EnrichMainPicture(pieceShortInformationModel);
+    }
+
+    private async Task EnrichMainPicture(TheaterWorkerShortInformationModel shortInformationModel)
+    {
+        if (shortInformationModel.MainPhoto is null)
+            return;
+
+        shortInformationModel.MainPhoto = await _fileStorageService.GetStorageFileInfoById(shortInformationModel.MainPhoto.Id);
     }
 }
