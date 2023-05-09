@@ -29,6 +29,7 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
             .Where(x => x.PieceDateId == dateId && x.PieceDate.PieceId == pieceId)
             .Include(x => x.BookedTicket)
             .Include(x => x.TicketPriceEvents).ThenInclude(x => x.PurchasedUserTicket)
+            .OrderBy(x=>x.TicketRow).ThenBy(x=>x.TicketPlace)
             .ToListAsync();
 
         return piecesDates;
@@ -42,26 +43,30 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
             .ThenInclude(x => x.PurchasedUserTicket);
     }
 
-    public async Task<WriteResult> BuyTicket(PiecesTicketEntity ticket, UserEntity user)
+    public async Task<WriteResult> BuyTickets(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user)
     {
-        var ticketPriceEvent = ticket.TicketPriceEvents.MaxBy(x => x.Version);
+        var ticketsPriceEvents = tickets
+            .Select(x => new { MaxVersion = x.TicketPriceEvents.MaxBy(c => c.Version) })
+            .Where(x=>x.MaxVersion != null)
+            .Select(x=>x.MaxVersion)
+            .ToList();
 
-        if (ticketPriceEvent is null)
+        if (ticketsPriceEvents.Count != tickets.Count)
             return WriteResult.FromError(TicketErrors.NotFound.Error);
 
-        user.Money -= ticketPriceEvent.Model.TicketPrice;
+        user.Money -= ticketsPriceEvents.Sum(x=>x.Model.TicketPrice);
 
         var transaction = await DbContext.Database.BeginTransactionAsync();
 
         try
         {
+            var bookedTickets = tickets.Select(x => x.BookedTicket).Where(x => x != null);
+            _dbContext.BookedTickets.RemoveRange(bookedTickets);
+
             _dbContext.Users.Update(user);
 
-            if(ticket.BookedTicket != null)
-                _dbContext.BookedTickets.RemoveRange(ticket.BookedTicket);
-
-            var purchasedUserTicket = BuildPurchasedUserTicketEntity(ticketPriceEvent.PiecesTicketId, ticketPriceEvent.Version, user.Id);
-            _dbContext.PurchasedUserTickets.Add(purchasedUserTicket);
+            var purchasedUserTicket = BuildPurchasedUserTicketEntity(ticketsPriceEvents, user.Id);
+            _dbContext.PurchasedUserTickets.AddRange(purchasedUserTicket);
 
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
@@ -71,22 +76,22 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
         catch (Exception e)
         {
             await transaction.RollbackAsync();
-            Logger.LogError(e, "Произошла ошибка при покупке билета. UserId = {UserId}, TicketId = {TicketId}", user.Id, ticket.Id);
+            Logger.LogError(e, "Произошла ошибка при покупке билетов. UserId = {UserId}, TicketIds = {@TicketId}", user.Id, tickets.Select(x=>x.Id));
                
             return WriteResult.FromError(TicketErrors.BuyTicketConflict.Error);
         }
     }
 
-    public async Task<WriteResult> BookTicket(Guid ticketId, Guid userId)
+    public async Task<WriteResult> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId)
     {
         try
         {
-            _dbContext.BookedTickets.Add(new BookedTicketEntity
+            _dbContext.BookedTickets.AddRange(ticketIds.Select(x=> new BookedTicketEntity
             {
-                PiecesTicketId = ticketId,
+                PiecesTicketId = x,
                 Timestamp = DateTime.UtcNow,
                 UserId = userId
-            });
+            }));
 
             await _dbContext.SaveChangesAsync();
 
@@ -98,12 +103,12 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
         }
     }
 
-    private static PurchasedUserTicketEntity BuildPurchasedUserTicketEntity(Guid ticketPriceEventsId, int ticketPriceEventsVersion, Guid userId)
-        => new()
+    private static List<PurchasedUserTicketEntity> BuildPurchasedUserTicketEntity(List<TicketPriceEventsEntity> ticketPriceEvents, Guid userId)
+        => ticketPriceEvents.Select(x=> new PurchasedUserTicketEntity
         {
             DateOfPurchase = DateTime.UtcNow,
-            TicketPriceEventsId = ticketPriceEventsId,
-            TicketPriceEventsVersion = ticketPriceEventsVersion,
+            TicketPriceEventsId = x.PiecesTicketId,
+            TicketPriceEventsVersion = x.Version,
             UserId = userId
-        };
+        }).ToList();
 }

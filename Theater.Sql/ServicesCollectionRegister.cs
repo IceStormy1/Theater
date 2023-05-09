@@ -9,7 +9,11 @@ public static class ServicesCollectionRegister
     public static void AddAllDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContextPool<TheaterDbContext>(x
-            => x.UseNpgsql(configuration.GetConnectionString("Theater"), 
-                options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery)));
+            =>
+        {
+            x.UseNpgsql(configuration.GetConnectionString("Theater"),
+                options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+            x.EnableSensitiveDataLogging();
+        });
     }
 }

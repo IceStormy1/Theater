@@ -12,8 +12,9 @@ public interface ICrudRepository<TEntity> where TEntity : IEntity
     /// Получить сущность по идентификатору
     /// </summary>
     /// <param name="entityId">Идентификатор сущности</param>
+    /// <param name="useAsNoTracking">Добавлять ли AsNoTracking</param>
     /// <returns></returns>
-    Task<TEntity> GetByEntityId(Guid entityId);
+    Task<TEntity> GetByEntityId(Guid entityId, bool useAsNoTracking = false);
 
     /// <summary>
     /// Получить сущности по идентификаторам

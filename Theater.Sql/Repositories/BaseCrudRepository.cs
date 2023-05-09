@@ -25,11 +25,14 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
         Logger = logger;
     }
 
-    public async Task<TEntity> GetByEntityId(Guid entityId)
+    public async Task<TEntity> GetByEntityId(Guid entityId, bool useAsNoTracking = false)
     {
         var query = DbSet.AsQueryable();
 
         query = AddIncludes(query);
+
+        if (useAsNoTracking)
+            query = query.AsNoTracking();
 
         return await query.FirstOrDefaultAsync(x => x.Id == entityId);
     }

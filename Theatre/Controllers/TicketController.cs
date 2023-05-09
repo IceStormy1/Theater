@@ -34,30 +34,30 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     /// <param name="dateId">Идентификатор даты пьесы</param>
     /// <response code="200">В случае успешной регистрации</response>
     [HttpGet("{pieceId:guid}/date/{dateId:guid}")]
-    [ProducesResponseType(typeof(DocumentCollection<PiecesTicketModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PieceTicketList), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPieceTicketsByDate([FromRoute] Guid pieceId, [FromRoute] Guid dateId)
     {
         var tickets = await _pieceTicketService.GetPieceTicketsByDate(pieceId, dateId);
 
-        return Ok(new DocumentCollection<PiecesTicketModel>(tickets));
+        return Ok(new PieceTicketList(tickets));
     }
 
     /// <summary>
     /// Купить билет 
     /// </summary>
-    /// <param name="ticketId">Идентификатор пьесы</param>
+    /// <param name="ticketBuyRequest">Тело запроса для покупки билетов</param>
     /// <response code="200">В случае успешной регистрации</response>
     /// <response code="400">В случае ошибок валидации</response>
     [Authorize]
-    [HttpPost("{ticketId:guid}/buy")]
-    [ProducesResponseType(typeof(WriteResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(WriteResult), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BuyTicket([FromRoute] Guid ticketId)
+    [HttpPost("buy")]
+    [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> BuyTicket([FromBody] PieceTicketBuyRequest ticketBuyRequest)
     {
         if (!UserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        var buyTicketResult = await _pieceTicketService.BuyTicket(ticketId, UserId.Value);
+        var buyTicketResult = await _pieceTicketService.BuyTickets(ticketBuyRequest.TicketIds, UserId.Value);
 
         return RenderResult(buyTicketResult);
     }
@@ -65,19 +65,19 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     /// <summary>
     /// Забронировать билет
     /// </summary>
-    /// <param name="ticketId">Идентификатор пьесы</param>
+    /// <param name="ticketBuyRequest">Тело запроса для бронирования билетов</param>
     /// <response code="200">В случае успешной регистрации</response>
     /// <response code="400">В случае ошибок валидации</response>
     [Authorize]
-    [HttpPost("{ticketId:guid}/book")]
-    [ProducesResponseType(typeof(WriteResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(WriteResult), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BookTicket([FromRoute] Guid ticketId)
+    [HttpPost("book")]
+    [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> BookTicket([FromBody] PieceTicketBuyRequest ticketBuyRequest)
     {
         if (!UserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        var buyTicketResult = await _pieceTicketService.BookTicket(ticketId, UserId.Value);
+        var buyTicketResult = await _pieceTicketService.BookTicket(ticketBuyRequest.TicketIds, UserId.Value);
 
         return RenderResult(buyTicketResult);
     }

@@ -11,10 +11,22 @@ public static class TicketErrors
         WriteResult.FromError(ErrorModel.NotFound("ticket/not-found", "Билет не найден в системе"));
 
     /// <summary>
+    /// Билет не найден в системе
+    /// </summary>
+    public static WriteResult TicketsNotFound =>
+        WriteResult.FromError(ErrorModel.NotFound("tickets/not-found", "Один или несколько билетов не найдено в системе"));
+
+    /// <summary>
     /// Билет уже забронирован другим человеком
     /// </summary>
     public static WriteResult AlreadyBooked =>
-        WriteResult.FromError(ErrorModel.Default("ticket/already-booked", "Билет уже забронирован"));
+        WriteResult.FromError(ErrorModel.Default("ticket/already-booked", "Билет (ряд - {0} место - {1}) уже забронирован"));
+
+    /// <summary>
+    /// Билет уже забронирован другим человеком
+    /// </summary>
+    public static WriteResult AlreadyBought =>
+        WriteResult.FromError(ErrorModel.Default("ticket/already-bought", "Билет (ряд - {0} место - {1}) уже куплен"));
 
     /// <summary>
     /// Произошла ошибка при покупке билета

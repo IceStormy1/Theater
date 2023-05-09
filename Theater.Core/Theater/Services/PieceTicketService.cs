@@ -46,9 +46,9 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         return Mapper.Map<IReadOnlyCollection<PiecesTicketModel>>(tickets);
     }
 
-    public async Task<WriteResult> BuyTicket(Guid ticketId, Guid userId)
+    public async Task<WriteResult> BuyTickets(IReadOnlyCollection<Guid> ticketIds, Guid userId)
     {
-        var user = await _userAccountRepository.GetByEntityId(userId);
+        var user = await _userAccountRepository.GetByEntityId(userId, useAsNoTracking: true);
 
         if (user is null)
             return WriteResult.FromError(UserAccountErrors.NotFound.Error);
@@ -56,19 +56,19 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         if (user.Money == default)
             return WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error);
 
-        var ticket = await _ticketRepository.GetByEntityId(ticketId);
+        var tickets = await _ticketRepository.GetByEntityIds(ticketIds);
 
-        if (ticket is null)
-            return WriteResult.FromError(TicketErrors.NotFound.Error);
+        if (tickets.Count != ticketIds.Count)
+            return WriteResult.FromError(TicketErrors.TicketsNotFound.Error);
 
-        var validationResult = CheckIfCanBuyTicket(ticket, user);
+        var validationResult = CheckIfCanBuyOrBookTicket(tickets, user);
 
         return !validationResult.IsSuccess
             ? validationResult
-            : await _ticketRepository.BuyTicket(ticket, user);
+            : await _ticketRepository.BuyTickets(tickets, user);
     }
 
-    public async Task<WriteResult> BookTicket(Guid ticketId, Guid userId)
+    public async Task<WriteResult> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId)
     {
         var user = await _userAccountRepository.GetByEntityId(userId);
 
@@ -78,16 +78,16 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         if (user.Money == default)
             return WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error);
 
-        var ticket = await _ticketRepository.GetByEntityId(ticketId);
+        var tickets = await _ticketRepository.GetByEntityIds(ticketIds);
 
-        if (ticket is null)
+        if (tickets is null)
             return WriteResult.FromError(TicketErrors.NotFound.Error);
 
-        var validationResult = CheckIfCanBookTicket(ticket, user);
+        var validationResult = CheckIfCanBookTicket(tickets, user);
 
         return !validationResult.IsSuccess
             ? validationResult
-            : await _ticketRepository.BookTicket(ticketId, userId);
+            : await _ticketRepository.BookTicket(ticketIds, userId);
     }
 
     public async Task<WriteResult> CreateTickets(Guid pieceId, PieceTicketCreateParameters ticketsParameters)
@@ -179,25 +179,25 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         }
     }
 
-    private static WriteResult CheckIfCanBuyTicket(PiecesTicketEntity ticket, UserEntity user)
+    private static WriteResult CheckIfCanBuyOrBookTicket(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user, bool isBookEvent = false)
     {
-        if (ticket.BookedTicket != null && ticket.BookedTicket.UserId != user.Id)
-            return WriteResult.FromError(TicketErrors.AlreadyBooked.Error);
+        var alreadyBookedTicket = tickets.FirstOrDefault(x => x.BookedTicket != null && (isBookEvent || x.BookedTicket.UserId != user.Id));
 
-        // TODO: валидация на уже купленный билет
+        if(alreadyBookedTicket != null)
+            return WriteResult.FromError(ErrorModel.Default(TicketErrors.AlreadyBooked.Error.Type, string.Format(TicketErrors.AlreadyBooked.Error.Message, alreadyBookedTicket.TicketRow, alreadyBookedTicket.TicketPlace)));
 
-        return ticket.TicketPrice > user.Money
+        var alreadyPurchasedTicket = tickets.FirstOrDefault(x => x.TicketPriceEvents.Any(c => c.PurchasedUserTicket != null));
+
+        if(alreadyPurchasedTicket != null)
+            return WriteResult.FromError(ErrorModel.Default(TicketErrors.AlreadyBought.Error.Type, string.Format(TicketErrors.AlreadyBought.Error.Message, alreadyPurchasedTicket.TicketRow, alreadyPurchasedTicket.TicketPlace)));
+
+        return tickets.Sum(x=>x.TicketPrice) > user.Money
             ? WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error)
             : WriteResult.Successful;
     }
 
-    private static WriteResult CheckIfCanBookTicket(PiecesTicketEntity ticket, UserEntity user)
+    private static WriteResult CheckIfCanBookTicket(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user)
     {
-        if (ticket.BookedTicket != null)
-            return WriteResult.FromError(TicketErrors.AlreadyBooked.Error);
-
-        return ticket.TicketPrice > user.Money
-            ? WriteResult.FromError(UserAccountErrors.NotEnoughMoney.Error)
-            : WriteResult.Successful;
+        return CheckIfCanBuyOrBookTicket(tickets, user, isBookEvent: true);
     }
 }

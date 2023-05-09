@@ -19,18 +19,18 @@ public interface IPieceTicketService : ICrudService<PiecesTicketParameters>
     /// <summary>
     /// Купить билет 
     /// </summary>
-    /// <param name="ticketId">Идентификатор билета</param>
+    /// <param name="ticketIds">Идентификаторы билетов</param>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <returns>Результат покупки</returns>
-    Task<WriteResult> BuyTicket(Guid ticketId, Guid userId);
+    Task<WriteResult> BuyTickets(IReadOnlyCollection<Guid> ticketIds, Guid userId);
 
     /// <summary>
     /// Забронировать билет билет 
     /// </summary>
-    /// <param name="ticketId">Идентификатор билета</param>
+    /// <param name="ticketIds">Идентификаторы билетов</param>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <returns>Результат бронирования</returns>
-    Task<WriteResult> BookTicket(Guid ticketId, Guid userId);
+    Task<WriteResult> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId);
 
     /// <summary>
     /// Добавить билеты для пьесы

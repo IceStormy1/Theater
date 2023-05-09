@@ -13,7 +13,6 @@ using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Abstractions.FileStorage;
-using Theater.Policy;
 
 namespace Theater.Controllers;
 

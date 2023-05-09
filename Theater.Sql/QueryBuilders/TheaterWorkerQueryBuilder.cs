@@ -22,6 +22,7 @@ public sealed class TheaterWorkerQueryBuilder : QueryBuilderBase<TheaterWorkerEn
     {
         return sortColumn?.ToLowerInvariant() switch
         {
+            "id" => x => x.Id,
             "name" => x => x.FirstName,
             "position" => x => x.Position.PositionName,
             _ => x => x.FirstName
