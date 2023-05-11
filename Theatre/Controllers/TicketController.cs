@@ -52,7 +52,7 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     [HttpPost("buy")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BuyTicket([FromBody] PieceTicketBuyRequest ticketBuyRequest)
+    public async Task<IActionResult> BuyTickets([FromBody] PieceTicketBuyRequest ticketBuyRequest)
     {
         if (!UserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
@@ -72,7 +72,7 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     [HttpPost("book")]
     [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BookTicket([FromBody] PieceTicketBuyRequest ticketBuyRequest)
+    public async Task<IActionResult> BookTickets([FromBody] PieceTicketBuyRequest ticketBuyRequest)
     {
         if (!UserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);

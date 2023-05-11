@@ -18,11 +18,11 @@ namespace Theater.Contracts.Theater.PiecesTicket
         /// <summary>
         /// Количество мест в ряду
         /// </summary>
-        public ushort Cols => Items.Max(x => x.TicketPlace);
+        public ushort Cols => Items.Count == default ? default : Items.Max(x => x.TicketPlace);
 
         /// <summary>
         /// Количество рядов
         /// </summary>
-        public ushort Rows => Items.Max(x => x.TicketRow);
+        public ushort Rows => Items.Count == default ? default : Items.Max(x => x.TicketRow);
     }
 }
