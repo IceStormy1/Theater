@@ -32,11 +32,11 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
 
     public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
     {
-        var user = await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(user => string.Equals(userEntity.UserName, user.UserName));
+        var isUserExists = await _dbContext.Users
+            .AnyAsync(user => string.Equals(userEntity.UserName, user.UserName) ||
+                              string.Equals(userEntity.Email, user.Email));
 
-        if (user != null)
+        if (isUserExists)
             return WriteResult<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
 
         _dbContext.Users.Add(userEntity);

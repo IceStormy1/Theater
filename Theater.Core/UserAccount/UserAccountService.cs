@@ -34,7 +34,6 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
 
     public async Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user)
     {
-        // TODO: Валидация на уникальность пользователя в системе
         var userEntity = Mapper.Map<UserEntity>(user);
 
         return await _userAccountRepository.CreateUser(userEntity);
