@@ -23,7 +23,6 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
     private readonly IUserAccountRepository _userAccountRepository;
     private readonly ITicketRepository _ticketRepository;
     private readonly IPieceRepository _pieceRepository;
-    private readonly ILogger<PieceTicketService> _logger;
 
     public PieceTicketService(
         IMapper mapper,
@@ -31,11 +30,10 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         IDocumentValidator<PiecesTicketParameters> documentValidator,
         IUserAccountRepository userAccountRepository,
         IPieceRepository pieceRepository,
-        ILogger<PieceTicketService> logger) : base(mapper, repository, documentValidator)
+        ILogger<PieceTicketService> logger) : base(mapper, repository, documentValidator, logger)
     {
         _userAccountRepository = userAccountRepository;
         _pieceRepository = pieceRepository;
-        _logger = logger;
         _ticketRepository = repository;
     }
 
@@ -129,7 +127,7 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Произошла ошибка при попытке добавить билеты в БД");
+            Logger.LogError(e, "Произошла ошибка при попытке добавить билеты в БД");
 
             return WriteResult.FromError(TicketErrors.CreateTicketConflict.Error);
         }
@@ -173,7 +171,7 @@ public sealed class PieceTicketService : ServiceBase<PiecesTicketParameters, Pie
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Произошла ошибка при попытке добавить билеты в БД");
+            Logger.LogError(e, "Произошла ошибка при попытке добавить билеты в БД");
 
             return WriteResult.FromError(TicketErrors.CreateTicketConflict.Error);
         }

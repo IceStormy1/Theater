@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Theater.Abstractions;
 using Theater.Abstractions.UserReviews;
 using Theater.Contracts.Theater.UserReview;
@@ -11,7 +12,8 @@ public class UserReviewsService : ServiceBase<UserReviewParameters, UserReviewEn
     public UserReviewsService(
         IMapper mapper,
         ICrudRepository<UserReviewEntity> repository,
-        IDocumentValidator<UserReviewParameters> documentValidator) : base(mapper, repository, documentValidator)
+        IDocumentValidator<UserReviewParameters> documentValidator,
+        ILogger<UserReviewsService> logger) : base(mapper, repository, documentValidator, logger)
     {
     }
 }

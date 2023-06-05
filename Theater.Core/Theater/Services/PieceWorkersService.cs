@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Theater.Abstractions;
 using Theater.Abstractions.PieceWorkers;
 using Theater.Contracts.Theater.PieceWorker;
@@ -11,7 +12,8 @@ internal class PieceWorkersService : ServiceBase<PieceWorkerParameters, PieceWor
     public PieceWorkersService(
         IMapper mapper,
         ICrudRepository<PieceWorkerEntity> repository,
-        IDocumentValidator<PieceWorkerParameters> documentValidator) : base(mapper, repository, documentValidator)
+        IDocumentValidator<PieceWorkerParameters> documentValidator,
+        ILogger<PieceWorkersService> logger) : base(mapper, repository, documentValidator, logger)
     {
     }
 }

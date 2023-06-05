@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Theater.Abstractions;
 using Theater.Abstractions.WorkersPosition;
 using Theater.Common;
@@ -16,7 +17,8 @@ public sealed class WorkersPositionService : ServiceBase<WorkersPositionParamete
     public WorkersPositionService(
         IMapper mapper,
         IWorkersPositionRepository workersPositionRepository,
-        IDocumentValidator<WorkersPositionParameters> documentValidator) : base(mapper, workersPositionRepository, documentValidator)
+        IDocumentValidator<WorkersPositionParameters> documentValidator,
+        ILogger<WorkersPositionService> logger) : base(mapper, workersPositionRepository, documentValidator, logger)
     {
         _workersPositionRepository = workersPositionRepository;
     }

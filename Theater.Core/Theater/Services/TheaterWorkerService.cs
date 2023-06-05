@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions;
@@ -19,8 +20,9 @@ public sealed class TheaterWorkerService : ServiceBase<TheaterWorkerParameters, 
         IMapper mapper,
         IDocumentValidator<TheaterWorkerParameters> documentValidator,
         ITheaterWorkerRepository repository,
-        IFileStorageService fileStorageService)
-        : base(mapper, repository, documentValidator)
+        IFileStorageService fileStorageService,
+        ILogger<TheaterWorkerService> logger)
+        : base(mapper, repository, documentValidator, logger)
     {
         _theaterWorkerRepository = repository;
         _fileStorageService = fileStorageService;

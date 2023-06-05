@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Theater.Abstractions;
 using Theater.Abstractions.PieceDates;
 using Theater.Contracts.Theater.PieceDate;
@@ -11,7 +12,8 @@ public class PieceDateService : ServiceBase<PieceDateParameters, PieceDateEntity
     public PieceDateService(
         IMapper mapper,
         ICrudRepository<PieceDateEntity> repository,
-        IDocumentValidator<PieceDateParameters> documentValidator) : base(mapper, repository, documentValidator)
+        IDocumentValidator<PieceDateParameters> documentValidator,
+        ILogger<PieceDateService> logger) : base(mapper, repository, documentValidator, logger)
     {
     }
 }

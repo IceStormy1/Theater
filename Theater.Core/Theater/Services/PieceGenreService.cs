@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions;
@@ -15,7 +16,8 @@ public sealed class PieceGenreService : ServiceBase<PiecesGenreParameters, Piece
     public PieceGenreService(
         IMapper mapper,
         IPieceGenreRepository repository,
-        IDocumentValidator<PiecesGenreParameters> documentValidator, IPieceGenreRepository pieceGenreRepository) : base(mapper, repository, documentValidator)
+        ILogger<PieceGenreService> logger,
+        IDocumentValidator<PiecesGenreParameters> documentValidator, IPieceGenreRepository pieceGenreRepository) : base(mapper, repository, documentValidator, logger)
     {
         _pieceGenreRepository = pieceGenreRepository;
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Theater.Abstractions;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.FileStorage;
@@ -24,7 +25,8 @@ public sealed class PieceService : ServiceBase<PieceParameters, PieceEntity>, IP
         IMapper mapper,
         IPieceRepository repository,
         IDocumentValidator<PieceParameters> documentValidator,
-        IFileStorageService fileStorageService) : base(mapper, repository, documentValidator)
+        IFileStorageService fileStorageService,
+        ILogger<PieceService> logger) : base(mapper, repository, documentValidator, logger)
     {
         _pieceRepository = repository;
         _fileStorageService = fileStorageService;
