@@ -29,6 +29,11 @@ public interface IUserAccountService : ICrudService<UserParameters>
     Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters);
 
     /// <summary>
+    /// Авторизоваться при помощи ВКонтакте
+    /// </summary>
+    Task<WriteResult<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto  authenticateVkDto);
+
+    /// <summary>
     /// Пополнить баланс пользователя
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>

@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Entities", "Theater
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Common", "Theater.Common\Theater.Common.csproj", "{C5C72085-578B-468B-B354-F8780E58BC17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Configuration", "Theater.Configuration\Theater.Configuration.csproj", "{D50E29A7-16B9-4542-BDB3-4AB713E88FE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Configuration", "Theater.Configuration\Theater.Configuration.csproj", "{D50E29A7-16B9-4542-BDB3-4AB713E88FE4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VkNet", "vk\VkNet\VkNet.csproj", "{10002899-EA58-4D04-BF7F-FDAEE0D2CE70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{D50E29A7-16B9-4542-BDB3-4AB713E88FE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D50E29A7-16B9-4542-BDB3-4AB713E88FE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D50E29A7-16B9-4542-BDB3-4AB713E88FE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10002899-EA58-4D04-BF7F-FDAEE0D2CE70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10002899-EA58-4D04-BF7F-FDAEE0D2CE70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10002899-EA58-4D04-BF7F-FDAEE0D2CE70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10002899-EA58-4D04-BF7F-FDAEE0D2CE70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

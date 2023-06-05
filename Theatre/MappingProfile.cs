@@ -25,6 +25,8 @@ using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
+using VkNet.Model.RequestParams;
+using GenderType = Theater.Entities.Authorization.GenderType;
 
 namespace Theater;
 
@@ -38,6 +40,21 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
             .ForMember(destination => destination.PhotoId, options => options.MapFrom(x => x.Photo == null ? (Guid?)null : x.Photo.Id))
             .ForMember(destination => destination.Photo, options => options.Ignore())
+            ;
+
+        CreateMap<AccountSaveProfileInfoParams, UserEntity>()
+            .ForMember(destination => destination.Id, options => options.Ignore())
+            .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
+            .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
+            .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
+            .ForMember(destination => destination.VkId, options => options.MapFrom(exp => exp.Id))
+            .ForMember(destination => destination.UserName, options => options.MapFrom(exp => exp.ScreenName))
+            .ForMember(destination => destination.FirstName, options => options.MapFrom(exp => exp.FirstName))
+            .ForMember(destination => destination.LastName, options => options.MapFrom(exp => exp.LastName))
+            .ForMember(destination => destination.Gender, options => options.MapFrom(exp => (int)exp.Sex == 1 ? GenderType.Female : GenderType.Male))
+            .ForMember(destination => destination.Email, options => options.MapFrom(exp => "test@mail.ru")) // TODO: разобраться откуда брать инфу о почте и телефоне в нормальном виде
+            .ForMember(destination => destination.Phone, options => options.MapFrom(exp => "79096478398")) // TODO: разобраться откуда брать инфу о почте и телефоне в нормальном виде
+            .ForMember(destination => destination.BirthDate, options => options.MapFrom(exp => exp.BirthDate))
             ;
 
         CreateMap<UserEntity, UserModel>()

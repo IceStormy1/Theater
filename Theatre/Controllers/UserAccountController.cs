@@ -18,6 +18,7 @@ using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
 using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
+using VkNet.Abstractions;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 
 namespace Theater.Controllers;
@@ -32,17 +33,20 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
     private readonly IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> _pieceTicketIndexReader;
     private readonly IFileStorageService _fileStorageService;
+    private readonly IVkApi _vkApiAuth;
 
     public UserAccountController(
         IUserAccountService userAccountService,
         IMapper mapper,
         IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader,
         IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> pieceTicketIndexReader,
-        IFileStorageService fileStorageService) : base(userAccountService, mapper)
+        IFileStorageService fileStorageService,
+        IVkApi vkApiAuth) : base(userAccountService, mapper)
     {
         _userAccountService = userAccountService;
         _userIndexReader = userIndexReader;
         _fileStorageService = fileStorageService;
+        _vkApiAuth = vkApiAuth;
         _pieceTicketIndexReader = pieceTicketIndexReader;
     }
 
@@ -127,6 +131,22 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
         return authenticateResult is null
             ? RenderResult(UserAccountErrors.NotFound)
             : Ok(authenticateResult);
+    }
+
+    /// <summary>
+    /// Войти при помощи логина и пароля
+    /// </summary>
+    /// <response code="200">В случае успешной регистрации</response>
+    /// <response code="400">В случае ошибок валидации</response>
+    [AllowAnonymous]
+    [HttpPost("vk/login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> LoginWithVkToken([FromBody] AuthenticateVkDto parameters)
+    {
+        var authenticateResult = await _userAccountService.AuthorizeWithVk(parameters);
+
+        return RenderResult(authenticateResult);
     }
 
     /// <summary>

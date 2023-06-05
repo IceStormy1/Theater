@@ -32,6 +32,8 @@ using Theater.Policy;
 using Theater.Sql;
 using Theater.Validation.Authorization;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
+using VkNet;
+using VkNet.Abstractions;
 
 namespace Theater;
 
@@ -80,13 +82,15 @@ public sealed class Startup
             .RequireAuthenticatedUser()
             .Build();
 
-        services.AddAuthorization(options =>
-        {
-            options.DefaultPolicy = defaultPolicy;
+        services
+            .AddScoped<IVkApi>(p => new VkApi())
+            .AddAuthorization(options =>
+            {
+                options.DefaultPolicy = defaultPolicy;
 
-            options.AddRoleModelPolicies<UserPolices>(Configuration, nameof(RoleModel.User));
-            //  options.AddRoleModelPolicies<MwPolicies>(Configuration, nameof(RoleModel.MedicalWorker));
-        });
+                options.AddRoleModelPolicies<UserPolices>(Configuration, nameof(RoleModel.User));
+                //  options.AddRoleModelPolicies<MwPolicies>(Configuration, nameof(RoleModel.MedicalWorker));
+            });
 
         services.AddAllDbContext(Configuration);
 
@@ -168,7 +172,7 @@ public sealed class Startup
     {
         if (env.IsDevelopment())
             app.UseDeveloperExceptionPage();
-
+        
         app.UseCors(options =>
         {
             options.AllowAnyOrigin()

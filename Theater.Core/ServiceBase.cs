@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions;
@@ -15,15 +16,18 @@ public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel>
     protected readonly IMapper Mapper;
     protected readonly ICrudRepository<TEntity> Repository;
     protected readonly IDocumentValidator<TModel> DocumentValidator;
+    protected readonly ILogger<ServiceBase<TModel, TEntity>> Logger;
 
     protected ServiceBase(
         IMapper mapper, 
         ICrudRepository<TEntity> repository,
-        IDocumentValidator<TModel> documentValidator)
+        IDocumentValidator<TModel> documentValidator, 
+        ILogger<ServiceBase<TModel, TEntity>> logger)
     {
         Mapper = mapper;
         Repository = repository;
         DocumentValidator = documentValidator;
+        Logger = logger;
     }
 
     public async Task<WriteResult<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null)

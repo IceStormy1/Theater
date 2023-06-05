@@ -19,5 +19,6 @@
 	  <ProjectReference Include="..\Theater.Configuration\Theater.Configuration.csproj" />
 	  <ProjectReference Include="..\Theater.Contracts\Theater.Contracts.csproj" />
 	  <ProjectReference Include="..\Theater.Sql\Theater.Sql.csproj" />
+	  <ProjectReference Include="..\vk\VkNet\VkNet.csproj" />
 	</ItemGroup>
 </Project>

@@ -13,7 +13,8 @@ public interface IUserAccountRepository : ICrudRepository<UserEntity>
     /// </summary>
     /// <param name="userName">Никнейм пользователя</param>
     /// <param name="password">Пароль пользователя</param>
-    Task<UserEntity> FindUser(string userName, string password);
+    /// <param name="vkId">Идентификатор пользователя в ВК. Если заполнен, то поиск будет проходить только по нему</param>
+    Task<UserEntity> FindUser(string userName, string password, int? vkId = null);
 
     /// <summary>
     /// Создать пользователя

@@ -22,15 +22,19 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
         _dbContext = dbContext;
     }
 
-    public async Task<UserEntity> FindUser(string userName, string password)
-        => await _dbContext.Users
-            .AsNoTracking()
-            .Include(x => x.UserRole)
-            .FirstOrDefaultAsync(user => string.Equals(password, user.Password)
-                                         && (string.Equals(user.UserName, userName)
-                                             || string.Equals(user.Email, userName)));
+    public async Task<UserEntity> FindUser(string userName, string password, int? vkId = null)
+    {
+        var userQuery = _dbContext.Users.AsNoTracking().AsQueryable();
 
-    public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
+        if (vkId != null)
+            return await userQuery.FirstOrDefaultAsync(user => user.VkId == vkId);
+
+        return await userQuery.FirstOrDefaultAsync(user => string.Equals(password, user.Password)
+                                                         && (string.Equals(user.UserName, userName)
+                                                             || string.Equals(user.Email, userName)));
+    }
+
+        public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
     {
         var isUserExists = await _dbContext.Users
             .AnyAsync(user => string.Equals(userEntity.UserName, user.UserName) ||
@@ -39,6 +43,7 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
         if (isUserExists)
             return WriteResult<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
 
+        userEntity.UserRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.Id == userEntity.RoleId); // todo: переделать, нужно для авторизации ВК 
         _dbContext.Users.Add(userEntity);
         await DbContext.SaveChangesAsync();
 

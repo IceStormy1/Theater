@@ -32,7 +32,7 @@ public sealed class JwtHelper : IJwtHelper
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.Email, user.Email),
             new (JwtRegisteredClaimNames.PhoneNumber, user.Phone),
-            new (JwtRegisteredClaimNames.Name, string.Format(FullNameFormat, user.LastName, user.FirstName, user.MiddleName)),
+            new (JwtRegisteredClaimNames.Name, string.Format(FullNameFormat, user.LastName, user.FirstName, user.MiddleName).Trim()),
             new (JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("dd/MM/yyyy")),
             new (JwtRegisteredClaimNames.Gender, user.Gender.ToString("D")),
             new ("role", user.UserRole.RoleName.ToLower()),

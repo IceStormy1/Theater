@@ -13,6 +13,11 @@ public sealed class UserEntity : IEntity
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Идентификатор пользователя, который авторизовался при помощи VK
+    /// </summary>
+    public int? VkId { get; set; }
+
+    /// <summary>
     /// Никнейм пользователя
     /// </summary>
     public string UserName { get; set; }
