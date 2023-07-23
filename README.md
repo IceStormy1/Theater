@@ -8,7 +8,7 @@
 - [x] FluentValidation
 - [x] FileStorage Minio S3
 - [x] Базовая логика для работы приложения
-- [ ] Refit and add SDK build
+- [x] Refit and add SDK build
 - [ ] Docker
 - [ ] SignalR
 - [ ] Rabbit MQ
