@@ -25,7 +25,7 @@ using Theater.Contracts.UserAccount;
 using Theater.Entities.Authorization;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
-using VkNet.Model.RequestParams;
+using VkNet.Model;
 using GenderType = Theater.Entities.Authorization.GenderType;
 
 namespace Theater;
@@ -47,7 +47,7 @@ internal sealed class MappingProfile : Profile
             .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
             .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
             .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
-            .ForMember(destination => destination.VkId, options => options.MapFrom(exp => exp.Id))
+           // .ForMember(destination => destination.VkId, options => options.MapFrom(exp => exp.Id))
             .ForMember(destination => destination.UserName, options => options.MapFrom(exp => exp.ScreenName))
             .ForMember(destination => destination.FirstName, options => options.MapFrom(exp => exp.FirstName))
             .ForMember(destination => destination.LastName, options => options.MapFrom(exp => exp.LastName))

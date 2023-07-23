@@ -12,6 +12,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.30.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
+		<PackageReference Include="VkNet" Version="1.76.0-alpha-52" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -19,6 +20,5 @@
 	  <ProjectReference Include="..\Theater.Configuration\Theater.Configuration.csproj" />
 	  <ProjectReference Include="..\Theater.Contracts\Theater.Contracts.csproj" />
 	  <ProjectReference Include="..\Theater.Sql\Theater.Sql.csproj" />
-	  <ProjectReference Include="..\vk\VkNet\VkNet.csproj" />
 	</ItemGroup>
 </Project>

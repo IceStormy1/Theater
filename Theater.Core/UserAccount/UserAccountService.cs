@@ -76,7 +76,7 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
             if (vkUserInfo is null)
                 return WriteResult<AuthenticateResponse>.FromError(UserAccountErrors.NotFound.Error);
 
-            var userEntity = await _userAccountRepository.FindUser(userName:null, password: null, vkId: vkUserInfo.Id);
+            var userEntity = await _userAccountRepository.FindUser(userName:null, password: null, vkId: default); // todo: Добавить нормальный vkID
 
             if (userEntity is null)
             {
