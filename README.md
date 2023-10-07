@@ -9,7 +9,7 @@
 - [x] FileStorage Minio S3
 - [x] Базовая логика для работы приложения
 - [x] Refit and add SDK build
-- [ ] Docker
+- [x] Docker
 - [ ] SignalR
 - [ ] Rabbit MQ
 - [ ] Hangfire (Отдельный хост)

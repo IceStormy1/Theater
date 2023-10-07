@@ -33,6 +33,7 @@ public sealed class MigrationTool
             foreach (var dbContext in dbContextCollection)
             {
                 _logger.LogInformation($"Migrating DbContext '{dbContext.GetType()}'...");
+                _logger.LogInformation("ConnectionString: {ConnectionString}", dbContext.Database.GetConnectionString());
                 dbContext.Database.SetCommandTimeout(TimeSpan.FromMinutes(2));
                 dbContext.Database.Migrate();
                 dbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(30));

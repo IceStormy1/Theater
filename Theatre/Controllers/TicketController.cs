@@ -5,8 +5,6 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Theater.Abstractions.Ticket;
-using Theater.Common;
-using Theater.Contracts;
 using Theater.Abstractions.Errors;
 using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;

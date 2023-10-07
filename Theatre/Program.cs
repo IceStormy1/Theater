@@ -26,9 +26,8 @@ public sealed class Program
                 var env = hostingContext.HostingEnvironment;
 
                 config.AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
-
-                config.AddEnvironmentVariables();
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+                    .AddEnvironmentVariables();
             })
             .UseSerilog((ctx, _, cfg) =>
                 cfg

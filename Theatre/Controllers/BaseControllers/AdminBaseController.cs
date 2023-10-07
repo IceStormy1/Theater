@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Theater.Abstractions;
 using Theater.Contracts;
 
@@ -11,10 +12,8 @@ namespace Theater.Controllers.BaseControllers;
 /// <summary>
 /// Базовый контроллер в админке с реализацией CRUD. Путь по умолчанию: <c>api/admin</c>.
 /// </summary>
-#if !DEBUG
-    [Authorize]
-#endif
-[Route("api/admin")]
+[Authorize] 
+[Route("api/admin")] 
 [ApiController]
 public class AdminBaseController<TParameters> : CrudServiceBaseController<TParameters>
     where TParameters : class
