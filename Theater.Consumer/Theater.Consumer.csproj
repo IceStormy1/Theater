@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Theater.Configuration\Theater.Configuration.csproj" />
     <ProjectReference Include="..\Theater.Contracts\Theater.Contracts.csproj" />
   </ItemGroup>
 

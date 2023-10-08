@@ -1,8 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Theater.Configuration;
 using Theater.Consumer.Consumers;
-using Theater.Consumer.Settings;
 using Theater.Contracts.Rabbit;
 
 namespace Theater.Consumer;

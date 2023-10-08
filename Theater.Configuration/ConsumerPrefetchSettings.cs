@@ -1,4 +1,4 @@
-﻿namespace Theater.Consumer.Settings;
+﻿namespace Theater.Configuration;
 
 public sealed class ConsumerPrefetchSettings
 {
