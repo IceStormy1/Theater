@@ -22,12 +22,14 @@ using System.Reflection;
 using Theater.Abstractions;
 using Theater.Abstractions.Jwt;
 using Theater.Configuration;
+using Theater.Consumer;
 using Theater.Contracts.Theater.Piece;
 using Theater.Contracts.Theater.PiecesTicket;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Contracts.UserAccount;
 using Theater.Core;
 using Theater.Entities.Theater;
+using Theater.Extensions;
 using Theater.Policy;
 using Theater.Sql;
 using Theater.Validation.Authorization;
@@ -95,7 +97,7 @@ public sealed class Startup
         services.AddAllDbContext(Configuration);
 
         services.AddRouting(c => c.LowercaseUrls = true);
-
+     
         services.AddControllers()
             .ConfigureApiBehaviorOptions(options =>
             {
@@ -161,6 +163,7 @@ public sealed class Startup
         });
 
         services.AddMemoryCache();
+        services.RegisterMassTransit(Configuration);
 
         AddRelationRepository(services);
         AddCrudServices(services);

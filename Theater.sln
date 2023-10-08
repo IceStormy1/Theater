@@ -21,9 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Common", "Theater.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Configuration", "Theater.Configuration\Theater.Configuration.csproj", "{D50E29A7-16B9-4542-BDB3-4AB713E88FE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Clients", "Theater.Clients\Theater.Clients.csproj", "{46D89B55-1F2A-466C-BAE8-27ED5B061AD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Clients", "Theater.Clients\Theater.Clients.csproj", "{46D89B55-1F2A-466C-BAE8-27ED5B061AD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.TestTerminal", "Theater.TestTerminal\Theater.TestTerminal.csproj", "{C1D16FB9-8E69-4BD8-9216-6343DD0AEEF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.TestTerminal", "Theater.TestTerminal\Theater.TestTerminal.csproj", "{C1D16FB9-8E69-4BD8-9216-6343DD0AEEF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Consumer", "Theater.Consumer\Theater.Consumer.csproj", "{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{C1D16FB9-8E69-4BD8-9216-6343DD0AEEF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1D16FB9-8E69-4BD8-9216-6343DD0AEEF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1D16FB9-8E69-4BD8-9216-6343DD0AEEF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

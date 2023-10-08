@@ -11,7 +11,7 @@
 - [x] Refit and add SDK build
 - [x] Docker
 - [ ] SignalR
-- [ ] Rabbit MQ
+- [x] Rabbit MQ
 - [ ] Hangfire (Отдельный хост)
 - [ ] JasperReport (Отдельный хост)
 - [ ] ElasticSearch

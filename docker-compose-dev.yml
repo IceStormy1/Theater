@@ -20,6 +20,7 @@ services:
     depends_on:
       - minio
       - postgres
+      - rabbitmq
 
   postgres:
     container_name: 'postgres'
@@ -37,25 +38,28 @@ services:
     volumes: 
       - postgres:/var/lib/postgresql/data
 
-  # rabbitmq:
-  #   image: rabbitmq:3.9.7-management
-  #   container_name: 'rabbitmq'
-  #   hostname: myrabbitmq
-  #   restart: unless-stopped
-  #   ports:
-  #     - 5672:5672 # AMQP protocol port
-  #     - 15672:15672 # UI for images ...:3-management
-  #   healthcheck:
-  #     test: rabbitmq-diagnostics -q ping
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
-  #     #start_period: 0s
-  #   #volumes:
-  #   #    - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-  #   #    - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-  #   env_file:
-  #     - .env-dev
+  rabbitmq:
+    image: rabbitmq:3.9.7-management
+    container_name: 'rabbitmq'
+    env_file:
+      - .env-dev
+    hostname: myrabbitmq
+    restart: unless-stopped
+    ports:
+      - 5672:5672 # AMQP protocol port
+      - 15672:15672 # UI for images ...:3-management
+    networks:
+      - theater-dev
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 0s
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
   minio:
     image: minio/minio:latest
     env_file:
@@ -66,6 +70,8 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    networks:
+      - theater-dev
 
 volumes:
   postgres:
