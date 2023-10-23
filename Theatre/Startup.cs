@@ -28,6 +28,7 @@ using Theater.Contracts.Theater.PiecesTicket;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Contracts.UserAccount;
 using Theater.Core;
+using Theater.Core.Profiles;
 using Theater.Entities.Theater;
 using Theater.Extensions;
 using Theater.Policy;
@@ -120,7 +121,7 @@ public sealed class Startup
                 cfg.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 
-        services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfile).Assembly));
+        services.AddAutoMapper(x => x.AddMaps(typeof(AbstractProfile).Assembly));
 
         services.AddSwaggerGen(c =>
         {
