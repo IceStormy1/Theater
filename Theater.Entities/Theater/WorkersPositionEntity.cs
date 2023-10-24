@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Theater.Common;
+using Theater.Common.Enums;
 
 namespace Theater.Entities.Theater;
 
-public sealed class WorkersPositionEntity : IEntity
+public sealed class WorkersPositionEntity : BaseEntity
 {
-    /// <summary>
-    /// Идентификатор должности
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Наименование должности
     /// </summary>

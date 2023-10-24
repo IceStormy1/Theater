@@ -4,13 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace Theater.Entities.Theater;
 
-public sealed class PieceDateEntity : IEntity
+public sealed class PieceDateEntity : BaseEntity
 {
-    /// <summary>
-    /// Идентификатор
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Дата и время пьесы
     /// </summary>

@@ -94,4 +94,33 @@ public class TheaterDbContext : DbContext
    
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(UserReviewEntityConfiguration))!);
     }
+
+    public override int SaveChanges()
+    {
+        SetDates();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        SetDates();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void SetDates()
+    {
+        var entries = ChangeTracker
+            .Entries()
+            .Where(e =>
+                (e.Entity is IHasCreatedAt or IHasUpdatedAt) && (e.State is EntityState.Added or EntityState.Modified));
+
+        foreach (var entityEntry in entries)
+        {
+            if (entityEntry.State == EntityState.Added && entityEntry.Entity is IHasCreatedAt createdEntity)
+                createdEntity.CreatedAt = DateTime.UtcNow;
+
+            if (entityEntry.State == EntityState.Modified && entityEntry.Entity is IHasUpdatedAt modifiedEntity)
+                modifiedEntity.UpdatedAt = DateTime.UtcNow;
+        }
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Theater.Entities.Authorization;
+namespace Theater.Entities.Users;
 
 public sealed class UserRoleEntity
 {

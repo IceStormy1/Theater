@@ -4,13 +4,8 @@ using Theater.Entities.FileStorage;
 
 namespace Theater.Entities.Theater;
 
-public sealed class PieceEntity : IEntity
+public sealed class PieceEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
-    /// <summary>
-    /// Идентификатор пьесы
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Наименование пьесы
     /// </summary>
@@ -50,6 +45,12 @@ public sealed class PieceEntity : IEntity
     /// Дополнительные фотографии пьесы
     /// </summary>
     public List<Guid> PhotoIds { get; set; }
+
+    /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
+    public DateTime? UpdatedAt { get; set; }
 
     public List<UserReviewEntity> UserReviews { get; set; }
     public List<PieceDateEntity> PieceDates { get; set; }

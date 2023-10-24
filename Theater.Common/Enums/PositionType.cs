@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Theater.Common;
+namespace Theater.Common.Enums;
 
 /// <summary>
 /// Тип должности

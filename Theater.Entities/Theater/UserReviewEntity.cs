@@ -1,15 +1,10 @@
 ﻿using System;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 
 namespace Theater.Entities.Theater;
 
-public sealed class UserReviewEntity : IEntity
+public sealed class UserReviewEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
-    /// <summary>
-    /// Идентификатор роли
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Текст рецензии
     /// </summary>
@@ -39,4 +34,10 @@ public sealed class UserReviewEntity : IEntity
     /// Ссылка на пьесу
     /// </summary>
     public PieceEntity Piece { get; set; }
+
+    /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
+    public DateTime? UpdatedAt { get; set; }
 }

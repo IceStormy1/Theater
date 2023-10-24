@@ -1,4 +1,4 @@
-﻿namespace Theater.Common;
+﻿namespace Theater.Common.Enums;
 
 public enum BucketIdentifier
 {

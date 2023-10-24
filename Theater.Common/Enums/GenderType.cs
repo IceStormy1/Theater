@@ -1,4 +1,4 @@
-﻿namespace Theater.Entities.Authorization;
+﻿namespace Theater.Common.Enums;
 
 /// <summary>
 /// Пол

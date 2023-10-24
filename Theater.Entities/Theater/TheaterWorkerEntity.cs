@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Theater.Entities.Authorization;
+using Theater.Common.Enums;
+using Theater.Entities.Users;
 
 namespace Theater.Entities.Theater;
 
-public sealed class TheaterWorkerEntity : IEntity
+public sealed class TheaterWorkerEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
-    /// <summary>
-    /// Идентификатор работника театра
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Имя 
     /// </summary>
@@ -50,6 +46,12 @@ public sealed class TheaterWorkerEntity : IEntity
     /// Идентификатор должности работника театра
     /// </summary>
     public Guid PositionId { get; set; }
+
+    /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
+    public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
     /// Ссылка на должность 

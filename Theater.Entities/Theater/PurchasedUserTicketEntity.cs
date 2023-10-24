@@ -1,15 +1,10 @@
 ﻿using System;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 
 namespace Theater.Entities.Theater;
 
-public sealed class PurchasedUserTicketEntity : IEntity
+public sealed class PurchasedUserTicketEntity : BaseEntity
 {
-    /// <summary>
-    /// Идентификатор купленного билета
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Дата покупки 
     /// </summary>

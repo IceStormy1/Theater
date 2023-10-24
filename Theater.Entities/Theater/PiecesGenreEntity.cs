@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Theater.Entities.Theater;
 
-public sealed class PiecesGenreEntity : IEntity
+public sealed class PiecesGenreEntity : BaseEntity
 {
-    /// <summary>
-    /// Идентификатор жанра
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Наименование роли
     /// </summary>

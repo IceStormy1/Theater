@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Theater.Common.Enums;
 using Theater.Entities.FileStorage;
+using Theater.Entities.Rooms;
 using Theater.Entities.Theater;
 
-namespace Theater.Entities.Authorization;
+namespace Theater.Entities.Users;
 
-public sealed class UserEntity : IEntity
+/// <summary>
+/// Пользователь
+/// </summary>
+public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
-    /// <summary>
-    /// Идентификатор пользователя
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Идентификатор пользователя, который авторизовался при помощи VK
     /// </summary>
@@ -58,11 +58,6 @@ public sealed class UserEntity : IEntity
     public GenderType Gender { get; set; }
 
     /// <summary>
-    /// Дата создания пользователя
-    /// </summary>
-    public DateTime DateOfCreate { get; set; }
-
-    /// <summary>
     /// Дата рождения
     /// </summary>
     public DateTime BirthDate { get; set; }
@@ -76,6 +71,12 @@ public sealed class UserEntity : IEntity
     /// Деньги пользователя
     /// </summary>
     public decimal Money { get; set; }
+
+    /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
+    public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
     /// Идентификатор фотографии пользователя в ЛК 
@@ -92,7 +93,14 @@ public sealed class UserEntity : IEntity
     /// </summary>
     public UserRoleEntity UserRole { get; set; }
 
-    public List<UserReviewEntity> UserReviews { get; set; }
-    public List<BookedTicketEntity> BookedTickets { get; set; }
-    public List<PurchasedUserTicketEntity> PurchasedUserTickets { get; set; }
+    public List<UserReviewEntity> UserReviews { get; set; } = new();
+    public List<BookedTicketEntity> BookedTickets { get; set; } = new();
+    public List<PurchasedUserTicketEntity> PurchasedUserTickets { get; set; } = new();
+
+    /// <summary>
+    /// Чаты пользователя
+    /// </summary>
+    public List<UserRoomEntity> UserRooms { get; set; } = new();
+
+    public List<MessageEntity> Messages { get; set; } = new();
 }

@@ -4,13 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace Theater.Entities.Theater;
 
-public sealed class PiecesTicketEntity : IEntity
+public sealed class PiecesTicketEntity : BaseEntity
 {
-    /// <summary>
-    /// Идентификатор билета
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Ряд
     /// </summary>
