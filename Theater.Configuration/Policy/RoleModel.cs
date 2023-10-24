@@ -1,4 +1,4 @@
-﻿namespace Theater.Policy;
+﻿namespace Theater.Configuration.Policy;
 
 internal class RoleModel
 {

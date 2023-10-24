@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.FileStorage;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts.FileStorage;
 using Theater.Controllers.BaseControllers;
 

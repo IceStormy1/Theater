@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 
-namespace Theater.Policy;
+namespace Theater.Configuration.Policy;
 
 internal static class AuthorizationOptionsExtension
 {

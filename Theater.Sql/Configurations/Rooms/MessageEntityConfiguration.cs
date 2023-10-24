@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 using Theater.Entities.Rooms;
 
 namespace Theater.Sql.Configurations.Rooms;

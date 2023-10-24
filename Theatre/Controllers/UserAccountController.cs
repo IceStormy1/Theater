@@ -16,8 +16,8 @@ using Theater.Contracts.Filters;
 using Theater.Contracts.Theater.PurchasedUserTicket;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.BaseControllers;
-using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
+using Theater.Entities.Users;
 using VkNet.Abstractions;
 using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
 

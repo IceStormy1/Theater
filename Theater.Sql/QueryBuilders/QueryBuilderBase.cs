@@ -5,7 +5,7 @@ using Theater.Abstractions;
 using Theater.Abstractions.Filters;
 using Theater.Entities;
 
-namespace Theater.Sql;
+namespace Theater.Sql.QueryBuilders;
 
 public abstract class QueryBuilderBase<TEntity, TFilter> : IQueryBuilder<TEntity, TFilter>
     where TEntity : class, IEntity

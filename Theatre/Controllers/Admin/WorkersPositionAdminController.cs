@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
 using Theater.Abstractions.WorkersPosition;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Common.Extensions;
 using Theater.Contracts;
 using Theater.Contracts.Theater.WorkersPosition;

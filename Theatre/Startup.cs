@@ -1,7 +1,4 @@
-using Autofac;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -19,24 +15,13 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Theater.Abstractions;
-using Theater.Abstractions.Jwt;
-using Theater.Configuration;
+using Theater.Common.Settings;
+using Theater.Configuration.Extensions;
 using Theater.Consumer;
-using Theater.Contracts.Theater.Piece;
-using Theater.Contracts.Theater.PiecesTicket;
-using Theater.Contracts.Theater.TheaterWorker;
-using Theater.Contracts.UserAccount;
-using Theater.Core;
 using Theater.Core.Profiles;
-using Theater.Entities.Theater;
-using Theater.Extensions;
-using Theater.Policy;
 using Theater.Sql;
 using Theater.Validation.Authorization;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
-using VkNet;
-using VkNet.Abstractions;
 
 namespace Theater;
 
@@ -54,50 +39,11 @@ public sealed class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var jwtOptionsSection = Configuration.GetSection("JwtOptions");
-        services.Configure<JwtOptions>(jwtOptionsSection);
+        services.Configure<FileStorageOptions>(Configuration.GetSection(nameof(FileStorageOptions)));
 
-        var jwtOptions = jwtOptionsSection.Get<JwtOptions>();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                if (jwtOptions != null)
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidateIssuer = true,
-
-                        ValidAudience = jwtOptions.Audience,
-                        ValidateAudience = true,
-
-                        IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(), // HS256
-                        ValidateIssuerSigningKey = true,
-
-                        ValidateLifetime = true
-                    };
-            });
-
-        services.Configure<RoleModel>(Configuration.GetSection("RoleModel"));
-        services.Configure<FileStorageOptions>(Configuration.GetSection("FileStorageOptions"));
-
-        var defaultPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-
-        services
-            .AddScoped<IVkApi>(p => new VkApi())
-            .AddAuthorization(options =>
-            {
-                options.DefaultPolicy = defaultPolicy;
-
-                options.AddRoleModelPolicies<UserPolices>(Configuration, nameof(RoleModel.User));
-                //  options.AddRoleModelPolicies<MwPolicies>(Configuration, nameof(RoleModel.MedicalWorker));
-            });
-
-        services.AddAllDbContext(Configuration);
-
-        services.AddRouting(c => c.LowercaseUrls = true);
+        services.AddTheaterAuthentication(Configuration)
+            .AddAllDbContext(Configuration)
+            .AddRouting(c => c.LowercaseUrls = true);
      
         services.AddControllers()
             .ConfigureApiBehaviorOptions(options =>
@@ -121,8 +67,6 @@ public sealed class Startup
                 cfg.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 
-        services.AddAutoMapper(x => x.AddMaps(typeof(AbstractProfile).Assembly));
-
         services.AddSwaggerGen(c =>
         {
             c.CustomSchemaIds(type => type.ToString());
@@ -138,6 +82,26 @@ public sealed class Startup
 
             var xmlContractDocs = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory), "*.xml");
             foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);
+           
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Token",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                    },
+                    Array.Empty<string>()
+                }
+            });
 
             c.EnableAnnotations();
             c.AddEnumsWithValuesFixFilters();
@@ -163,12 +127,12 @@ public sealed class Startup
             });
         });
 
-        services.AddMemoryCache();
-        services.RegisterMassTransit(Configuration);
-
-        AddRelationRepository(services);
-        AddCrudServices(services);
-        AddStubValidators(services);
+        services.AddAutoMapper(x => x.AddMaps(typeof(AbstractProfile).Assembly))
+            .AddRepositories()
+            .AddServices()
+            .AddFileStorage()
+            .AddMemoryCache()
+            .RegisterMassTransit(Configuration, typeof(IMessageConsumer<>).Assembly);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -204,36 +168,5 @@ public sealed class Startup
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-    }
-
-    public void ConfigureContainer(ContainerBuilder builder)
-    {
-        builder.RegisterModule<Core.Module>();
-        builder.RegisterModule<Core.FileStorageModule>();
-    }
-
-    private static void AddRelationRepository(IServiceCollection services)
-    {
-        services.AddRelationRepository<PieceEntity, TheaterDbContext>();
-        services.AddRelationRepository<PieceDateEntity, TheaterDbContext>();
-        services.AddRelationRepository<PieceWorkerEntity, TheaterDbContext>();
-        services.AddRelationRepository<UserReviewEntity, TheaterDbContext>();
-        services.AddRelationRepository<PiecesGenreEntity, TheaterDbContext>();
-        services.AddRelationRepository<WorkersPositionEntity, TheaterDbContext>();
-        services.AddRelationRepository<PurchasedUserTicketEntity, TheaterDbContext>();
-    }
-
-    private static void AddCrudServices(IServiceCollection services)
-    {
-        services.AddScoped(typeof(ICrudService<>), typeof(ServiceBase<,>));
-        //services.AddCrudService<PieceDateParameters, PieceDateEntity>();
-    }
-
-    private static void AddStubValidators(IServiceCollection services)
-    {
-        services.AddStubValidator<PieceParameters>();
-        services.AddStubValidator<TheaterWorkerParameters>();
-        services.AddStubValidator<PiecesTicketParameters>();
-        services.AddStubValidator<UserParameters>();
     }
 }

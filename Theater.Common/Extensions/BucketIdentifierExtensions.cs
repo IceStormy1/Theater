@@ -1,4 +1,6 @@
-﻿namespace Theater.Common.Extensions;
+﻿using Theater.Common.Enums;
+
+namespace Theater.Common.Extensions;
 
 public static class BucketIdentifierExtensions
 {

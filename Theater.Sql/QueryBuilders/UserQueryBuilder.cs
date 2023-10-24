@@ -2,7 +2,7 @@
 using System;
 using System.Linq.Expressions;
 using Theater.Abstractions.Filters;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 using Theater.Sql.Extensions;
 
 namespace Theater.Sql.QueryBuilders;

@@ -6,7 +6,7 @@ namespace Theater.Sql;
 
 public static class ServicesCollectionRegister
 {
-    public static void AddAllDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddAllDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContextPool<TheaterDbContext>(x
             =>
@@ -15,5 +15,7 @@ public static class ServicesCollectionRegister
                 options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
             x.EnableSensitiveDataLogging();
         });
+
+        return services;
     }
 }

@@ -7,7 +7,7 @@ using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 
 namespace Theater.Sql.Repositories;
 
@@ -34,31 +34,31 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
                                                              || string.Equals(user.Email, userName)));
     }
 
-        public async Task<WriteResult<CreateUserResult>> CreateUser(UserEntity userEntity)
+        public async Task<Result<CreateUserResult>> CreateUser(UserEntity userEntity)
     {
         var isUserExists = await _dbContext.Users
             .AnyAsync(user => string.Equals(userEntity.UserName, user.UserName) ||
                               string.Equals(userEntity.Email, user.Email));
 
         if (isUserExists)
-            return WriteResult<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
+            return Result<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
 
         userEntity.UserRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.Id == userEntity.RoleId); // todo: переделать, нужно для авторизации ВК 
         _dbContext.Users.Add(userEntity);
         await DbContext.SaveChangesAsync();
 
-        return new WriteResult<CreateUserResult>(new CreateUserResult { UserId = userEntity.Id, IsSuccess = true });
+        return new Result<CreateUserResult>(new CreateUserResult { UserId = userEntity.Id, IsSuccess = true });
     }
 
-    public async Task<WriteResult> UpdateUser(UserEntity userEntity)
+    public async Task<Result> UpdateUser(UserEntity userEntity)
     {
         _dbContext.Users.Update(userEntity);
         await DbContext.SaveChangesAsync();
 
-        return WriteResult.Successful;
+        return Result.Successful;
     }
 
-    public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
+    public async Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
@@ -70,7 +70,7 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
         _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
 
-        return WriteResult.Successful;
+        return Result.Successful;
     }
 
     public override IQueryable<UserEntity> AddIncludes(IQueryable<UserEntity> query)

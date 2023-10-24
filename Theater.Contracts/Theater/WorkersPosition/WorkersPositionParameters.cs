@@ -1,4 +1,4 @@
-﻿using Theater.Common;
+﻿using Theater.Common.Enums;
 
 namespace Theater.Contracts.Theater.WorkersPosition;
 

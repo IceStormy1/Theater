@@ -34,11 +34,11 @@ public class TheaterBaseController : ControllerBase
     }
 
     /// <summary>
-    /// Возвращает ActionResult из WriteResult
+    /// Возвращает ActionResult из Result
     /// </summary>
     /// <param name="source">Write result с ошибкой или моделью</param>
     /// <typeparam name="T"></typeparam>
-    protected IActionResult RenderResult<T>(IWriteResult<T> source)
+    protected IActionResult RenderResult<T>(IResult<T> source)
     {
         if (!source.IsSuccess)
             return RenderError(source.Error);
@@ -50,10 +50,10 @@ public class TheaterBaseController : ControllerBase
     }
 
     /// <summary>
-    /// Возвращает ActionResult из WriteResult
+    /// Возвращает ActionResult из Result
     /// </summary>
     /// <param name="source">Write result</param>
-    protected IActionResult RenderResult(WriteResult source)
+    protected IActionResult RenderResult(Result source)
         => source.IsSuccess ? new OkResult() : RenderError(source.Error);
 
     /// <summary>

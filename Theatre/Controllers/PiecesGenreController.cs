@@ -29,7 +29,6 @@ public sealed class PiecesGenreController : CrudServiceBaseController<PiecesGenr
     public async Task<IActionResult> GetPieceTicketsByDate()
     {
         var tickets = await _pieceGenreService.GetAllGenres();
-
         return Ok(new DocumentCollection<PiecesGenreModel>(tickets));
     }
 }

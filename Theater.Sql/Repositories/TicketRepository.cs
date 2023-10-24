@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.Ticket;
 using Theater.Common;
-using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
+using Theater.Entities.Users;
 
 namespace Theater.Sql.Repositories;
 
@@ -43,7 +43,7 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
             .ThenInclude(x => x.PurchasedUserTicket);
     }
 
-    public async Task<WriteResult> BuyTickets(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user)
+    public async Task<Result> BuyTickets(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user)
     {
         var ticketsPriceEvents = tickets
             .Select(x => new { MaxVersion = x.TicketPriceEvents.MaxBy(c => c.Version) })
@@ -52,7 +52,7 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
             .ToList();
 
         if (ticketsPriceEvents.Count != tickets.Count)
-            return WriteResult.FromError(TicketErrors.NotFound.Error);
+            return Result.FromError(TicketErrors.NotFound.Error);
 
         user.Money -= ticketsPriceEvents.Sum(x=>x.Model.TicketPrice);
 
@@ -71,18 +71,18 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return WriteResult.Successful;
+            return Result.Successful;
         }
         catch (Exception e)
         {
             await transaction.RollbackAsync();
             Logger.LogError(e, "Произошла ошибка при покупке билетов. UserId = {UserId}, TicketIds = {@TicketId}", user.Id, tickets.Select(x=>x.Id));
                
-            return WriteResult.FromError(TicketErrors.BuyTicketConflict.Error);
+            return Result.FromError(TicketErrors.BuyTicketConflict.Error);
         }
     }
 
-    public async Task<WriteResult> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId)
+    public async Task<Result> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId)
     {
         try
         {
@@ -95,11 +95,11 @@ public sealed class TicketRepository : BaseCrudRepository<PiecesTicketEntity>, I
 
             await _dbContext.SaveChangesAsync();
 
-            return WriteResult.Successful;
+            return Result.Successful;
         }
         catch (Exception)
         {
-            return WriteResult.FromError(TicketErrors.BookTicketConflict.Error);
+            return Result.FromError(TicketErrors.BookTicketConflict.Error);
         }
     }
 

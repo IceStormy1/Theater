@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts.Theater.Piece;
 
 namespace Theater.Contracts.Theater.TheaterWorker;

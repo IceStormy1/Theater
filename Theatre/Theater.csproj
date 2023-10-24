@@ -9,9 +9,7 @@
     <AssemblyVersion>1.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="7.0.1" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+	<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
@@ -34,7 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Theater.Configuration\Theater.Configuration.csproj" />
     <ProjectReference Include="..\Theater.Consumer\Theater.Consumer.csproj" />
-    <ProjectReference Include="..\Theater.Sql\Theater.Sql.csproj" />
     <ProjectReference Include="..\Theater.Core\Theater.Core.csproj" />
     <ProjectReference Include="..\Theater.Validation\Theater.Validation.csproj" />
   </ItemGroup>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Theater.Common.Enums;
-using Theater.Entities.Users;
 
 namespace Theater.Entities.Theater;
 

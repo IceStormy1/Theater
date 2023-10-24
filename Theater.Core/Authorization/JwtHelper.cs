@@ -7,7 +7,7 @@ using System.Security.Claims;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Jwt;
 using Theater.Common.Extensions;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace Theater.Core.Authorization;
