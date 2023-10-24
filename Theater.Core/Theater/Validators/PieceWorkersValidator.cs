@@ -17,29 +17,29 @@ public class PieceWorkersValidator : IDocumentValidator<PieceWorkerParameters>
         _pieceWorkersRepository = pieceWorkersRepository;
     }
 
-    public async Task<WriteResult> CheckIfCanCreate(PieceWorkerParameters parameters, Guid? userId = null)
+    public async Task<Result> CheckIfCanCreate(PieceWorkerParameters parameters, Guid? userId = null)
     {
         var alreadyAttached = await _pieceWorkersRepository.CheckWorkerRelation(parameters.TheaterWorkerId, parameters.PieceId);
 
         return alreadyAttached 
-            ? WriteResult.FromError(PieceWorkersErrors.AlreadyAttached.Error) 
-            : WriteResult.Successful;
+            ? Result.FromError(PieceWorkersErrors.AlreadyAttached.Error) 
+            : Result.Successful;
     }
 
-    public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PieceWorkerParameters parameters, Guid? userId = null)
+    public async Task<Result> CheckIfCanUpdate(Guid entityId, PieceWorkerParameters parameters, Guid? userId = null)
     {
         var pieceWorkerEntity = await _pieceWorkersRepository.GetByEntityId(entityId);
 
         if (pieceWorkerEntity is null)
-            return WriteResult.FromError(PieceWorkersErrors.NotFound.Error);
+            return Result.FromError(PieceWorkersErrors.NotFound.Error);
 
         return pieceWorkerEntity.TheaterWorkerId != parameters.TheaterWorkerId 
-            ? WriteResult.FromError(PieceWorkersErrors.InvalidOperation.Error) 
-            : WriteResult.Successful;
+            ? Result.FromError(PieceWorkersErrors.InvalidOperation.Error) 
+            : Result.Successful;
     }
 
-    public Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
+    public Task<Result> CheckIfCanDelete(Guid entityId, Guid? userId = null)
     {
-        return Task.FromResult(WriteResult.Successful);
+        return Task.FromResult(Result.Successful);
     }
 }

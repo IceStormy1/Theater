@@ -2,7 +2,7 @@
 
 namespace Theater.Common;
 
-public interface IWriteResult
+public interface IResult
 {
     /// <summary>
     /// True, если результат успешный.
@@ -15,20 +15,20 @@ public interface IWriteResult
     ErrorModel Error { get; }
 }
 
-public interface IWriteResult<out T> : IWriteResult
+public interface IResult<out T> : IResult
 {
     T ResultData { get; }
 }
 
-public sealed class WriteResult<T> : IWriteResult<T>
+public sealed class Result<T> : IResult<T>
 {
-    public WriteResult(T resultData)
+    public Result(T resultData)
     {
         ResultData = resultData;
         IsSuccess = true;
     }
 
-    private WriteResult(ErrorModel error)
+    private Result(ErrorModel error)
     {
         Error = error;
         IsSuccess = false;
@@ -42,22 +42,22 @@ public sealed class WriteResult<T> : IWriteResult<T>
     /// Возвращает неуспешный результат, исходя из ошибки 
     /// </summary>
     /// <param name="error">Модель ошибки</param>
-    public static WriteResult<T> FromError(ErrorModel error) => new(error);
+    public static Result<T> FromError(ErrorModel error) => new(error);
 }
 
-public class WriteResult : IWriteResult
+public class Result : IResult
 {
     /// <summary>
     /// Успешный результат
     /// </summary>
-    public static readonly WriteResult Successful = new();
+    public static readonly Result Successful = new();
 
-    private WriteResult()
+    private Result()
     {
         IsSuccess = true;
     }
 
-    private WriteResult(ErrorModel error)
+    private Result(ErrorModel error)
     {
         Error = error;
         IsSuccess = false;
@@ -70,13 +70,13 @@ public class WriteResult : IWriteResult
     /// Возвращает успешный результат, исходя из полученной модели 
     /// </summary>
     /// <param name="value">Модель</param>
-    public static WriteResult<T> FromValue<T>(T value) => new(value);
+    public static Result<T> FromValue<T>(T value) => new(value);
 
     /// <summary>
     /// Возвращает неуспешный результат, исходя из ошибки 
     /// </summary>
     /// <param name="error">Модель ошибки</param>
-    public static WriteResult FromError(ErrorModel error) => new(error);
+    public static Result FromError(ErrorModel error) => new(error);
 }
 
 public class ErrorModel
@@ -135,16 +135,6 @@ public class ErrorModel
     /// <param name="message">Error message</param>
     public static ErrorModel Unauthorized(string type, string message) =>
         new(type, message, ErrorKind.Unauthorized);
-
-    /// <summary>
-    /// Вспомогательный метод для конвертации ошибки в <see cref="WriteResult"/> 
-    /// </summary>
-    public WriteResult ToWriteResult() => WriteResult.FromError(this);
-
-    /// <summary>
-    /// Вспомогательный метод для конвертации ошибки в <see cref="WriteResult"/>
-    /// </summary>
-    public WriteResult<T> ToWriteResult<T>() => WriteResult<T>.FromError(this);
 }
 
 public enum ErrorKind

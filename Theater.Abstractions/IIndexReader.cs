@@ -28,5 +28,5 @@ public interface IIndexReader<TModel, TIndex, in TFilter>
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<WriteResult<TModel>> GetById(Guid id);
+    Task<Result<TModel>> GetById(Guid id);
 }

@@ -7,6 +7,6 @@ public static class WorkersPositionErrors
     /// <summary>
     /// Невозможно удалить запись, т.к есть связанные работники театра
     /// </summary>
-    public static WriteResult HasTheaterWorkers =>
-        WriteResult.FromError(ErrorModel.NotFound("position/has-relation", "Невозможно удалить запись, т.к есть связанные работники театра"));
+    public static Result HasTheaterWorkers =>
+        Result.FromError(ErrorModel.NotFound("position/has-relation", "Невозможно удалить запись, т.к есть связанные работники театра"));
 }

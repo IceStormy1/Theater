@@ -9,20 +9,20 @@ using Theater.Entities;
 
 namespace Theater.Core;
 
-public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel>
+public class BaseService<TModel, TEntity> : ICrudService<TModel>
     where TEntity : class, IEntity, new()
     where TModel : class
 {
     protected readonly IMapper Mapper;
     protected readonly ICrudRepository<TEntity> Repository;
     protected readonly IDocumentValidator<TModel> DocumentValidator;
-    protected readonly ILogger<ServiceBase<TModel, TEntity>> Logger;
+    protected readonly ILogger<BaseService<TModel, TEntity>> Logger;
 
-    protected ServiceBase(
+    public BaseService(
         IMapper mapper, 
         ICrudRepository<TEntity> repository,
         IDocumentValidator<TModel> documentValidator, 
-        ILogger<ServiceBase<TModel, TEntity>> logger)
+        ILogger<BaseService<TModel, TEntity>> logger)
     {
         Mapper = mapper;
         Repository = repository;
@@ -30,7 +30,7 @@ public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel>
         Logger = logger;
     }
 
-    public async Task<WriteResult<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null)
+    public async Task<Result<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null)
     {
         var entity = entityId.HasValue 
             ? await Repository.GetByEntityId(entityId.Value) 
@@ -41,12 +41,12 @@ public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel>
             : await UpdateEntity(entity, model, entityId);
     }
 
-    public async Task<WriteResult> Delete(Guid id, Guid? userId = null)
+    public async Task<Result> Delete(Guid id, Guid? userId = null)
     {
         var isEntityExists = await Repository.IsEntityExists(id);
 
         if(!isEntityExists)
-            return WriteResult.FromError(ErrorModel.Default("delete-conflict", "Указанная запись не найдена"));
+            return Result.FromError(ErrorModel.Default("delete-conflict", "Указанная запись не найдена"));
 
         var validationResult = await DocumentValidator.CheckIfCanDelete(id, userId);
 
@@ -55,40 +55,40 @@ public abstract class ServiceBase<TModel, TEntity> : ICrudService<TModel>
 
         await Repository.Delete(id);
 
-        return WriteResult.Successful;
+        return Result.Successful;
     }
 
-    private async Task<WriteResult<DocumentMeta>> CreateEntity(TModel model)
+    private async Task<Result<DocumentMeta>> CreateEntity(TModel model)
     {
         var validationResult = await DocumentValidator.CheckIfCanCreate(model);
 
         if (!validationResult.IsSuccess)
-            return WriteResult<DocumentMeta>.FromError(validationResult.Error);
+            return Result<DocumentMeta>.FromError(validationResult.Error);
 
         var entity = Mapper.Map<TEntity>(model);
 
         await Repository.Add(entity);
 
-        return WriteResult.FromValue(new DocumentMeta(entity.Id));
+        return Result.FromValue(new DocumentMeta(entity.Id));
     }
 
-    private async Task<WriteResult<DocumentMeta>> UpdateEntity(TEntity entity, TModel model, Guid? entityId)
+    private async Task<Result<DocumentMeta>> UpdateEntity(TEntity entity, TModel model, Guid? entityId)
     {
         if (!entityId.HasValue)
-            return WriteResult<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "При обновлении сущности необходимо передавать идентификатор"));
+            return Result<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "При обновлении сущности необходимо передавать идентификатор"));
 
         if(entity is null)
-            return WriteResult<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "Указанная запись не найдена"));
+            return Result<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "Указанная запись не найдена"));
 
         var validationResult = await DocumentValidator.CheckIfCanUpdate(entityId.Value, model);
 
         if (!validationResult.IsSuccess)
-            return WriteResult<DocumentMeta>.FromError(validationResult.Error);
+            return Result<DocumentMeta>.FromError(validationResult.Error);
 
         Mapper.Map(model, entity);
 
         await Repository.Update(entity);
 
-        return WriteResult.FromValue(new DocumentMeta(entity.Id));
+        return Result.FromValue(new DocumentMeta(entity.Id));
     }
 }

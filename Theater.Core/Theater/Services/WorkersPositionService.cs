@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.WorkersPosition;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts.Theater.WorkersPosition;
 using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class WorkersPositionService : ServiceBase<WorkersPositionParameters, WorkersPositionEntity>, IWorkersPositionService
+public sealed class WorkersPositionService : BaseService<WorkersPositionParameters, WorkersPositionEntity>, IWorkersPositionService
 {
     private readonly IWorkersPositionRepository _workersPositionRepository;
 

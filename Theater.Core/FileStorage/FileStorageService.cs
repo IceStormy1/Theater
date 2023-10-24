@@ -11,9 +11,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Theater.Abstractions.FileStorage;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Common.Extensions;
-using Theater.Configuration;
+using Theater.Common.Settings;
 using Theater.Contracts.FileStorage;
 using Theater.Core.Utils;
 using Theater.Entities.FileStorage;
@@ -41,7 +41,6 @@ public class FileStorageService : IFileStorageService
         _logger = logger;
         _mapper = mapper;
         _fileStorageOptions = fileStorageOptions?.Value;
-
     }
 
     public async Task<StorageFileListItem> Upload(
@@ -52,7 +51,7 @@ public class FileStorageService : IFileStorageService
     {
         var bucketName = bucketIdentifier.ToBucketName();
 
-        ValidateFileNameAndThrow(fileNameWithExtension, bucketName, userName);
+        ValidateFileNameAndThrow(fileNameWithExtension);
 
         //generate data
         var (newFileGuid, fileStorageName) = GenerateUniqueFileName(fileNameWithExtension);
@@ -74,8 +73,7 @@ public class FileStorageService : IFileStorageService
                 ContentType = contentType,
                 Size = (ulong)fileStream.Length,
                 FileName = fileNameWithExtension,
-                FileStorageName = fileStorageName,
-                UploadAt = DateTime.UtcNow
+                FileStorageName = fileStorageName
             };
 
             _dbContext.Files.Add(fileEntity);
@@ -98,10 +96,8 @@ public class FileStorageService : IFileStorageService
     /// Валидирует имя файла и выбрасывает ошибку в случае, если валидация не была пройдена
     /// </summary>
     /// <param name="fileNameWithExtension">Имя файла с расширением</param>
-    /// <param name="bucketName">Наименование бакета</param>
-    /// <param name="userName">Имя пользователя</param>
     /// <returns></returns>
-    private void ValidateFileNameAndThrow(string fileNameWithExtension, string bucketName, string userName)
+    private void ValidateFileNameAndThrow(string fileNameWithExtension)
     {
         var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileNameWithExtension);
 
@@ -138,7 +134,7 @@ public class FileStorageService : IFileStorageService
             FileName = fileEntity.FileName,
             Size = (long?)fileEntity.Size,
             StorageFileName = fileEntity.FileStorageName,
-            UploadAt = fileEntity.UploadAt
+            UploadAt = fileEntity.CreatedAt
         };
         return result;
     }

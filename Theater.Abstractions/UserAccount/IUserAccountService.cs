@@ -13,14 +13,14 @@ public interface IUserAccountService : ICrudService<UserParameters>
     /// Создать пользователя
     /// </summary>
     /// <param name="user">Данные пользователя</param>
-    Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user);
+    Task<Result<CreateUserResult>> CreateUser(UserParameters user);
 
     /// <summary>
     /// Обновить профиль пользователя
     /// </summary>
     /// <param name="user">Данные пользователя</param>
     /// <param name="userId">Идентификатор пользователя</param>
-    Task<WriteResult> UpdateUser(UserParameters user, Guid userId);
+    Task<Result> UpdateUser(UserParameters user, Guid userId);
 
     /// <summary>
     /// Авторизация пользователя
@@ -31,12 +31,12 @@ public interface IUserAccountService : ICrudService<UserParameters>
     /// <summary>
     /// Авторизоваться при помощи ВКонтакте
     /// </summary>
-    Task<WriteResult<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto  authenticateVkDto);
+    Task<Result<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto  authenticateVkDto);
 
     /// <summary>
     /// Пополнить баланс пользователя
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="replenishmentAmount">Сумма пополнения</param>
-    Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount);
+    Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount);
 }

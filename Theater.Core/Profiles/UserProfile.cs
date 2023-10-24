@@ -6,9 +6,9 @@ using Theater.Contracts.Authorization;
 using Theater.Contracts.FileStorage;
 using Theater.Contracts.Filters;
 using Theater.Contracts.UserAccount;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 using VkNet.Model;
-using GenderType = Theater.Entities.Authorization.GenderType;
+using GenderType = Theater.Common.Enums.GenderType;
 
 namespace Theater.Core.Profiles;
 
@@ -17,7 +17,7 @@ public sealed class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<UserParameters, UserEntity>()
-            .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
+            .ForMember(destination => destination.CreatedAt, options => options.MapFrom(_ => DateTime.UtcNow))
             .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
             .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
             .ForMember(destination => destination.PhotoId, options => options.MapFrom(x => x.Photo == null ? (Guid?)null : x.Photo.Id))
@@ -26,7 +26,7 @@ public sealed class UserProfile : Profile
 
         CreateMap<AccountSaveProfileInfoParams, UserEntity>()
             .ForMember(destination => destination.Id, options => options.Ignore())
-            .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow))
+            .ForMember(destination => destination.CreatedAt, options => options.MapFrom(_ => DateTime.UtcNow))
             .ForMember(destination => destination.RoleId, options => options.MapFrom(_ => (int)UserRole.User))
             .ForMember(destination => destination.Money, options => options.MapFrom(_ => (decimal)default))
             // .ForMember(destination => destination.VkId, options => options.MapFrom(exp => exp.Id))

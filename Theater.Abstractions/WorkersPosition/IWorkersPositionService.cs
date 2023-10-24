@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts.Theater.WorkersPosition;
 
 namespace Theater.Abstractions.WorkersPosition;

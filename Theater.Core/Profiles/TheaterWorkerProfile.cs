@@ -32,7 +32,7 @@ public sealed class TheaterWorkerProfile : Profile
             .ForMember(destination => destination.MainPhoto, options => options.MapFrom(exp => exp.PhotoId.HasValue ? new StorageFileListItem { Id = exp.PhotoId.Value } : null))
             ;
 
-        CreateMap<WriteResult<TheaterWorkerEntity>, WriteResult<TheaterWorkerModel>>();
+        CreateMap<Result<TheaterWorkerEntity>, Result<TheaterWorkerModel>>();
         CreateMap<TheaterWorkerParameters, TheaterWorkerEntity>()
             .ForMember(destination => destination.DateOfBirth, options => options.MapFrom(exp => exp.BirthDate))
             .ForMember(destination => destination.PhotoId, options => options.MapFrom(exp => exp.MainPhoto.Id))

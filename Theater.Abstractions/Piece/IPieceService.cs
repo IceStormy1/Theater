@@ -12,7 +12,7 @@ public interface IPieceService : ICrudService<PieceParameters>
     /// Получить полную информацию о пьесе по идентификатору
     /// </summary>
     /// <returns>Полная информация о пьесе</returns>
-    Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId);
+    Task<Result<PieceModel>> GetPieceById(Guid pieceId);
 
     /// <summary>
     /// Обогатить модель

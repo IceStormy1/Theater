@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Common;
-using Theater.Entities.Authorization;
 using Theater.Entities.Theater;
+using Theater.Entities.Users;
 
 namespace Theater.Abstractions.Ticket;
 
@@ -22,12 +22,12 @@ public interface ITicketRepository : ICrudRepository<PiecesTicketEntity>
     /// </summary>
     /// <param name="tickets">Сущности билетов</param>
     /// <param name="user">Сущность пользователя</param>
-    Task<WriteResult> BuyTickets(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user);
+    Task<Result> BuyTickets(IReadOnlyCollection<PiecesTicketEntity> tickets, UserEntity user);
 
     /// <summary>
     /// Забронировать билет
     /// </summary>
     /// <param name="ticketIds">Идентификаторы билетов</param>
     /// <param name="userId">Идентификатор пользователя</param>
-    Task<WriteResult> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId);
+    Task<Result> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId);
 }

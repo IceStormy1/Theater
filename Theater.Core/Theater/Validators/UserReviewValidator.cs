@@ -23,19 +23,19 @@ public sealed class UserReviewValidator : IDocumentValidator<UserReviewParameter
         _userAccountRepository = userAccountRepository;
     }
 
-    public Task<WriteResult> CheckIfCanCreate(UserReviewParameters parameters, Guid? userId = null)
+    public Task<Result> CheckIfCanCreate(UserReviewParameters parameters, Guid? userId = null)
     {
         //TODO: Валидация на существование пьесы
-        return Task.FromResult(WriteResult.Successful); ;
+        return Task.FromResult(Result.Successful); ;
     }
 
-    public Task<WriteResult> CheckIfCanUpdate(Guid entityId, UserReviewParameters parameters, Guid? userId = null)
+    public Task<Result> CheckIfCanUpdate(Guid entityId, UserReviewParameters parameters, Guid? userId = null)
     {
         //TODO: Валидация на существование пьесы
-        return Task.FromResult(WriteResult.Successful); ;
+        return Task.FromResult(Result.Successful); ;
     }
 
-    public async Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
+    public async Task<Result> CheckIfCanDelete(Guid entityId, Guid? userId = null)
     {
         if (!userId.HasValue)
             return UserAccountErrors.Unauthorized;
@@ -46,6 +46,6 @@ public sealed class UserReviewValidator : IDocumentValidator<UserReviewParameter
         if(userReviewEntity.UserId != userId.Value && userEntity.RoleId != (int)UserRole.Admin)
             return UserAccountErrors.InsufficientRights;
 
-        return WriteResult.Successful;
+        return Result.Successful;
     }
 }
