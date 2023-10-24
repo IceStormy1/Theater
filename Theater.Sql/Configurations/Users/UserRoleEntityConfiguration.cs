@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 
-namespace Theater.Sql.Configurations;
+namespace Theater.Sql.Configurations.Users;
 
 internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<UserRoleEntity>
 {
@@ -11,7 +11,7 @@ internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<Use
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.RoleName).IsRequired().HasMaxLength(64);
-
+       
         builder.HasMany(s => s.Users)
             .WithOne(x => x.UserRole)
             .HasForeignKey(x => x.RoleId)

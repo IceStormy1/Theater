@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Theater.Entities.FileStorage;
 
-namespace Theater.Sql.Configurations;
+namespace Theater.Sql.Configurations.FileStorage;
 
 internal class FileStorageEntityConfiguration : IEntityTypeConfiguration<FileStorageEntity>
 {

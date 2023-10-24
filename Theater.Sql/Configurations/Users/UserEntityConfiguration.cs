@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Theater.Abstractions.Authorization.Models;
-using Theater.Entities.Authorization;
+using Theater.Common.Enums;
+using Theater.Entities.Users;
 
-namespace Theater.Sql.Configurations;
+namespace Theater.Sql.Configurations.Users;
 
 internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {
@@ -43,6 +44,14 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
             .HasForeignKey<UserEntity>(x => x.PhotoId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(x => x.Messages)
+            .WithOne(x => x.User)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.UserRooms)
+            .WithOne(x => x.User)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasData(GetPrimaryUsersData());
     }
 
@@ -51,7 +60,7 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
         {
             new()
             {
-                DateOfCreate = new DateTime(2023, 01, 05),
+                CreatedAt = new DateTime(2023, 01, 05),
                 Email = "icestormyy-admin@mail.ru",
                 FirstName = "Mikhail",
                 LastName = "Tolmachev",
@@ -67,7 +76,7 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
             },
             new()
             {
-                DateOfCreate = new DateTime(2023, 01, 05),
+                CreatedAt = new DateTime(2023, 01, 05),
                 Email = "icestormyy-user@mail.ru",
                 FirstName = "Mikhail",
                 LastName = "Tolmachev",

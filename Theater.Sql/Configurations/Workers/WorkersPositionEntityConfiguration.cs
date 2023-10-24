@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Theater.Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Theater.Common.Enums;
 using Theater.Entities.Theater;
 
-namespace Theater.Sql.Configurations;
+namespace Theater.Sql.Configurations.Workers;
 
 internal sealed class WorkersPositionEntityConfiguration : IEntityTypeConfiguration<WorkersPositionEntity>
 {

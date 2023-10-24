@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Theater.Entities.Theater;
 
-namespace Theater.Sql.Configurations;
+namespace Theater.Sql.Configurations.Tickets;
 
 internal sealed class TicketPriceEventsEntityConfiguration : IEntityTypeConfiguration<TicketPriceEventsEntity>
 {
