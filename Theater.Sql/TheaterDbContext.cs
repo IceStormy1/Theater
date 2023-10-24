@@ -1,10 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection;
-using Theater.Entities.Authorization;
+using System.Threading.Tasks;
+using System.Threading;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
-using Theater.Sql.Configurations;
+using Theater.Entities.Users;
+using System.Linq;
+using Theater.Entities;
+using Theater.Entities.Rooms;
+using Theater.Sql.Configurations.Users;
 
 namespace Theater.Sql;
 
@@ -82,6 +87,15 @@ public class TheaterDbContext : DbContext
     /// Файлы в хранилище
     /// </summary>
     public DbSet<FileStorageEntity> Files { get; set; }
+
+    /// <inheritdoc cref="RoomEntity"/>
+    public DbSet<RoomEntity> Rooms { get; set; }
+
+    /// <inheritdoc cref="UserRoomEntity"/>
+    public DbSet<UserRoomEntity> UserRooms { get; set; }
+
+    /// <inheritdoc cref="MessageEntity"/>
+    public DbSet<MessageEntity> Messages { get; set; }
 
     public TheaterDbContext(DbContextOptions<TheaterDbContext> options) : base(options)
     {
