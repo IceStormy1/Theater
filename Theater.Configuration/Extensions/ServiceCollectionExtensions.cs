@@ -19,6 +19,7 @@ using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserReviews;
 using Theater.Common.Settings;
 using Theater.Configuration.Policy;
+using Theater.Contracts.Messages;
 using Theater.Contracts.Theater.Piece;
 using Theater.Contracts.Theater.PieceDate;
 using Theater.Contracts.Theater.PiecesGenre;
@@ -33,6 +34,7 @@ using Theater.Core;
 using Theater.Core.Authorization;
 using Theater.Core.Theater.Validators;
 using Theater.Entities;
+using Theater.Entities.Rooms;
 using Theater.Entities.Theater;
 using Theater.Entities.Users;
 using Theater.Sql;
@@ -62,7 +64,7 @@ public static class ServiceCollectionExtensions
         where TDocumentModel : class
         where TEntity : class, IEntity, new()
     {
-        return services.AddScoped<ICrudService<TDocumentModel>, BaseService<TDocumentModel, TEntity>>();
+        return services.AddScoped<ICrudService<TDocumentModel>, BaseCrudService<TDocumentModel, TEntity>>();
     }
 
     public static IServiceCollection AddStubValidator<T>(this IServiceCollection services) where T : class
@@ -77,6 +79,8 @@ public static class ServiceCollectionExtensions
         services.AddRelationRepository<PiecesGenreEntity, TheaterDbContext>();
         services.AddRelationRepository<WorkersPositionEntity, TheaterDbContext>();
         services.AddRelationRepository<PurchasedUserTicketEntity, TheaterDbContext>();
+        services.AddRelationRepository<MessageEntity, TheaterDbContext>();
+        services.AddRelationRepository<RoomEntity, TheaterDbContext>();
 
         return services;
     }
@@ -96,6 +100,7 @@ public static class ServiceCollectionExtensions
         services.AddStubValidator<TheaterWorkerParameters>();
         services.AddStubValidator<PiecesTicketParameters>();
         services.AddStubValidator<UserParameters>();
+        services.AddStubValidator<RoomParameters>();
 
         return services;
     }
@@ -120,7 +125,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        var serviceTypes = typeof(BaseService<,>).Assembly
+        var serviceTypes = typeof(BaseCrudService<,>).Assembly
             .GetTypes()
             .Where(x => x.Name.EndsWith("Service") && !x.IsAbstract && !x.IsInterface);
 
@@ -144,10 +149,10 @@ public static class ServiceCollectionExtensions
             // do nothing
         }
         
-        services.AddCrudServices();
+        //services.AddCrudServices();
         services.AddStubValidators()
             .AddScoped<IJwtHelper, JwtHelper>()
-            .AddScoped<IVkApi>(p => new VkApi())
+            .AddScoped<IVkApi>(_ => new VkApi())
             .AddScoped<IDocumentValidator<PieceDateParameters>, PiecesDateValidator>()
             .AddScoped<IDocumentValidator<PieceWorkerParameters>, PieceWorkersValidator>()
             .AddScoped<IDocumentValidator<PiecesGenreParameters>, PieceGenreValidator>()
@@ -201,16 +206,24 @@ public static class ServiceCollectionExtensions
     {
         try
         {
-            var repos = typeof(BaseCrudRepository<>).Assembly.GetTypes().Where(x => x.Name.EndsWith("Repository") && !x.IsAbstract && !x.IsInterface);
-            foreach (var repo in repos)
+            var repositories = typeof(BaseCrudRepository<>).Assembly
+                .GetTypes()
+                .Where(x => x.Name.EndsWith("Repository") && !x.IsAbstract && !x.IsInterface)
+                .ToList();
+
+            foreach (var repository in repositories)
             {
-                if (repo.GetInterfaces().Length > 0)
-                    foreach (var @interface in repo.GetInterfaces())
+                if (repository.GetInterfaces().Length > 0)
+                {
+                    foreach (var @interface in repository.GetInterfaces())
                     {
-                        services.AddScoped(@interface, repo);
+                        services.AddScoped(@interface, repository);
                     }
+                }
                 else
-                    services.AddScoped(repo);
+                {
+                    services.AddScoped(repository);
+                }
             }
         }
         catch

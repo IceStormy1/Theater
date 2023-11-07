@@ -11,7 +11,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class TheaterWorkerService : BaseService<TheaterWorkerParameters, TheaterWorkerEntity>, ITheaterWorkerService
+public sealed class TheaterWorkerService : BaseCrudService<TheaterWorkerParameters, TheaterWorkerEntity>, ITheaterWorkerService
 {
     private readonly ITheaterWorkerRepository _theaterWorkerRepository;
     private readonly IFileStorageService _fileStorageService;

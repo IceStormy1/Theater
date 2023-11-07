@@ -13,7 +13,7 @@ using Theater.Contracts;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater.UserReview;
 using Theater.Contracts.UserAccount;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 using Theater.Entities.Theater;
 
 namespace Theater.Controllers;

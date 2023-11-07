@@ -14,5 +14,5 @@ public class BaseEventConsumer<TConsumer, TEvent> : IConsumer<TEvent>
     }
 
     public Task Consume(ConsumeContext<TEvent> context) =>
-        context.Message == null ? Task.CompletedTask : _handler.HandleMessage(context.Message);
+        context.Message == null ? Task.CompletedTask : _handler.ProcessMessage(context.Message);
 }

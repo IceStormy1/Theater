@@ -16,7 +16,7 @@ using Theater.Entities.Users;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class PieceTicketService : BaseService<PiecesTicketParameters, PiecesTicketEntity>, IPieceTicketService
+public sealed class PieceTicketService : BaseCrudService<PiecesTicketParameters, PiecesTicketEntity>, IPieceTicketService
 {
     private const int DefaultTicketVersion = 1;
 

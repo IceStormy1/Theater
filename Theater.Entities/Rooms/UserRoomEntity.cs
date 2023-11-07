@@ -1,4 +1,5 @@
 ﻿using System;
+using Theater.Common.Enums;
 using Theater.Entities.Users;
 
 namespace Theater.Entities.Rooms;
@@ -26,4 +27,7 @@ public sealed class UserRoomEntity : IHasCreatedAt
     /// Дата и время присоединения к чату
     /// </summary>
     public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc cref="RoomRole"/>
+    public RoomRole Role { get; set; }
 }

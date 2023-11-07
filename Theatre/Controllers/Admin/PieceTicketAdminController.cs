@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions.Ticket;
 using Theater.Contracts;
 using Theater.Contracts.Theater.PiecesTicket;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers.Admin;
 

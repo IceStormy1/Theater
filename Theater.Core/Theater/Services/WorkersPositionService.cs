@@ -10,7 +10,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class WorkersPositionService : BaseService<WorkersPositionParameters, WorkersPositionEntity>, IWorkersPositionService
+public sealed class WorkersPositionService : BaseCrudService<WorkersPositionParameters, WorkersPositionEntity>, IWorkersPositionService
 {
     private readonly IWorkersPositionRepository _workersPositionRepository;
 

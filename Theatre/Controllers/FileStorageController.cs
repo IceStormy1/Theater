@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Theater.Abstractions.FileStorage;
 using Theater.Common.Enums;
 using Theater.Contracts.FileStorage;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 
 [SwaggerTag("Пользовательские методы для работы с файловым хранилищем")]
-public class FileStorageController : TheaterBaseController
+public class FileStorageController : BaseController
 {
     private readonly IFileStorageService _fileStorageService;
 

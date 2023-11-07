@@ -17,7 +17,7 @@ using VkNet.Model;
 
 namespace Theater.Core.UserAccount;
 
-public sealed class UserAccountService : BaseService<UserParameters, UserEntity>, IUserAccountService
+public sealed class UserAccountService : BaseCrudService<UserParameters, UserEntity>, IUserAccountService
 {
     private readonly IJwtHelper _jwtHelper;
     private readonly IUserAccountRepository _userAccountRepository;

@@ -12,7 +12,7 @@ using System.Reflection;
 using Theater.Configuration.Extensions;
 using Theater.Consumer;
 using Theater.Core.Profiles;
-using Theater.SignalR;
+using Theater.SignalR.Hubs;
 using Theater.Sql;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
@@ -79,7 +79,7 @@ builder.Services
     })
     .AddAutoMapper(x => x.AddMaps(typeof(AbstractProfile).Assembly))
     .AddRepositories()
-    .AddServices()
+    .AddServices().AddSingleton<ChatManager>()
     .AddFileStorage()
     .AddMemoryCache()
     .RegisterMassTransit(builder.Configuration, Assembly.GetExecutingAssembly())

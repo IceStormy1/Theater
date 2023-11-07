@@ -10,8 +10,9 @@
 - [x] Базовая логика для работы приложения
 - [x] Refit and add SDK build
 - [x] Docker
-- [ ] SignalR
+- [x] SignalR (Отдельный хост)
 - [x] Rabbit MQ
 - [ ] Hangfire (Отдельный хост)
 - [ ] JasperReport (Отдельный хост)
 - [ ] ElasticSearch
+- [ ] Redis

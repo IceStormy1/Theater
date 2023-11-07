@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
+using Theater.Abstractions.Errors;
 using Theater.Abstractions.Filters;
 using Theater.Common;
 using Theater.Entities;
@@ -85,7 +86,7 @@ public sealed class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel,
         var entity = await _crudRepository.GetByEntityId(id);
 
         return entity is null 
-            ? Result<TModel>.FromError(ErrorModel.Default("delete-conflict", "Указанная запись не найдена")) 
+            ? Result<TModel>.FromError(AbstractionErrors.NotFoundError.Error) 
             : Result.FromValue(_mapper.Map<TModel>(entity));
     }
 

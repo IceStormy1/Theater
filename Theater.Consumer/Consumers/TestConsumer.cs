@@ -12,7 +12,7 @@ internal sealed class TestConsumer : IMessageConsumer<TestRabbitModel>
         _logger = logger;
     }
 
-    public Task HandleMessage(TestRabbitModel message)
+    public Task ProcessMessage(TestRabbitModel message)
     {
         _logger.LogInformation("Получено сообщение {MessageId}", message.Id);
 

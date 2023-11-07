@@ -10,7 +10,7 @@ public class PagingSettings
     /// Максимальное количество записей, которое должен вернуть запрос.
     /// </summary>
     /// <example>15</example>
-    public int Limit { get; set; }
+    public int Limit { get; set; } = DefaultLimit;
     /// <summary>
     /// Смещение.
     /// </summary>

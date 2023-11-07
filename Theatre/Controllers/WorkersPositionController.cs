@@ -7,7 +7,7 @@ using Theater.Abstractions.WorkersPosition;
 using Theater.Common.Enums;
 using Theater.Contracts;
 using Theater.Contracts.Theater.WorkersPosition;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 

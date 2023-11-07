@@ -7,7 +7,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-internal class PieceWorkersService : BaseService<PieceWorkerParameters, PieceWorkerEntity>, IPieceWorkersService
+internal class PieceWorkersService : BaseCrudService<PieceWorkerParameters, PieceWorkerEntity>, IPieceWorkersService
 {
     public PieceWorkersService(
         IMapper mapper,

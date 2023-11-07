@@ -16,7 +16,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class PieceService : BaseService<PieceParameters, PieceEntity>, IPieceService
+public sealed class PieceService : BaseCrudService<PieceParameters, PieceEntity>, IPieceService
 {
     private readonly IPieceRepository _pieceRepository;
     private readonly IFileStorageService _fileStorageService;

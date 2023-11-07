@@ -10,9 +10,9 @@ using Theater.Entities.Rooms;
 
 namespace Theater.Sql.Repositories;
 
-public sealed class RoomsRepository : BaseCrudRepository<RoomEntity>, IRoomsRepository
+public sealed class RoomRepository : BaseCrudRepository<RoomEntity>, IRoomRepository
 {
-    public RoomsRepository(TheaterDbContext dbContext, ILogger<BaseCrudRepository<RoomEntity>> logger) : base(dbContext, logger)
+    public RoomRepository(TheaterDbContext dbContext, ILogger<BaseCrudRepository<RoomEntity>> logger) : base(dbContext, logger)
     {
     }
 
@@ -23,15 +23,13 @@ public sealed class RoomsRepository : BaseCrudRepository<RoomEntity>, IRoomsRepo
                                       && x.IsActive 
                                       && x.Room.Id == roomId);
 
+    public Task<RoomEntity> GetActiveRoomForUser(Guid userId, Guid roomId)
+        => DbContext.Rooms
+            .FirstOrDefaultAsync(x => x.Users.Any(c => c.UserId == userId && c.RoomId == roomId && c.IsActive));
+
     public async Task<RoomEntity[]> GetRoomsForUser(Guid userId, RoomSearchSettings filter)
     {
         var items = await DbContext.UserRooms.Where(userRoom => userRoom.User.Id == userId && userRoom.IsActive)
-            .AsNoTracking()
-            .Where(t =>
-                (t.Room.RoomType == RoomType.Group && EF.Functions.ILike(t.Room.Title, $"%{filter.Query}%")) ||
-                (t.Room.RoomType == RoomType.Individual &&
-                 (EF.Functions.ILike(t.User.FirstName, $"%{filter.Query}%") ||
-                  EF.Functions.ILike(t.User.LastName, $"%{filter.Query}%"))))
             .AsNoTracking()
             .Skip(filter.Offset)
             .Take(filter.Limit)

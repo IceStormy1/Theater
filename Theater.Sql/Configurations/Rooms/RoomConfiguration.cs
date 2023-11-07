@@ -19,7 +19,6 @@ internal sealed class RoomConfiguration : IEntityTypeConfiguration<RoomEntity>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.Title)
-            .IsRequired()
             .HasMaxLength(255);
 
         builder.ToTable(name: "Rooms", schema: "chat");

@@ -12,6 +12,7 @@
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.30.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 		<PackageReference Include="VkNet" Version="1.76.0-alpha-52" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.1.2-develop.1557" />
 	</ItemGroup>
 
 	<ItemGroup>

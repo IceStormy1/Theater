@@ -5,7 +5,7 @@ using Theater.Entities.Rooms;
 
 namespace Theater.Abstractions.Rooms;
 
-public interface IRoomsRepository : ICrudRepository<RoomEntity>
+public interface IRoomRepository : ICrudRepository<RoomEntity>
 {
     /// <summary>
     /// Получить связь юзера и активной комнаты
@@ -13,7 +13,14 @@ public interface IRoomsRepository : ICrudRepository<RoomEntity>
     /// <param name="userId">Проверяемый пользователь</param>
     /// <param name="roomId">Идентификатор комнаты</param>
     /// <returns></returns>
-    Task<UserRoomEntity?> GetActiveRoomRelationForUser(Guid userId, Guid roomId);
+    Task<UserRoomEntity> GetActiveRoomRelationForUser(Guid userId, Guid roomId);
+
+    /// <summary>
+    /// Получить комнату по идентификатору пользователя и комнаты
+    /// </summary>
+    /// <param name="userId">Проверяемый пользователь</param>
+    /// <param name="roomId">Идентификатор комнаты</param>
+    Task<RoomEntity> GetActiveRoomForUser(Guid userId, Guid roomId);
 
     /// <summary>
     /// Получить список чатов юзера с пейджинацией

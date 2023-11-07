@@ -6,23 +6,24 @@ using Theater.Abstractions;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Entities;
+using VkNet.Model;
 
 namespace Theater.Core;
 
-public class BaseService<TModel, TEntity> : ICrudService<TModel>
+public class BaseCrudService<TModel, TEntity> : ICrudService<TModel>
     where TEntity : class, IEntity, new()
     where TModel : class
 {
     protected readonly IMapper Mapper;
     protected readonly ICrudRepository<TEntity> Repository;
     protected readonly IDocumentValidator<TModel> DocumentValidator;
-    protected readonly ILogger<BaseService<TModel, TEntity>> Logger;
+    protected readonly ILogger<BaseCrudService<TModel, TEntity>> Logger;
 
-    public BaseService(
+    public BaseCrudService(
         IMapper mapper, 
         ICrudRepository<TEntity> repository,
         IDocumentValidator<TModel> documentValidator, 
-        ILogger<BaseService<TModel, TEntity>> logger)
+        ILogger<BaseCrudService<TModel, TEntity>> logger)
     {
         Mapper = mapper;
         Repository = repository;
@@ -37,8 +38,8 @@ public class BaseService<TModel, TEntity> : ICrudService<TModel>
             : null;
 
         return entity is null 
-            ? await CreateEntity(model) 
-            : await UpdateEntity(entity, model, entityId);
+            ? await CreateEntity(userId, model) 
+            : await UpdateEntity(userId, entity, model, entityId);
     }
 
     public async Task<Result> Delete(Guid id, Guid? userId = null)
@@ -58,7 +59,10 @@ public class BaseService<TModel, TEntity> : ICrudService<TModel>
         return Result.Successful;
     }
 
-    private async Task<Result<DocumentMeta>> CreateEntity(TModel model)
+    protected virtual Task<TEntity> EnrichEntity(Guid? userId, TEntity entity) 
+        => Task.FromResult(entity);
+
+    private async Task<Result<DocumentMeta>> CreateEntity(Guid? userId, TModel model)
     {
         var validationResult = await DocumentValidator.CheckIfCanCreate(model);
 
@@ -66,13 +70,14 @@ public class BaseService<TModel, TEntity> : ICrudService<TModel>
             return Result<DocumentMeta>.FromError(validationResult.Error);
 
         var entity = Mapper.Map<TEntity>(model);
+        await EnrichEntity(userId, entity);
 
         await Repository.Add(entity);
 
         return Result.FromValue(new DocumentMeta(entity.Id));
     }
 
-    private async Task<Result<DocumentMeta>> UpdateEntity(TEntity entity, TModel model, Guid? entityId)
+    private async Task<Result<DocumentMeta>> UpdateEntity(Guid? userId, TEntity entity, TModel model, Guid? entityId)
     {
         if (!entityId.HasValue)
             return Result<DocumentMeta>.FromError(ErrorModel.Default("update-conflict", "При обновлении сущности необходимо передавать идентификатор"));
@@ -86,6 +91,7 @@ public class BaseService<TModel, TEntity> : ICrudService<TModel>
             return Result<DocumentMeta>.FromError(validationResult.Error);
 
         Mapper.Map(model, entity);
+        await EnrichEntity(userId, entity);
 
         await Repository.Update(entity);
 

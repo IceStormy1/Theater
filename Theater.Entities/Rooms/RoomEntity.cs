@@ -9,6 +9,12 @@ namespace Theater.Entities.Rooms;
 /// </summary>
 public sealed class RoomEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
+    /// <summary>
+    /// Название комнаты
+    /// </summary>
+    /// <remarks>
+    /// null, если <see cref="RoomType"/> == <see cref="Common.Enums.RoomType.Individual"/>
+    /// </remarks>
     public string Title { get; set; }
 
     public RoomType RoomType { get; set; }

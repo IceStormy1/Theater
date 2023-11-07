@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Theater.Abstractions;
 
-namespace Theater.Controllers.BaseControllers;
+namespace Theater.Controllers.Base;
 
 /// <summary>
 /// Базовый контроллер с <see cref="ICrudService{TParameters}"/>. Путь по умолчанию: <c>api/[controller]</c>.
 /// </summary>
 [ApiController]
-public class CrudServiceBaseController<TParameters> : TheaterBaseController
+public class CrudServiceBaseController<TParameters> : BaseController
     where TParameters : class
 {
     protected readonly ICrudService<TParameters> Service;

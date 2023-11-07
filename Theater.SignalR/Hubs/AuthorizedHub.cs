@@ -1,21 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
-using Theater.Abstractions.UserAccount;
 
-namespace Theater.SignalR;
+namespace Theater.SignalR.Hubs;
 
 [Authorize]
 public abstract class AuthorizedHub<T> : Hub<T> where T : class
 {
-    private readonly IUserAccountRepository _usersRepository;
-
-    protected AuthorizedHub(IUserAccountRepository usersRepository)
-    {
-        _usersRepository = usersRepository;
-    }
-
-    protected Guid AuthorizedUserExternalId
+    protected Guid AuthorizedUserId
     {
         get
         {

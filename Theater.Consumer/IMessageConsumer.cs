@@ -2,5 +2,5 @@
 
 public interface IMessageConsumer<in T> where T : class
 {
-    Task HandleMessage(T message);
+    Task ProcessMessage(T message);
 }

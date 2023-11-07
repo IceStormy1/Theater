@@ -102,7 +102,6 @@ namespace Theater.Sql.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -129,6 +128,9 @@ namespace Theater.Sql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
                     b.HasKey("UserId", "RoomId");
 

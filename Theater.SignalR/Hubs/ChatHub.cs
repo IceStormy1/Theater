@@ -2,29 +2,32 @@
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.Rooms;
 using Theater.Abstractions.UserAccount;
+using Theater.Contracts.UserAccount;
 using HubConnectionContext = Microsoft.AspNetCore.SignalR.HubConnectionContext;
 using IUserIdProvider = Microsoft.AspNetCore.SignalR.IUserIdProvider;
 
-namespace Theater.SignalR;
+namespace Theater.SignalR.Hubs;
 
 public class ChatHub : AuthorizedHub<IChatClient>
 {
     public const string Url = "/hubs";
     private readonly ILogger<ChatHub> _logger;
-    private readonly IRoomsRepository _roomsRepository;
+    private readonly IRoomRepository _roomsRepository;
+    private readonly ChatManager _chatManager;
 
     public ChatHub(
         ILogger<ChatHub> logger,
-        IRoomsRepository roomsRepository,
-        IUserAccountRepository usersRepository) : base(usersRepository)
+        IRoomRepository roomsRepository,
+        ChatManager chatManager)
     {
         _logger = logger;
         _roomsRepository = roomsRepository;
+        _chatManager = chatManager;
     }
 
     public async Task EnterRoom(Guid roomId)
     {
-        var room = await _roomsRepository.GetActiveRoomRelationForUser(AuthorizedUserExternalId, roomId);
+        var room = await _roomsRepository.GetActiveRoomRelationForUser(AuthorizedUserId, roomId);
         if (room == null)
         {
             _logger.LogWarning("Комната {roomId} не найдена", roomId);
@@ -41,29 +44,46 @@ public class ChatHub : AuthorizedHub<IChatClient>
 
     public override async Task OnConnectedAsync()
     {
-        if (AuthorizedUserExternalId != Guid.Empty)
+        if (AuthorizedUserId != Guid.Empty)
         {
-            var rooms = await _roomsRepository.GetRoomsForUser(AuthorizedUserExternalId, new RoomSearchSettings());
+            var rooms = await _roomsRepository.GetRoomsForUser(AuthorizedUserId, new RoomSearchSettings());
             foreach (var room in rooms)
                 await Groups.AddToGroupAsync(Context.ConnectionId, room.Id.ToString());
         }
 
+        _chatManager.ConnectUser(AuthorizedUserId, Context.ConnectionId);
+
+        await UpdateUsersAsync();
+
         await base.OnConnectedAsync();
     }
 
-    public override async Task OnDisconnectedAsync(Exception? exception)
+    public override async Task OnDisconnectedAsync(Exception exception)
     {
-        if (AuthorizedUserExternalId != Guid.Empty)
+        if (AuthorizedUserId != Guid.Empty)
         {
-            var rooms = await _roomsRepository.GetRoomsForUser(AuthorizedUserExternalId, new RoomSearchSettings());
+            var rooms = await _roomsRepository.GetRoomsForUser(AuthorizedUserId, new RoomSearchSettings());
             foreach (var room in rooms)
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, room.Id.ToString());
             }
         }
 
+        _chatManager.DisconnectUser(Context.ConnectionId);
+
+        await UpdateUsersAsync();
+
         await base.OnDisconnectedAsync(exception);
     }
+
+    public async Task UpdateUsersAsync()
+    {
+        var users = _chatManager.Users.Select(x => x.UserId).ToList();
+        await Clients.All.UpdateUsersAsync(users);
+    }
+
+    public Task SendMessageAsync(string userId, string message) 
+        => Clients.All.SendMessageAsync(userId, message);
 }
 
 public class UserIdProvider : IUserIdProvider

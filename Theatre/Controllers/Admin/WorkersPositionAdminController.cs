@@ -9,7 +9,7 @@ using Theater.Common.Enums;
 using Theater.Common.Extensions;
 using Theater.Contracts;
 using Theater.Contracts.Theater.WorkersPosition;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers.Admin;
 
