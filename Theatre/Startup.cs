@@ -140,33 +140,27 @@ public sealed class Startup
     {
         if (env.IsDevelopment())
             app.UseDeveloperExceptionPage();
-        
+
         app.UseCors(options =>
-        {
-            options.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
+            {
+                options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            })
+            .UseStatusCodePages()
+            .UseHttpsRedirection()
 
-        app.UseStatusCodePages();
-
-        app.UseHttpsRedirection();
-
-        app.UseRouting();
-
-        app.UseSwagger(c => { c.SerializeAsV2 = true; });
-
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint($"/swagger/v{_assemblyVersion}/swagger.json", $"{ApiName} API V{_assemblyVersion}");
-            c.RoutePrefix = string.Empty;
-            c.DocumentTitle = $"{ApiName} Documentation";
-            c.DocExpansion(DocExpansion.None);
-        });
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            .UseRouting()
+            .UseSwagger(c => { c.SerializeAsV2 = true; })
+            .UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v{_assemblyVersion}/swagger.json", $"{ApiName} API V{_assemblyVersion}");
+                c.RoutePrefix = string.Empty;
+                c.DocumentTitle = $"{ApiName} Documentation";
+                c.DocExpansion(DocExpansion.None);
+            })
+            .UseAuthentication()
+            .UseAuthorization()
+            .UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }
