@@ -14,8 +14,4 @@
 	  <ProjectReference Include="..\Theater.Entities\Theater.Entities.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Message\" />
-	</ItemGroup>
-
 </Project>

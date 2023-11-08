@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using MassTransit;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using Theater.Common.Enums;
 using Theater.Consumer;
 using Theater.Contracts.Messages;

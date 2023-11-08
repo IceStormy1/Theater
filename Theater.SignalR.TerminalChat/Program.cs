@@ -105,7 +105,7 @@ public class Program
         });
 
         var tokenSource = new CancellationTokenSource();
-        Console.CancelKeyPress += (sender, eventArgs) => { tokenSource.Cancel(); };
+        Console.CancelKeyPress += (_, _) => { tokenSource.Cancel(); };
 
         TheaterClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -123,7 +123,6 @@ public class Program
 
             await Task.Delay(100, tokenSource.Token);
         }
-
 
         Console.ReadLine();
         await hub.StopAsync(tokenSource.Token);

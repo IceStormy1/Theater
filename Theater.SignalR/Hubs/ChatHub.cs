@@ -1,8 +1,6 @@
 ﻿using System.Security.Claims;
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.Rooms;
-using Theater.Abstractions.UserAccount;
-using Theater.Contracts.UserAccount;
 using HubConnectionContext = Microsoft.AspNetCore.SignalR.HubConnectionContext;
 using IUserIdProvider = Microsoft.AspNetCore.SignalR.IUserIdProvider;
 

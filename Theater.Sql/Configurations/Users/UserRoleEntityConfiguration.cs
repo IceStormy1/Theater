@@ -32,6 +32,11 @@ internal sealed class UserRoleEntityConfiguration : IEntityTypeConfiguration<Use
             {
                 Id = 2,
                 RoleName = "Admin"
+            },
+            new()
+            {
+                Id = 3,
+                RoleName = "System"
             }
         };
 }

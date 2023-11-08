@@ -1,6 +1,4 @@
-﻿using MassTransit;
-using SignalRSwaggerGen.Attributes;
-using SignalRSwaggerGen.Enums;
+﻿using SignalRSwaggerGen.Attributes;
 using Theater.Contracts.Messages;
 
 namespace Theater.SignalR.Hubs;

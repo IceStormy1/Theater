@@ -6,7 +6,6 @@ using Theater.Abstractions;
 using Theater.Common;
 using Theater.Contracts;
 using Theater.Entities;
-using VkNet.Model;
 
 namespace Theater.Core;
 

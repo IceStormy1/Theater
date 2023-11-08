@@ -19,6 +19,8 @@ namespace Theater.Core.UserAccount;
 
 public sealed class UserAccountService : BaseCrudService<UserParameters, UserEntity>, IUserAccountService
 {
+    private const string SystemUser = "SystemUser";
+
     private readonly IJwtHelper _jwtHelper;
     private readonly IUserAccountRepository _userAccountRepository;
     private readonly IVkApi _vkApiAuth;
@@ -101,10 +103,8 @@ public sealed class UserAccountService : BaseCrudService<UserParameters, UserEnt
         }
     }
 
-    public async Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount)
-    {
-        return await _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
-    }
+    public Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount)
+        => _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
 
     private AuthenticateResponse GetAuthenticateResponseByUser(UserEntity userEntity)
     {

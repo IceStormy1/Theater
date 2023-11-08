@@ -73,6 +73,15 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
         return Result.Successful;
     }
 
+    public async Task<Result<UserEntity>> GetSystemUser()
+    {
+        var systemUser = await DbSet.FirstOrDefaultAsync(x => x.RoleId == (int)UserRole.System);
+
+        return systemUser is null 
+            ? Result<UserEntity>.FromError(UserAccountErrors.NotFound.Error) 
+            : Result.FromValue(systemUser);
+    }
+
     public override IQueryable<UserEntity> AddIncludes(IQueryable<UserEntity> query)
     {
         return query.Include(x => x.Photo)

@@ -13,12 +13,12 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.Property(x=>x.UserName).IsRequired().HasMaxLength(128);
-        builder.Property(x=>x.Email).IsRequired().HasMaxLength(256);
-        builder.Property(x=>x.Phone).IsRequired().HasMaxLength(11).IsFixedLength();
-        builder.Property(x=>x.FirstName).IsRequired().HasMaxLength(128);
-        builder.Property(x=>x.LastName).IsRequired().HasMaxLength(128);
-        builder.Property(x=>x.MiddleName).HasMaxLength(128);
+        builder.Property(x => x.UserName).IsRequired().HasMaxLength(128);
+        builder.Property(x => x.Email).HasMaxLength(256);
+        builder.Property(x => x.Phone).HasMaxLength(11).IsFixedLength();
+        builder.Property(x => x.FirstName).IsRequired().HasMaxLength(128);
+        builder.Property(x => x.LastName).IsRequired().HasMaxLength(128);
+        builder.Property(x => x.MiddleName).HasMaxLength(128);
 
         builder.Navigation(x => x.UserRole).AutoInclude();
 
@@ -89,6 +89,20 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
                 BirthDate = new DateTime(2001, 06, 06),
                 UserName = "IceStormy-user",
                 Money = new decimal(1000.00)
+            },
+            new()
+            {
+                CreatedAt = new DateTime(2023, 01, 05),
+                Email = "shadow-theater@mail.ru",
+                FirstName = "Администрация",
+                LastName = "Театра",
+                Gender = GenderType.Male,
+                Phone = "81094316687",
+                Id = Guid.Parse("cd448464-2ec0-4b21-b5fa-9a3cc8547489"),
+                Password = "E10ADC3949BA59ABBE56E057F20F883E", // 123456
+                RoleId = (int)UserRole.System,
+                BirthDate = new DateTime(2001, 06, 06),
+                UserName = "SystemUser",
             }
         };
 }

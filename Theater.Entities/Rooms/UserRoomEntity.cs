@@ -30,4 +30,6 @@ public sealed class UserRoomEntity : IHasCreatedAt
 
     /// <inheritdoc cref="RoomRole"/>
     public RoomRole Role { get; set; }
+
+    // TODO: последнее прочитанное сообщение
 }

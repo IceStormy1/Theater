@@ -9,7 +9,7 @@ namespace Theater.Controllers.Admin;
 
 [Route("api/admin/piece/date")]
 [SwaggerTag("Админ. Методы для работы с датами пьес")]
-public class PieceDateAdminController : AdminBaseController<PieceDateParameters>
+public sealed class PieceDateAdminController : AdminBaseController<PieceDateParameters>
 {
     public PieceDateAdminController(
         IPieceDateService service, 

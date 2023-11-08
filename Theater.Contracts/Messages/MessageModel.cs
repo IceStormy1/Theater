@@ -1,7 +1,7 @@
 ﻿using System;
 using Theater.Common.Enums;
 
-namespace Theater.Contracts.Rooms;
+namespace Theater.Contracts.Messages;
 
 public sealed class MessageModel
 {

@@ -16,20 +16,36 @@ public sealed class UserParametersValidator : AbstractValidator<UserParameters>
         Include(userValidator);
         Include(userBaseValidator);
 
-        RuleFor(user => user.Email)
-            .NotEmpty()
-            .EmailAddress()
-            .MaximumLength(256)
-            .WithName("Электронная почта");
+        When(x => string.IsNullOrWhiteSpace(x.Email), () =>
+        {
+            RuleFor(user => user.Phone)
+                .NotEmpty()
+                .WithMessage("Указан некорректный номер телефона");
+        }).Otherwise((() =>
+        {
+            RuleFor(user => user.Email)
+                .NotEmpty()
+                .EmailAddress()
+                .MaximumLength(256)
+                .WithName("Электронная почта");
+        }));
+
+        When(x => string.IsNullOrWhiteSpace(x.Phone), () =>
+        {
+            RuleFor(user => user.Email)
+                .NotEmpty()
+                .WithName("Электронная почта");
+        }).Otherwise((() =>
+        {
+            RuleFor(user => user.Phone)
+                .Must(phone => Regex.IsMatch(phone, "^\\d{11}$"))
+                .WithMessage("Указан некорректный номер телефона");
+        }));
 
         RuleFor(user => user.UserName)
             .NotEmpty()
             .MinimumLength(5)
             .MaximumLength(128)
             .WithName("Никнейм");
-
-        RuleFor(user => user.Phone)
-            .Must(user=> !string.IsNullOrWhiteSpace(user) && Regex.IsMatch(user, "^\\d{11}$"))
-            .WithMessage("Указан некорректный номер телефона");
     }
 }

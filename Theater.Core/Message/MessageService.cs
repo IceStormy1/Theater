@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using MassTransit;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
+using Theater.Abstractions.Filters;
+using Theater.Abstractions.Message;
 using Theater.Abstractions.Rooms;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
 using Theater.Common.Enums;
+using Theater.Contracts.Filters;
 using Theater.Contracts.Messages;
 using Theater.Contracts.Rabbit;
 using Theater.Entities.Rooms;
@@ -45,7 +49,7 @@ public sealed class MessageService : IMessageService
         var userRoom = await _roomRepository.GetActiveRoomForUser(userId, roomId);
 
         if (userRoom is null)
-            return Result<MessageModel>.FromError(AbstractionErrors.NotFoundError.Error);
+            return Result<MessageModel>.FromError(RoomErrors.RoomNotFoundError.Error);
 
         var message = new MessageEntity
         {
@@ -57,6 +61,29 @@ public sealed class MessageService : IMessageService
 
         await _messageRepository.Add(message);
 
+        await PublishMessageSent(userId, roomId, message);
+
+        var messageModel = _mapper.Map<MessageModel>(message);
+
+        return Result.FromValue(messageModel);
+    }
+
+    public async Task<Result<List<MessageModel>>> GetMessages(Guid roomId, Guid userId, MessageFilterParameters filter)
+    {
+        var isMemberOfRoom = await _roomRepository.IsMemberOfRoom(userId, roomId);
+
+        if (!isMemberOfRoom)
+            return Result<List<MessageModel>>.FromError(RoomErrors.RoomNotFoundError.Error);
+
+        var filterSettings = _mapper.Map<MessageFilterSettings>(filter);
+
+        var messages = await _messageRepository.GetMessages(roomId, filterSettings);
+
+        return Result.FromValue(_mapper.Map<List<MessageModel>>(messages));
+    }
+
+    private async Task PublishMessageSent(Guid userId, Guid roomId, MessageEntity message)
+    {
         var messageSentModel = new MessageSentModel
         {
             Id = message.Id,
@@ -64,13 +91,9 @@ public sealed class MessageService : IMessageService
             CreatedAt = message.CreatedAt,
             MessageType = message.MessageType,
             RoomId = roomId,
-            Text = newMessage.Text
+            Text = message.Text
         };
 
         await _messageBus.Publish(messageSentModel);
-
-        var messageModel = _mapper.Map<MessageModel>(message);
-
-        return Result.FromValue(messageModel);
     }
 }

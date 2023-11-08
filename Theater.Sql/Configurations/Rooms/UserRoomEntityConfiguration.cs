@@ -10,7 +10,6 @@ internal sealed class UserRoomEntityConfiguration : IEntityTypeConfiguration<Use
     {
         builder.HasKey(x => new { x.UserId, x.RoomId });
         builder.Property(x => x.IsActive).HasDefaultValue(true);
-        builder.Navigation(x => x.Room).AutoInclude();
 
         builder.ToTable(name: "UserRooms", schema: "chat");
     }

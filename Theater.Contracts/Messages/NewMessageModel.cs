@@ -1,4 +1,4 @@
-﻿namespace Theater.Contracts.Rooms;
+﻿namespace Theater.Contracts.Messages;
 
 public sealed class NewMessageModel
 {

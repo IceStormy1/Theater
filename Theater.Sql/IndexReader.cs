@@ -12,6 +12,8 @@ using Theater.Entities;
 
 namespace Theater.Sql;
 
+// TODO: переделать поиск на ElasticSearch
+
 public sealed class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntity, TFilter>
     where TModel : class
     where TEntity : class, IEntity

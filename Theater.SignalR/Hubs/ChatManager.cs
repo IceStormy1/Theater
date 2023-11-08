@@ -1,6 +1,6 @@
 ﻿namespace Theater.SignalR.Hubs;
 
-public class ChatManager
+public sealed class ChatManager
 {
     public List<ChatUser> Users { get; } = new();// TODO: переделать на редис
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Theater.Common.Constants;
-using Theater.Contracts.Rooms;
+using Theater.Contracts.Messages;
 
 namespace Theater.Validation.Rooms;
 

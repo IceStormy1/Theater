@@ -13,11 +13,11 @@ public sealed class RoomEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     /// Название комнаты
     /// </summary>
     /// <remarks>
-    /// null, если <see cref="RoomType"/> == <see cref="Common.Enums.RoomType.Individual"/>
+    /// null, если <see cref="Type"/> == <see cref="Common.Enums.RoomType.Individual"/>
     /// </remarks>
     public string Title { get; set; }
 
-    public RoomType RoomType { get; set; }
+    public RoomType Type { get; set; }
 
     /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
     public DateTime CreatedAt { get; set; }
@@ -30,5 +30,5 @@ public sealed class RoomEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     /// </summary>
     public List<UserRoomEntity> Users { get; set; } = new();
 
-    public List<MessageEntity> Messages { get; set; }
+    public List<MessageEntity> Messages { get; set; } = new();
 }

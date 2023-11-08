@@ -13,7 +13,7 @@ public sealed class RoomParametersValidator : AbstractValidator<RoomParameters>
         {
             RuleFor(x => x.Title)
                 .Empty()
-                .WithMessage("Название должно быть пустым при создании / обновлении чата");
+                .WithMessage("Название чата должно быть пустым в личных сообщениях");
         }).Otherwise(() =>
         {
             RuleFor(x => x.Title)

@@ -34,4 +34,9 @@ public interface IUserAccountRepository : ICrudRepository<UserEntity>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="replenishmentAmount">Сумма пополнения</param>
     Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount);
+
+    /// <summary>
+    /// Возвращает системного пользователя
+    /// </summary>
+    Task<Result<UserEntity>> GetSystemUser();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Theater.Common.Enums;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Rooms;
@@ -84,6 +85,12 @@ public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     public Guid? PhotoId { get; set; }
 
     /// <summary>
+    /// ФИО
+    /// </summary>
+    [NotMapped]
+    public string FullName => $"{LastName} {FirstName} {MiddleName}";
+
+    /// <summary>
     /// Основная фотография пьесы
     /// </summary>
     public FileStorageEntity Photo { get; set; }
@@ -92,6 +99,7 @@ public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     /// Ссылка на роль пользователя
     /// </summary>
     public UserRoleEntity UserRole { get; set; }
+
 
     public List<UserReviewEntity> UserReviews { get; set; } = new();
     public List<BookedTicketEntity> BookedTickets { get; set; } = new();
