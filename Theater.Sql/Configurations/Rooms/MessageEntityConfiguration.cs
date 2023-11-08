@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Theater.Common.Constants;
 using Theater.Entities.Rooms;
 
 namespace Theater.Sql.Configurations.Rooms;
@@ -15,7 +16,7 @@ public sealed class MessageEntityConfiguration : IEntityTypeConfiguration<Messag
 
         builder.Property(x => x.Text)
             .IsRequired()
-            .HasMaxLength(2000);
+            .HasMaxLength(MessageConstants.MessageMaxLength);
 
         builder.ToTable(name: "Messages", schema: "chat");
     }

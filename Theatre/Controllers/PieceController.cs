@@ -64,7 +64,6 @@ public sealed class PieceController : CrudServiceBaseController<PieceParameters>
 
         var result = Mapper.Map<Page<PieceShortInformationModel>>(piecesShortInformation);
 
-        //TODO: добавить в QueryItems обогащение модели
         await _pieceService.EnrichPieceShortInformation(result);
 
         return Ok(result);

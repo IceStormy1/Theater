@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Theater.Common.Constants;
 using Theater.Entities.Rooms;
 
 namespace Theater.Sql.Configurations.Rooms;
@@ -19,7 +20,7 @@ internal sealed class RoomConfiguration : IEntityTypeConfiguration<RoomEntity>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.Title)
-            .HasMaxLength(255);
+            .HasMaxLength(RoomConstants.TitleMaxLength);
 
         builder.ToTable(name: "Rooms", schema: "chat");
     }
