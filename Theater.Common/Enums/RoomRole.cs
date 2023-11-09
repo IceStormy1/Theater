@@ -8,10 +8,10 @@ public enum RoomRole
     /// <summary>
     /// Участник
     /// </summary>
-    User,
+    User = 0,
 
     /// <summary>
     /// Создатель
     /// </summary>
-    Owner
+    Owner = 1
 }

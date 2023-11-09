@@ -23,7 +23,7 @@ public class ChatHub : AuthorizedHub<IChatClient>
         _chatManager = chatManager;
     }
 
-    public async Task EnterRoom(Guid roomId)
+    public async Task EnterRoom(Guid roomId, string title)
     {
         var room = await _roomsRepository.GetActiveRoomRelationForUser(AuthorizedUserId, roomId);
         if (room == null)

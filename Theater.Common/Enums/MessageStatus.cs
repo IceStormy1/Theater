@@ -5,6 +5,6 @@
 /// </summary>
 public enum MessageStatus
 {
-    Unseen,
-    Seen
+    Unseen = 0,
+    Seen = 1
 }

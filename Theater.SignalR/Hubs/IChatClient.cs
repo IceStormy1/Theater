@@ -24,6 +24,8 @@ public interface IChatClient
         [SignalRParam(description: "Доставленное сообщение")]
         MessageModel message);
 
+    Task OnRoomEnter([SignalRParam(description: "Идентификатор активной комнаты")] Guid roomId, string title);
+
     /// <summary>
     /// Update user list
     /// </summary>

@@ -14,6 +14,11 @@ public sealed class MessageEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     /// </summary>
     public string Text { get; set; }
 
+    /// <summary>
+    /// Идентификатор пользователя
+    /// </summary>
+    public Guid UserId { get; set; }
+
     /// <inheritdoc cref="UserEntity"/>
     public UserEntity User { get; set; }
 
@@ -25,6 +30,11 @@ public sealed class MessageEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 
     /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
     public DateTime? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Идентификатор комнаты
+    /// </summary>
+    public Guid RoomId { get; set; }
 
     /// <inheritdoc cref="RoomEntity"/>
     public RoomEntity Room { get; set; }

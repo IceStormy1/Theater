@@ -13,5 +13,5 @@ public enum GenderType
     /// <summary>
     /// Женский
     /// </summary>
-    Female
+    Female = 2
 }

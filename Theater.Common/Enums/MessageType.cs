@@ -8,10 +8,10 @@ public enum MessageType
     /// <summary>
     /// Сообщение пользователя
     /// </summary>
-    Text,
+    Text = 0,
 
     /// <summary>
     /// Системный текст
     /// </summary>
-    SystemText
+    SystemText = 1
 }

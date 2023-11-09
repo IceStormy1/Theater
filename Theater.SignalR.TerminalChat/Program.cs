@@ -24,9 +24,11 @@ public class Program
         Console.OutputEncoding = Encoding.Unicode;
         Console.InputEncoding = Encoding.Unicode;
 
-        var token = await GetToken();
+        var token = await GetToken(args);
 
         var roomId = args[0];
+
+        // todo: user args
 
         await using var hub = new HubConnectionBuilder()
             .WithUrl(
@@ -74,13 +76,13 @@ public class Program
         //});
 
 
-        //hub.On<long, RoomType, string>("OnRoomEnter", (roomId, roomType, title) =>
-        //{
-        //    Console.WriteLine(new StringBuilder("Пользователь вошел в чат - ")
-        //        .Append($"RoomId: {roomId}, ").Append(Environment.NewLine)
-        //        .Append($"Title: {title}, ").Append(Environment.NewLine)
-        //        .ToString());
-        //});
+        hub.On<Guid, string>("OnRoomEnter", (roomIdd, title) =>
+        {
+            Console.WriteLine(new StringBuilder("Пользователь вошел в чат - ")
+                .Append($"RoomId: {roomIdd}, ").Append(Environment.NewLine)
+                .Append($"Title: {title}, ").Append(Environment.NewLine)
+                .ToString());
+        });
 
         //hub.On<Guid>("OnRoomExit", (id) =>
         //{
@@ -128,10 +130,16 @@ public class Program
         await hub.StopAsync(tokenSource.Token);
     }
 
-    private static async Task<string> GetToken()
+    private static async Task<string> GetToken(IEnumerable<string> args)
     {
-        var authParameters = new { UserName = "IceStormy-admin", Password = "123456" };
+        byte.TryParse(args.ElementAtOrDefault(1), out var indexUser);
+
+        var testUsers = GetTestUsers();
+
+        var authParameters = testUsers[indexUser];
+        Console.WriteLine("INDEX" + indexUser);
         const string requestUri = TheaterUrl + LoginRoute;
+
         var loginResponse = await TheaterClient.PostAsJsonAsync(requestUri, value: authParameters);
 
         loginResponse.EnsureSuccessStatusCode();
@@ -140,4 +148,12 @@ public class Program
 
         return authResponse.AccessToken;
     }
+
+    private static object[] GetTestUsers()
+        => new object[]
+        {
+            new { UserName = "IceStormy-admin", Password = "123456" },
+            new { UserName = "IceStormy-admin-4", Password = "123456" },
+            new { UserName = "IceStormy-admin23", Password = "123456" }
+        };
 }

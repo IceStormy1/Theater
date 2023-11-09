@@ -46,6 +46,9 @@ public sealed class ChatManager
         return false;
     }
 
+    public List<ChatConnection> GetUserConnectionsById(Guid userId)
+        => GetConnectedUserById(userId)?.Connections;
+
     /// <summary>
     /// Returns <see cref="ChatUser"/> by connectionId if connection found
     /// </summary>

@@ -7,7 +7,7 @@ namespace Theater.Entities.Rooms;
 /// <summary>
 /// Участник чата
 /// </summary>
-public sealed class UserRoomEntity : IHasCreatedAt
+public sealed class UserRoomEntity : BaseEntity, IHasCreatedAt
 {
     public Guid UserId { get; set; }
 

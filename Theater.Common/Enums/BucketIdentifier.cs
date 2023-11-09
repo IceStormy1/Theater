@@ -10,10 +10,10 @@ public enum BucketIdentifier
     /// <summary>
     /// Файлы пользователей
     /// </summary>
-    User,
+    User = 1,
 
     /// <summary>
     /// Файлы работников театра
     /// </summary>
-    TheaterWorker
+    TheaterWorker = 2
 }

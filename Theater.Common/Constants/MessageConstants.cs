@@ -10,7 +10,7 @@ public static class MessageConstants
     /// <summary>
     /// Пользователь присоединился к чату
     /// </summary>
-    public const string SystemSignInMessage = "{0} присоединился к чату";
+    public const string SystemSignInMessage = "Пользователь {0} добавил {1} в чат";
 
     /// <summary>
     /// Чат создан

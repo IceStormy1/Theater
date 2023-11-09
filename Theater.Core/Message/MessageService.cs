@@ -41,11 +41,6 @@ public sealed class MessageService : IMessageService
 
     public async Task<Result<MessageModel>> SendMessage(Guid roomId, Guid userId, NewMessageModel newMessage)
     {
-        var user = await _userAccountRepository.GetByEntityId(userId);
-
-        if (user is null)
-            return Result<MessageModel>.FromError(UserAccountErrors.NotFound.Error);
-
         var userRoom = await _roomRepository.GetActiveRoomForUser(userId, roomId);
 
         if (userRoom is null)
@@ -54,9 +49,9 @@ public sealed class MessageService : IMessageService
         var message = new MessageEntity
         {
             MessageType = MessageType.Text,
-            Room = userRoom,
+            RoomId = roomId,
             Text = newMessage.Text,
-            User = user
+            UserId = userId
         };
 
         await _messageRepository.Add(message);
@@ -82,7 +77,7 @@ public sealed class MessageService : IMessageService
         return Result.FromValue(_mapper.Map<List<MessageModel>>(messages));
     }
 
-    private async Task PublishMessageSent(Guid userId, Guid roomId, MessageEntity message)
+    public async Task PublishMessageSent(Guid userId, Guid roomId, MessageEntity message)
     {
         var messageSentModel = new MessageSentModel
         {

@@ -17,17 +17,17 @@ public enum PositionType
     /// Актер
     /// </summary>
     [Display(Name = "Актер")]
-    Actor,
+    Actor = 2,
 
     /// <summary>
     /// Художник
     /// </summary>
     [Display(Name = "Художник")]
-    Artist,
+    Artist = 3,
 
     /// <summary>
     /// Музыкант
     /// </summary>
     [Display(Name = "Музыкант")]
-    Musician
+    Musician = 4
 }

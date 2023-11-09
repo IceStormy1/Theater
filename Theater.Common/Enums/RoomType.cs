@@ -8,10 +8,10 @@ public enum RoomType
     /// <summary>
     /// Индивидуально
     /// </summary>
-    Individual,
+    Individual = 0,
 
     /// <summary>
     /// Групповой чат
     /// </summary>
-    Group
+    Group = 1
 }

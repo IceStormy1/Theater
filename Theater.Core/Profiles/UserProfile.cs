@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
-using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Filters;
+using Theater.Common.Enums;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.FileStorage;
 using Theater.Contracts.Filters;

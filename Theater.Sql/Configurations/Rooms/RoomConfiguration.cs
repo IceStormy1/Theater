@@ -17,6 +17,7 @@ internal sealed class RoomConfiguration : IEntityTypeConfiguration<RoomEntity>
 
         builder.HasMany(x => x.Messages)
             .WithOne(x => x.Room)
+            .HasForeignKey(x=>x.RoomId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.Title)

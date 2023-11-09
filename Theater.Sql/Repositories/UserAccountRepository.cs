@@ -7,6 +7,7 @@ using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Entities.Users;
 
 namespace Theater.Sql.Repositories;

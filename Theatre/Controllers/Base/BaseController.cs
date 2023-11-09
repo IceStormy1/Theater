@@ -4,8 +4,8 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
+using Theater.Common.Enums;
 
 namespace Theater.Controllers.Base;
 

@@ -1,4 +1,4 @@
-﻿namespace Theater.Abstractions.Authorization.Models;
+﻿namespace Theater.Common.Enums;
 
 public enum UserRole
 {

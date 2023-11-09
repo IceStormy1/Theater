@@ -13,37 +13,33 @@ public class MessageSentConsumer : IMessageConsumer<MessageSentModel>
     private readonly ILogger<MessageSentConsumer> _logger;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
     private readonly IMapper _mapper;
+    private readonly ChatManager _chatManager;
 
     public MessageSentConsumer(
         ILogger<MessageSentConsumer> logger,
         IHubContext<ChatHub, IChatClient> hubContext,
-        IMapper mapper
-        )
+        IMapper mapper,
+        ChatManager chatManager)
     {
         _logger = logger;
         _hubContext = hubContext;
         _mapper = mapper;
+        _chatManager = chatManager;
     }
 
     public async Task ProcessMessage(MessageSentModel message)
     {
         IChatClient group;
-
         if (message.MessageType != MessageType.SystemText)
         {
-            group = _hubContext.Clients.GroupExcept(message.RoomId.ToString(), new List<string>());
-            if (group == null)
-            {
-                return;
-            }
+            var authorConnections = _chatManager.GetUserConnectionsById(message.AuthorId) ?? new List<ChatConnection>();
+            group = _hubContext.Clients.GroupExcept(
+                    groupName: message.RoomId.ToString(), 
+                    excludedConnectionIds: authorConnections.Select(x=>x.ConnectionId));
         }
         else
         {
             group = _hubContext.Clients.Group(message.RoomId.ToString());
-            if (group == null)
-            {
-                return;
-            }
         }
 
         var messageDto = _mapper.Map<MessageModel>(message);

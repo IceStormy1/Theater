@@ -19,7 +19,7 @@ using Theater.Controllers.Base;
 using Theater.Entities.Theater;
 using Theater.Entities.Users;
 using VkNet.Abstractions;
-using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
+using RoleUser = Theater.Common.Enums.UserRole;
 
 namespace Theater.Controllers;
 

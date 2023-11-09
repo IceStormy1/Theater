@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Theater.Abstractions.Authorization.Models;
 using Theater.Common.Enums;
 using Theater.Entities.Users;
 
@@ -46,6 +45,7 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
 
         builder.HasMany(x => x.Messages)
             .WithOne(x => x.User)
+            .HasForeignKey(x=>x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.UserRooms)

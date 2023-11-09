@@ -8,7 +8,9 @@ internal sealed class UserRoomEntityConfiguration : IEntityTypeConfiguration<Use
 {
     public void Configure(EntityTypeBuilder<UserRoomEntity> builder)
     {
-        builder.HasKey(x => new { x.UserId, x.RoomId });
+        builder.HasKey(x => x.Id);
+        builder.HasIndex(x => new { x.UserId, x.RoomId }).IsUnique();
+
         builder.Property(x => x.IsActive).HasDefaultValue(true);
 
         builder.ToTable(name: "UserRooms", schema: "chat");

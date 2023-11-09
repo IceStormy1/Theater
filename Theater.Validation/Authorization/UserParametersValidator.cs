@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Theater.Contracts;
 using Theater.Contracts.UserAccount;
+using Theater.Validation.UserAccount;
 
 namespace Theater.Validation.Authorization;
 

@@ -11,9 +11,6 @@ public sealed class MessageEntityConfiguration : IEntityTypeConfiguration<Messag
     {
         builder.HasKey(x => x.Id);
 
-        builder.Navigation(x => x.User).IsRequired();
-        builder.Navigation(x => x.Room).IsRequired();
-
         builder.Property(x => x.Text)
             .IsRequired()
             .HasMaxLength(MessageConstants.MessageMaxLength);

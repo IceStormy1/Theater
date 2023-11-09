@@ -2,12 +2,10 @@
 
 public class ChatUser
 {
-    private readonly List<ChatConnection> _connections;
-
     public ChatUser(Guid userId)
     {
         UserId = userId;
-        _connections = new List<ChatConnection>();
+        Connections = new List<ChatConnection>();
     }
 
     /// <summary>
@@ -37,7 +35,7 @@ public class ChatUser
     /// <summary>
     /// All user connections
     /// </summary>
-    public IEnumerable<ChatConnection> Connections => _connections;
+    public List<ChatConnection> Connections { get; }
 
     /// <summary>
     /// Append connection for user
@@ -56,7 +54,7 @@ public class ChatUser
             ConnectionId = connectionId
         };
 
-        _connections.Add(connection);
+        Connections.Add(connection);
     }
 
     /// <summary>
@@ -67,10 +65,10 @@ public class ChatUser
         if (connectionId == null)
             throw new ArgumentNullException(nameof(connectionId));
 
-        var connection = _connections.SingleOrDefault(x => x.ConnectionId.Equals(connectionId));
+        var connection = Connections.SingleOrDefault(x => x.ConnectionId.Equals(connectionId));
         if (connection == null)
             return;
         
-        _connections.Remove(connection);
+        Connections.Remove(connection);
     }
 }

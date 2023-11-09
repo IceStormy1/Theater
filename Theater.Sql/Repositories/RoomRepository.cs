@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Theater.Abstractions.Authorization.Models;
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.Rooms;
 using Theater.Entities.Rooms;
@@ -21,6 +20,8 @@ public sealed class RoomRepository : BaseCrudRepository<RoomEntity>, IRoomReposi
     public Task<UserRoomEntity> GetActiveRoomRelationForUser(Guid userId, Guid roomId)
         => DbContext.UserRooms
             .AsNoTracking()
+            .Include(x => x.User)
+            .Include(x => x.Room)
             .FirstOrDefaultAsync(x => x.User.Id == userId
                                       && x.Room.Id == roomId
                                       && x.IsActive);
@@ -31,28 +32,15 @@ public sealed class RoomRepository : BaseCrudRepository<RoomEntity>, IRoomReposi
                                                        && c.RoomId == roomId 
                                                        && c.IsActive));
 
-    public async Task<RoomEntity[]> GetRoomsForUser(Guid userId, RoomSearchSettings filter)
-    {
-        return await DbSet.AsNoTracking()
-        .Include(x => x.Users).ThenInclude(x=>x.User)
-        .Where(x=>x.Users.Any(c => c.UserId == userId && c.IsActive))
-        .Skip(filter.Offset)
-        .Take(filter.Limit)
-        .OrderByDescending(x => x.Messages.OrderByDescending(y => y.CreatedAt).First().CreatedAt)
-        .ToArrayAsync();
-
-        //var items = await DbContext.UserRooms
-        //    .AsNoTracking()
-        //    .Include(x => x.Room.Users)
-        //    .Where(userRoom => userRoom.User.Id == userId && userRoom.IsActive)
-        //    .Skip(filter.Offset)
-        //    .Take(filter.Limit)
-        //    .OrderByDescending(x => x.Room.Messages.OrderByDescending(y => y.CreatedAt).First().CreatedAt)
-        //    .Select(x => x.Room)
-        //    .ToArrayAsync();
-
-        //return items;
-    }
+    public Task<RoomEntity[]> GetRoomsForUser(Guid userId, RoomSearchSettings filter)
+        => DbSet.AsNoTracking()
+            .Include(x => x.Users)
+                .ThenInclude(x => x.User)
+            .Where(x => x.Users.Any(c => c.UserId == userId && c.IsActive))
+            .Skip(filter.Offset)
+            .Take(filter.Limit)
+            .OrderByDescending(x => x.Messages.OrderByDescending(y => y.CreatedAt).First().CreatedAt)
+            .ToArrayAsync();
 
     public Task<bool> IsMemberOfRoom(Guid userId, Guid roomId)
         => DbContext.UserRooms

@@ -15,6 +15,7 @@ using Theater.Controllers.Base;
 
 namespace Theater.Controllers.Rooms;
 
+[Tags("Rooms")]
 [SwaggerTag("Пользовательские методы для работы с чатом")]
 [Authorize]
 public sealed class RoomsController : CrudServiceBaseController<RoomParameters>
@@ -72,20 +73,5 @@ public sealed class RoomsController : CrudServiceBaseController<RoomParameters>
         return !UserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
             : RenderResult(await _roomService.CreateOrUpdate(roomParameters, roomId, userId: UserId.Value));
-    }
-
-    /// <summary>
-    /// Обновляет комнату
-    /// </summary>
-    /// <param name="roomId">Идентификатор комнаты</param>
-    [HttpDelete("{roomId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageModel))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> DeleteRoom([FromRoute] Guid roomId)
-    {
-        return !UserId.HasValue
-            ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _roomService.Delete(roomId, userId: UserId.Value));
     }
 }

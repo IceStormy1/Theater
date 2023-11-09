@@ -2,7 +2,7 @@
 using FluentValidation;
 using Theater.Contracts;
 
-namespace Theater.Validation;
+namespace Theater.Validation.UserAccount;
 
 public sealed class UserValidator : AbstractValidator<IUser>
 {

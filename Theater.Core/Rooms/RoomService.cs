@@ -33,39 +33,13 @@ public sealed class RoomService : BaseCrudService<RoomParameters, RoomEntity>, I
         ILogger<RoomService> logger, 
         IUserAccountRepository userAccountRepository,
         IRoomRepository roomRepository,
-        IMessageRepository messageRepository) : base(mapper, repository, documentValidator, logger)
+        IMessageRepository messageRepository
+        ) : base(mapper, repository, documentValidator, logger)
     {
         _logger = logger;
         _userAccountRepository = userAccountRepository;
         _roomRepository = roomRepository;
         _messageRepository = messageRepository;
-    }
-
-    protected override async Task<RoomEntity> EnrichEntity(Guid? userId, RoomEntity entity)
-    {
-        if (userId.HasValue && entity.Users.All(x => x.UserId != userId))
-            entity.Users.Add(new UserRoomEntity { IsActive = true, Role = RoomRole.Owner, UserId = userId.Value });
-
-        if(!entity.UpdatedAt.HasValue && entity.Type == RoomType.Group)
-        {
-            var systemUser = await _userAccountRepository.GetSystemUser();
-
-            if (!systemUser.IsSuccess)
-            {
-                _logger.LogWarning("{ServiceName}: Ошибка при поиске системного пользователя", nameof(RoomService));
-
-                return entity;
-            }
-
-            entity.Messages.Add(new MessageEntity
-            {
-                MessageType = MessageType.SystemText,
-                Text = MessageConstants.SystemCreateRoom,
-                User = systemUser.ResultData
-            });
-        }
-
-        return await base.EnrichEntity(userId, entity);
     }
 
     public async Task<Result<List<RoomItemDto>>> GetRoomsForUser(Guid userId, RoomSearchParameters filter)
@@ -81,7 +55,7 @@ public sealed class RoomService : BaseCrudService<RoomParameters, RoomEntity>, I
             .Select(x => x.Id)
             .ToList();
 
-        var users = await _roomRepository.GetUsersByIndividualRooms(userId, individualRoomsIds);
+        var usersByIndividualRooms = await _roomRepository.GetUsersByIndividualRooms(userId, individualRoomsIds);
 
         var roomIds = userRooms.Select(x => x.Id).ToArray();
     
@@ -92,7 +66,7 @@ public sealed class RoomService : BaseCrudService<RoomParameters, RoomEntity>, I
         {
             var roomDto = Mapper.Map<RoomItemDto>(room);
 
-            if (room.Type == RoomType.Individual && users.TryGetValue(roomDto.Id, out var user))
+            if (room.Type == RoomType.Individual && usersByIndividualRooms.TryGetValue(roomDto.Id, out var user))
                 roomDto.Title = user.FullName;
 
             if (messages.TryGetValue(roomDto.Id, out var message))
@@ -107,5 +81,32 @@ public sealed class RoomService : BaseCrudService<RoomParameters, RoomEntity>, I
         }
 
         return Result.FromValue(dtoItems);
+    }
+
+    protected override async Task<RoomEntity> EnrichEntity(Guid? userId, RoomEntity entity)
+    {
+        if (userId.HasValue && entity.Users.All(x => x.UserId != userId))
+            entity.Users.Add(new UserRoomEntity { IsActive = true, Role = RoomRole.Owner, UserId = userId.Value });
+
+        if (!entity.UpdatedAt.HasValue && entity.Type == RoomType.Group)
+        {
+            var systemUser = await _userAccountRepository.GetSystemUser();
+
+            if (!systemUser.IsSuccess)
+            {
+                _logger.LogWarning("{ServiceName}: Ошибка при поиске системного пользователя", nameof(RoomService));
+
+                return entity;
+            }
+
+            entity.Messages.Add(new MessageEntity
+            {
+                MessageType = MessageType.SystemText,
+                Text = MessageConstants.SystemCreateRoom,
+                UserId = systemUser.ResultData.Id
+            });
+        }
+
+        return await base.EnrichEntity(userId, entity);
     }
 }
