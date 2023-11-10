@@ -23,7 +23,7 @@ public class ChatHub : AuthorizedHub<IChatClient>
         _chatManager = chatManager;
     }
 
-    public async Task EnterRoom(Guid roomId, string title)
+    public async Task EnterRoom(Guid roomId)
     {
         var room = await _roomsRepository.GetActiveRoomRelationForUser(AuthorizedUserId, roomId);
         if (room == null)
@@ -79,9 +79,6 @@ public class ChatHub : AuthorizedHub<IChatClient>
         var users = _chatManager.Users.Select(x => x.UserId).ToList();
         await Clients.All.UpdateUsersAsync(users);
     }
-
-    public Task SendMessageAsync(string userId, string message) 
-        => Clients.All.SendMessageAsync(userId, message);
 }
 
 public class UserIdProvider : IUserIdProvider

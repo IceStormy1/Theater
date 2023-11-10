@@ -134,7 +134,7 @@ app.UseHttpsRedirection()
     })
     .UseAuthentication()
     .UseRouting()
-    .UseCors(corsPolicy) //должно стоять перед UseAuthorization и после UseRouting
+    .UseCors(corsPolicy) 
     .UseAuthorization();
 
 app.MapHub<ChatHub>(ChatHub.Url);

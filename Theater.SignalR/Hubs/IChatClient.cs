@@ -24,18 +24,24 @@ public interface IChatClient
         [SignalRParam(description: "Доставленное сообщение")]
         MessageModel message);
 
+    /// <summary>
+    /// Событие об открытии нового чата или добавлении текущего пользователя в чат
+    /// Нужен для обновления списка чатов, так как новый чат должен быть отображен пользователю
+    /// </summary>
+    /// <param name="roomId">Идентификатор активной комнаты</param>
+    /// <param name="title">Название комнаты</param>
     Task OnRoomEnter([SignalRParam(description: "Идентификатор активной комнаты")] Guid roomId, string title);
+
+    /// <summary>
+    /// Событие о выходе пользователя из чата.
+    /// Нужен для обновления списка чатов, так как чат из которого вышел пользователь
+    /// не должен быть отображен пользователю
+    /// </summary>
+    /// <param name="roomId">Идентификатор активной комнаты</param>
+    Task OnRoomExit([SignalRParam(description: "Идентификатор активной комнаты")] Guid roomId);
 
     /// <summary>
     /// Update user list
     /// </summary>
     Task UpdateUsersAsync(List<Guid> usersIds);
-
-    /// <summary>
-    /// Send message
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="message"></param>
-    /// <returns></returns>
-    Task SendMessageAsync(string userId, string message);
 }

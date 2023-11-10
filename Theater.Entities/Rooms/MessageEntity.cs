@@ -9,6 +9,19 @@ namespace Theater.Entities.Rooms;
 /// </summary>
 public sealed class MessageEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
+    public MessageEntity()
+    {
+        
+    }
+
+    public MessageEntity(Guid userId, Guid roomId, string text, MessageType type)
+    {
+        UserId = userId;
+        RoomId = roomId;
+        Text = text;
+        MessageType = type;
+    }
+
     /// <summary>
     /// Текст сообщения
     /// </summary>

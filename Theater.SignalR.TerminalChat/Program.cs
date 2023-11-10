@@ -1,9 +1,9 @@
-﻿using System.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR.Client;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.WebSockets;
 using System.Text;
-using Microsoft.AspNetCore.Http.Connections;
-using Microsoft.AspNetCore.SignalR.Client;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Messages;
 using Theater.SignalR.Hubs;
@@ -17,7 +17,6 @@ public class Program
     private const string LoginRoute = "/api/account/login";
 
     private static readonly HttpClient TheaterClient = new() { BaseAddress = new Uri(TheaterUrl) };
-    private static readonly HttpClient SignalRClient = new() { BaseAddress = new Uri(HubsUrl) };
 
     public static async Task Main(string[] args)
     {
@@ -27,8 +26,6 @@ public class Program
         var token = await GetToken(args);
 
         var roomId = args[0];
-
-        // todo: user args
 
         await using var hub = new HubConnectionBuilder()
             .WithUrl(
@@ -56,7 +53,7 @@ public class Program
             .Build();
 
         await hub.StartAsync();
-
+      
         hub.On<Guid, MessageModel>("OnMessageReceived", (roomId1, message) =>
         {
             Console.WriteLine(new StringBuilder("Reply - ").Append(Environment.NewLine)
@@ -65,6 +62,7 @@ public class Program
                 .Append($"RoomId: {roomId1}, ").Append(Environment.NewLine)
                 .Append($"Author: {message.AuthorId},  ").Append(Environment.NewLine)
                 .Append($"Message: {message.Text}").Append(Environment.NewLine)
+                .Append($"MessageType: {message.MessageType}").Append(Environment.NewLine)
                 .ToString());
         });
 
@@ -84,26 +82,29 @@ public class Program
                 .ToString());
         });
 
-        //hub.On<Guid>("OnRoomExit", (id) =>
-        //{
-        //    Console.WriteLine(new StringBuilder("Пользователь покинул чат - ")
-        //        .Append($"RoomId: {id}, ").Append(Environment.NewLine)
-        //        .ToString());
-        //});
-
-        hub.On<List<Guid>>("UpdateUsersAsync", (List<Guid> users) =>
+        hub.On<Guid>("OnRoomExit", (id) =>
         {
-            Console.WriteLine($"Total Users: {users.Count}");
+            Console.WriteLine(new StringBuilder("Пользователь покинул чат - ")
+                .Append($"RoomId: {id}, ").Append(Environment.NewLine)
+                .ToString());
+        });
+
+        hub.On<List<Guid>>("UpdateUsersAsync", users =>
+        {
+            var updatedUsersMessage = new StringBuilder($"Total Users: {users.Count}")
+                .Append(Environment.NewLine);
 
             foreach (var user in users)
-            {
-                Console.WriteLine($"User Id: {user}");
-            }
+                updatedUsersMessage.Append($"User Id: {user}");
+
+            Console.WriteLine(updatedUsersMessage.Append(Environment.NewLine).ToString());
         });
 
         hub.On<Guid, string>("SendMessageAsync", (id, message) =>
         {
-            Console.WriteLine($"Пользователь {id} отправил сообщение: {message}");
+            Console.WriteLine(new StringBuilder($"Пользователь {id} отправил сообщение: {message}")
+                .Append(Environment.NewLine)
+                .ToString());
         });
 
         var tokenSource = new CancellationTokenSource();

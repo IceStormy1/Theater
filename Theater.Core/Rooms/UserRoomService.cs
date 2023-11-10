@@ -50,9 +50,9 @@ public sealed class UserRoomService : IUserRoomService
         if (userRoom is null)
             return Result.FromError(RoomErrors.RoomNotFoundError.Error);
 
-        userRoom.IsActive = false;
+        await DeleteUserAndPublishMessage(userRoom);
 
-        await _userRoomsRepository.Update(userRoom);
+        await AddAndPublishUserLeaveMessage(userRoom, roomId);
 
         return Result.Successful;
     }
@@ -83,6 +83,26 @@ public sealed class UserRoomService : IUserRoomService
         return Result.Successful;
     }
 
+    private async Task DeleteUserAndPublishMessage(UserRoomEntity userRoom)
+    {
+        userRoom.IsActive = false;
+
+        await _userRoomsRepository.Update(userRoom);
+        await _messageBus.Publish(new UserExitMessage { RoomId = userRoom.RoomId, UserId = userRoom.UserId });
+    }
+
+    private async Task AddAndPublishUserLeaveMessage(UserRoomEntity userRoom, Guid roomId)
+    {
+        var message = new MessageEntity(
+            userId: userRoom.UserId,
+            roomId: roomId,
+            text: string.Format(MessageConstants.SystemUserLeaveFromRoom, userRoom.User.FullName),
+            type: MessageType.SystemText);
+
+        await _messageRepository.Add(message);
+        await _messageService.PublishMessageSent(userRoom.UserId, roomId, message);
+    }
+
     private async Task AddUsersToRoom(UserEntity requestUser, RoomEntity room, IEnumerable<UserEntity> invitedUsers)
     {
         var notAddedUsers = invitedUsers
@@ -110,13 +130,11 @@ public sealed class UserRoomService : IUserRoomService
     private async Task AddUserInvitedMessages(UserEntity requestUser, Guid roomId, IEnumerable<UserEntity> roomMembers)
     {
         var messageEntities = roomMembers
-            .Select(x => new MessageEntity
-            {
-                MessageType = MessageType.SystemText,
-                RoomId = roomId,
-                UserId = requestUser.Id,
-                Text = string.Format(MessageConstants.SystemSignInMessage, requestUser.FullName, x.FullName)
-            })
+            .Select(x => new MessageEntity(
+                userId: requestUser.Id, 
+                roomId: roomId, 
+                text: string.Format(MessageConstants.SystemSignInMessage, requestUser.FullName, x.FullName), 
+                type: MessageType.SystemText))
             .ToList();
 
         await _messageRepository.AddRange(messageEntities);

@@ -16,4 +16,9 @@ public static class MessageConstants
     /// Чат создан
     /// </summary>
     public const string SystemCreateRoom = "Чат создан";
+
+    /// <summary>
+    /// Пользователь покинул чат
+    /// </summary>
+    public const string SystemUserLeaveFromRoom = "{0} покинул(а) чат";
 }

@@ -91,7 +91,7 @@ public sealed class PieceTicketService : BaseCrudService<PiecesTicketParameters,
     public async Task<Result> CreateTickets(Guid pieceId, PieceTicketCreateParameters ticketsParameters)
     {
         var pieceEntity = await _pieceRepository.GetByEntityId(pieceId);
-        // todo: валидация, что дата билета больше или равна текущей даты
+     
         if (pieceEntity is null)
             return Result.FromError(PieceErrors.NotFound.Error);
 
