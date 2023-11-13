@@ -5,7 +5,7 @@ using Theater.Common;
 
 namespace Theater.Core;
 
-public class  DocumentValidatorStub<T> : IDocumentValidator<T> where T : class
+public sealed class  DocumentValidatorStub<T> : IDocumentValidator<T> where T : class
 {
     public Task<Result> CheckIfCanCreate(T parameters, Guid? userId = null) => Task.FromResult(Result.Successful);
 

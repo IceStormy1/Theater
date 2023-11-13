@@ -3,7 +3,7 @@
 /// <summary>
 /// User connection form one of the device 
 /// </summary>
-public class ChatConnection
+public sealed class ChatConnection
 {
     /// <summary>
     /// Дата и время подключения к чату

@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Filters;
 
-public class PieceFilterParameters : PagingSortParameters
+public sealed class PieceFilterParameters : PagingSortParameters
 {
     /// <summary>
     /// Идентификатор жанра

@@ -21,7 +21,7 @@ using Theater.Sql;
 
 namespace Theater.Core.FileStorage;
 
-public class FileStorageService : IFileStorageService
+public sealed class FileStorageService : IFileStorageService
 {
     private readonly TheaterDbContext _dbContext;
     private readonly FileStorageOptions _fileStorageOptions;

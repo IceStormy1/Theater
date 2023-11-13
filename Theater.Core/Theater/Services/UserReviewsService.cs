@@ -7,7 +7,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public class UserReviewsService : BaseCrudService<UserReviewParameters, UserReviewEntity>, IUserReviewsService
+public sealed class UserReviewsService : BaseCrudService<UserReviewParameters, UserReviewEntity>, IUserReviewsService
 {
     public UserReviewsService(
         IMapper mapper,

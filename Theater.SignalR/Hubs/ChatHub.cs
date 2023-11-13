@@ -6,7 +6,7 @@ using IUserIdProvider = Microsoft.AspNetCore.SignalR.IUserIdProvider;
 
 namespace Theater.SignalR.Hubs;
 
-public class ChatHub : AuthorizedHub<IChatClient>
+public sealed class ChatHub : AuthorizedHub<IChatClient>
 {
     public const string Url = "/hubs";
     private readonly ILogger<ChatHub> _logger;

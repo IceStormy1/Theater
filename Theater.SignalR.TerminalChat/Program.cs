@@ -11,7 +11,7 @@ using Theater.SignalR.Hubs;
 
 namespace Theater.SignalR.TerminalChat;
 
-public class Program
+public sealed class Program
 {
     private const string HubsUrl = "http://localhost:5002";
     private const string TheaterUrl = "http://localhost:5000";

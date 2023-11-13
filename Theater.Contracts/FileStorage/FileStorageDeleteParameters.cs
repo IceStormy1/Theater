@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.FileStorage;
 
-public class FileStorageDeleteParameters : FileStorageParameters
+public sealed class FileStorageDeleteParameters : FileStorageParameters
 {
     /// <summary>
     /// Список названий файлов

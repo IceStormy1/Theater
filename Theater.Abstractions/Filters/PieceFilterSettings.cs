@@ -2,7 +2,7 @@
 
 namespace Theater.Abstractions.Filters;
 
-public class PieceFilterSettings : PagingSortSettings
+public sealed class PieceFilterSettings : PagingSortSettings
 {
     /// <summary>
     /// Идентификатор жанра

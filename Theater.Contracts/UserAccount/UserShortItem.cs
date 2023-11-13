@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.UserAccount;
 
-public class UserShortItem
+public sealed class UserShortItem
 {
     /// <summary>
     /// Идентификатор пользователя

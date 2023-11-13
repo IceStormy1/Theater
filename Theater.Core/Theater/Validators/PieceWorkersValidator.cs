@@ -8,7 +8,7 @@ using Theater.Contracts.Theater.PieceWorker;
 
 namespace Theater.Core.Theater.Validators;
 
-public class PieceWorkersValidator : IDocumentValidator<PieceWorkerParameters>
+public sealed class PieceWorkersValidator : IDocumentValidator<PieceWorkerParameters>
 {
     private readonly IPieceWorkersRepository _pieceWorkersRepository;
 

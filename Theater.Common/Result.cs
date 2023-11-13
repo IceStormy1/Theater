@@ -45,7 +45,7 @@ public sealed class Result<T> : IResult<T>
     public static Result<T> FromError(ErrorModel error) => new(error);
 }
 
-public class Result : IResult
+public sealed class Result : IResult
 {
     /// <summary>
     /// Успешный результат

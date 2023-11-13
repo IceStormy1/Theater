@@ -15,7 +15,7 @@ namespace Theater.Controllers.Rooms;
 [Tags("Rooms")]
 [Authorize]
 [Route("api/rooms/{roomId:guid}/users")]
-public class UserRoomsController : BaseController
+public sealed class UserRoomsController : BaseController
 {
     private readonly IUserRoomService _userRoomService;
 

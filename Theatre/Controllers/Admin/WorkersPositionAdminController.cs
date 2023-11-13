@@ -15,7 +15,7 @@ namespace Theater.Controllers.Admin;
 
 [SwaggerTag("Админ. Методы для работы с должностями работников театра")]
 [Route("api/admin/position")]
-public class WorkersPositionAdminController : AdminBaseController<WorkersPositionParameters>
+public sealed class WorkersPositionAdminController : AdminBaseController<WorkersPositionParameters>
 {
     public WorkersPositionAdminController(
         IWorkersPositionService service,

@@ -9,7 +9,7 @@ namespace Theater.Controllers.Admin;
 
 [Route("api/admin/pieceWorker")]
 [SwaggerTag("Админ. Методы для работы с работниками театра, которые участвуют в пьесе")]
-public class PieceWorkersAdminController : AdminBaseController<PieceWorkerParameters>
+public sealed class PieceWorkersAdminController : AdminBaseController<PieceWorkerParameters>
 {
     public PieceWorkersAdminController(
         IMapper mapper,

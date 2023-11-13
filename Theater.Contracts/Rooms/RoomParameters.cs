@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Rooms;
 
-public class RoomParameters
+public sealed class RoomParameters
 {
     /// <summary>
     /// Название чата

@@ -1,6 +1,6 @@
 ﻿namespace Theater.SignalR.Hubs;
 
-public class ChatUser
+public sealed class ChatUser
 {
     public ChatUser(Guid userId)
     {

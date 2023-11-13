@@ -7,7 +7,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories;
 
-public class PieceWorkersRepository : BaseCrudRepository<PieceWorkerEntity>, IPieceWorkersRepository
+public sealed class PieceWorkersRepository : BaseCrudRepository<PieceWorkerEntity>, IPieceWorkersRepository
 {
     private readonly TheaterDbContext _dbContext;
 

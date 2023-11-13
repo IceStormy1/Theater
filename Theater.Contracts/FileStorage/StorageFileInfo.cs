@@ -3,7 +3,7 @@
 /// <summary>
 /// Модель записи с информацией о файле в хранилище S3
 /// </summary>
-public class StorageFileInfo : StorageFileListItem
+public sealed class StorageFileInfo : StorageFileListItem
 {
     /// <summary>
     /// Bucket

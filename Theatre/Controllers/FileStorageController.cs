@@ -12,7 +12,7 @@ using Theater.Controllers.Base;
 namespace Theater.Controllers;
 
 [SwaggerTag("Пользовательские методы для работы с файловым хранилищем")]
-public class FileStorageController : BaseController
+public sealed class FileStorageController : BaseController
 {
     private readonly IFileStorageService _fileStorageService;
 

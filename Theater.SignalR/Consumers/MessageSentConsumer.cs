@@ -8,7 +8,7 @@ using Theater.SignalR.Hubs;
 
 namespace Theater.SignalR.Consumers;
 
-public class MessageSentConsumer : IMessageConsumer<MessageSentModel>
+public sealed class MessageSentConsumer : IMessageConsumer<MessageSentModel>
 {
     private readonly ILogger<MessageSentConsumer> _logger;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;

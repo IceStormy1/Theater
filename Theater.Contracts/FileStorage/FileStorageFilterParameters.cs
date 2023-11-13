@@ -1,6 +1,6 @@
 ﻿namespace Theater.Contracts.FileStorage;
 
-public class FileStorageFilterParameters : FileStorageParameters
+public sealed class FileStorageFilterParameters : FileStorageParameters
 {
     /// <summary>
     /// Максимальное количество записей, которое должен вернуть запрос.

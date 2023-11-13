@@ -5,7 +5,7 @@ using Theater.SignalR.Hubs;
 
 namespace Theater.SignalR.Consumers;
 
-public class UserJoinedModelConsumer : IMessageConsumer<UserJoinedModel>
+public sealed class UserJoinedModelConsumer : IMessageConsumer<UserJoinedModel>
 {
     private readonly ILogger<UserJoinedModelConsumer> _logger;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;

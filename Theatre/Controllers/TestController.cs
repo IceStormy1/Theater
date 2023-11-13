@@ -13,7 +13,7 @@ namespace Theater.Controllers;
 [SwaggerTag("Тестовые методы")]
 [ApiController]
 [Route("[controller]")]
-public class TestController : ControllerBase
+public sealed class TestController : ControllerBase
 {
     private readonly IPublishEndpoint _messageBus;
     private readonly ILogger<TestController> _logger;

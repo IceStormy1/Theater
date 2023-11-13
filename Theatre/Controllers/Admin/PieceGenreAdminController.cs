@@ -10,7 +10,7 @@ namespace Theater.Controllers.Admin;
 [Route("api/admin/genre")]
 [ApiController]
 [SwaggerTag("Админ. Методы для работы с жанрами пьес")]
-public class PieceGenreAdminController : AdminBaseController<PiecesGenreParameters>
+public sealed class PieceGenreAdminController : AdminBaseController<PiecesGenreParameters>
 {
     public PieceGenreAdminController(
         IPieceGenreService pieceGenreService,
