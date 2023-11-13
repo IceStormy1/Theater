@@ -2,13 +2,8 @@
 
 namespace Theater.Entities.Theater;
 
-public sealed class PieceWorkerEntity : IEntity
+public sealed class PieceWorkerEntity : BaseEntity
 {
-    /// <summary>
-    /// Идентификатор 
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Идентификатор работника театра 
     /// </summary>

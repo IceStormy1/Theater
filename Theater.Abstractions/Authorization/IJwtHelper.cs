@@ -1,4 +1,4 @@
-﻿using Theater.Entities.Authorization;
+﻿using Theater.Entities.Users;
 
 namespace Theater.Abstractions.Authorization;
 

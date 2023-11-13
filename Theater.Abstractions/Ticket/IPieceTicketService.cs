@@ -22,7 +22,7 @@ public interface IPieceTicketService : ICrudService<PiecesTicketParameters>
     /// <param name="ticketIds">Идентификаторы билетов</param>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <returns>Результат покупки</returns>
-    Task<WriteResult> BuyTickets(IReadOnlyCollection<Guid> ticketIds, Guid userId);
+    Task<Result> BuyTickets(IReadOnlyCollection<Guid> ticketIds, Guid userId);
 
     /// <summary>
     /// Забронировать билет билет 
@@ -30,19 +30,19 @@ public interface IPieceTicketService : ICrudService<PiecesTicketParameters>
     /// <param name="ticketIds">Идентификаторы билетов</param>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <returns>Результат бронирования</returns>
-    Task<WriteResult> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId);
+    Task<Result> BookTicket(IReadOnlyCollection<Guid> ticketIds, Guid userId);
 
     /// <summary>
     /// Добавить билеты для пьесы
     /// </summary>
     /// <param name="pieceId">Идентификатор пьесы</param>
     /// <param name="ticketsParameters">Билеты</param>
-    Task<WriteResult> CreateTickets(Guid pieceId, PieceTicketCreateParameters ticketsParameters);
+    Task<Result> CreateTickets(Guid pieceId, PieceTicketCreateParameters ticketsParameters);
 
     /// <summary>
     /// Добавить билеты для пьесы
     /// </summary>
     /// <param name="pieceId">Идентификатор пьесы</param>
     /// <param name="ticketsParameters">Билеты</param>
-    Task<WriteResult> UpdateTickets(Guid pieceId, PieceTicketUpdateParameters ticketsParameters);
+    Task<Result> UpdateTickets(Guid pieceId, PieceTicketUpdateParameters ticketsParameters);
 }

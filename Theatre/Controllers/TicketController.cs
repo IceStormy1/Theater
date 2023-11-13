@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Theater.Abstractions.Ticket;
 using Theater.Abstractions.Errors;
-using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Contracts.Theater.PiecesTicket;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 

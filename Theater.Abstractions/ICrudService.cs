@@ -17,7 +17,7 @@ public interface ICrudService<in TModel> where TModel : class
     /// Идентификатор<paramref name="entityId"/> заполняется при редактировании сущности
     /// </remarks>
     /// <returns></returns>
-    Task<WriteResult<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null);
+    Task<Result<DocumentMeta>> CreateOrUpdate(TModel model, Guid? entityId, Guid? userId = null);
 
     /// <summary>
     /// Удалить сущность
@@ -25,5 +25,5 @@ public interface ICrudService<in TModel> where TModel : class
     /// <param name="id">Идентификатор удаляемой сущности</param>
     /// <param name="userId">Идентификатор пользователя, который вносит изменения</param>
     /// <returns></returns>
-    Task<WriteResult> Delete(Guid id, Guid? userId = null);
+    Task<Result> Delete(Guid id, Guid? userId = null);
 }

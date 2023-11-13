@@ -9,8 +9,8 @@ using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
 using Theater.Contracts.Filters;
 using Theater.Contracts.UserAccount;
-using Theater.Controllers.BaseControllers;
-using Theater.Entities.Authorization;
+using Theater.Controllers.Base;
+using Theater.Entities.Users;
 
 namespace Theater.Controllers.Admin;
 

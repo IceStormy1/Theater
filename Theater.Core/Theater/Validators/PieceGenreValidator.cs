@@ -17,22 +17,22 @@ public sealed class PieceGenreValidator : IDocumentValidator<PiecesGenreParamete
         _pieceGenreRepository = pieceGenreRepository;
     }
 
-    public Task<WriteResult> CheckIfCanCreate(PiecesGenreParameters parameters, Guid? userId = null)
+    public Task<Result> CheckIfCanCreate(PiecesGenreParameters parameters, Guid? userId = null)
     {
-        return Task.FromResult(WriteResult.Successful);
+        return Task.FromResult(Result.Successful);
     }
 
-    public Task<WriteResult> CheckIfCanUpdate(Guid entityId, PiecesGenreParameters parameters, Guid? userId = null)
+    public Task<Result> CheckIfCanUpdate(Guid entityId, PiecesGenreParameters parameters, Guid? userId = null)
     {
-        return Task.FromResult(WriteResult.Successful);
+        return Task.FromResult(Result.Successful);
     }
 
-    public async Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
+    public async Task<Result> CheckIfCanDelete(Guid entityId, Guid? userId = null)
     {
         var hasPieces = await _pieceGenreRepository.HasPieces(entityId);
 
         return hasPieces 
-            ? WriteResult.FromError(PieceGenreErrors.HasPieces.Error)
-            :  WriteResult.Successful;
+            ? Result.FromError(PieceGenreErrors.HasPieces.Error)
+            :  Result.Successful;
     }
 }

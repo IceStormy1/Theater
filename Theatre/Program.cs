@@ -1,4 +1,3 @@
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -38,10 +37,8 @@ public sealed class Program
                     .ReadFrom.Configuration(ctx.Configuration)
                     .MinimumLevel.Override("System", LogEventLevel.Information)
             )
-            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.ConfigureServices(services => services.AddAutofac());
                 webBuilder.UseStartup<Startup>();
             });
 }

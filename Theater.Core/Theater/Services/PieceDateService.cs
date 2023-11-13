@@ -7,7 +7,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public class PieceDateService : ServiceBase<PieceDateParameters, PieceDateEntity>, IPieceDateService
+public class PieceDateService : BaseCrudService<PieceDateParameters, PieceDateEntity>, IPieceDateService
 {
     public PieceDateService(
         IMapper mapper,

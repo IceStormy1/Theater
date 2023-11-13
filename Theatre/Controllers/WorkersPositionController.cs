@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 using Theater.Abstractions.WorkersPosition;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts;
 using Theater.Contracts.Theater.WorkersPosition;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 

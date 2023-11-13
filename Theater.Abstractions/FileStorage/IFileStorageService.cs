@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts.FileStorage;
 
 namespace Theater.Abstractions.FileStorage;

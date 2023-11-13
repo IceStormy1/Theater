@@ -70,7 +70,7 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
         }
     }
 
-    public virtual async Task Update(TEntity entity)
+    public async Task Update(TEntity entity)
     {
         var entityExists = await DbSet.AnyAsync(x => x.Id == entity.Id);
 
@@ -108,7 +108,7 @@ public class BaseCrudRepository<TEntity> : ICrudRepository<TEntity>
     {
         var entity = await DbSet.SingleOrDefaultAsync(x => x.Id == id);
 
-        if (entity == null)
+        if (entity is null)
         {
             Logger.LogWarning("Сущность с идентификатором {Id} типа '{EntityType}' не найдена при удалении.",
                 id, typeof(TEntity));

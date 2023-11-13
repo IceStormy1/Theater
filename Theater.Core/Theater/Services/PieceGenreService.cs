@@ -9,7 +9,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class PieceGenreService : ServiceBase<PiecesGenreParameters, PiecesGenreEntity>, IPieceGenreService
+public sealed class PieceGenreService : BaseCrudService<PiecesGenreParameters, PiecesGenreEntity>, IPieceGenreService
 {
     private readonly IPieceGenreRepository _pieceGenreRepository;
 

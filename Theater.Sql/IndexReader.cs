@@ -5,13 +5,16 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions;
+using Theater.Abstractions.Errors;
 using Theater.Abstractions.Filters;
 using Theater.Common;
 using Theater.Entities;
 
 namespace Theater.Sql;
 
-public class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntity, TFilter>
+// TODO: переделать весь поиск на ElasticSearch
+
+public sealed class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntity, TFilter>
     where TModel : class
     where TEntity : class, IEntity
     where TFilter : PagingSortSettings
@@ -80,13 +83,13 @@ public class IndexReader<TModel, TEntity, TFilter> : IIndexReader<TModel, TEntit
         };
     }
 
-    public async Task<WriteResult<TModel>> GetById(Guid id)
+    public async Task<Result<TModel>> GetById(Guid id)
     {
         var entity = await _crudRepository.GetByEntityId(id);
 
         return entity is null 
-            ? WriteResult<TModel>.FromError(ErrorModel.Default("delete-conflict", "Указанная запись не найдена")) 
-            : WriteResult.FromValue(_mapper.Map<TModel>(entity));
+            ? Result<TModel>.FromError(AbstractionErrors.NotFoundError.Error) 
+            : Result.FromValue(_mapper.Map<TModel>(entity));
     }
 
     private async Task<PagingResult<TEntity>> QueryItemsWithEmptyFilter()

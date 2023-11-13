@@ -8,10 +8,10 @@ using Theater.Abstractions.Piece;
 using Theater.Contracts;
 using Theater.Contracts.Filters;
 using Theater.Entities.Theater;
-using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.Piece;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 
@@ -64,7 +64,6 @@ public sealed class PieceController : CrudServiceBaseController<PieceParameters>
 
         var result = Mapper.Map<Page<PieceShortInformationModel>>(piecesShortInformation);
 
-        //TODO: добавить в QueryItems обогащение модели
         await _pieceService.EnrichPieceShortInformation(result);
 
         return Ok(result);

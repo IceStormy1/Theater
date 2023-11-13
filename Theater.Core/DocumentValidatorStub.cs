@@ -7,9 +7,9 @@ namespace Theater.Core;
 
 public class  DocumentValidatorStub<T> : IDocumentValidator<T> where T : class
 {
-    public Task<WriteResult> CheckIfCanCreate(T parameters, Guid? userId = null) => Task.FromResult(WriteResult.Successful);
+    public Task<Result> CheckIfCanCreate(T parameters, Guid? userId = null) => Task.FromResult(Result.Successful);
 
-    public Task<WriteResult> CheckIfCanUpdate(Guid entityId, T parameters, Guid? userId = null) => Task.FromResult(WriteResult.Successful);
+    public Task<Result> CheckIfCanUpdate(Guid entityId, T parameters, Guid? userId = null) => Task.FromResult(Result.Successful);
 
-    public Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null) => Task.FromResult(WriteResult.Successful);
+    public Task<Result> CheckIfCanDelete(Guid entityId, Guid? userId = null) => Task.FromResult(Result.Successful);
 }

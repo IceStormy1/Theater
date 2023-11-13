@@ -18,30 +18,30 @@ public sealed class PiecesDateValidator : IDocumentValidator<PieceDateParameters
         _pieceRepository = pieceRepository;
     }
 
-    public async Task<WriteResult> CheckIfCanCreate(PieceDateParameters parameters, Guid? userId = null)
+    public async Task<Result> CheckIfCanCreate(PieceDateParameters parameters, Guid? userId = null)
     {
         return await CheckIfCanCreateOrUpdate(parameters);
     }
 
-    public async Task<WriteResult> CheckIfCanUpdate(Guid entityId, PieceDateParameters parameters, Guid? userId = null)
+    public async Task<Result> CheckIfCanUpdate(Guid entityId, PieceDateParameters parameters, Guid? userId = null)
     {
         return await CheckIfCanCreateOrUpdate(parameters);
     }
 
-    public Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
+    public Task<Result> CheckIfCanDelete(Guid entityId, Guid? userId = null)
     {
-        return Task.FromResult(WriteResult.Successful);
+        return Task.FromResult(Result.Successful);
     }
 
-    private async Task<WriteResult> CheckIfCanCreateOrUpdate(PieceDateParameters parameters)
+    private async Task<Result> CheckIfCanCreateOrUpdate(PieceDateParameters parameters)
     {
         var pieceEntity = await _pieceRepository.GetPieceWithDates(parameters.PieceId);
 
         if (pieceEntity is null)
-            return WriteResult.FromError(PieceErrors.NotFound.Error);
+            return Result.FromError(PieceErrors.NotFound.Error);
 
         return pieceEntity.PieceDates.Any(x => x.Date.Date == parameters.Date.Date) 
-            ? WriteResult.FromError(PieceErrors.DateAlreadyExists.Error)
-            : WriteResult.Successful;
+            ? Result.FromError(PieceErrors.DateAlreadyExists.Error)
+            : Result.Successful;
     }
 }

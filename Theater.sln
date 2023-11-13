@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Clients", "Theater.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.TestTerminal", "Theater.TestTerminal\Theater.TestTerminal.csproj", "{C1D16FB9-8E69-4BD8-9216-6343DD0AEEF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.Consumer", "Theater.Consumer\Theater.Consumer.csproj", "{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.Consumer", "Theater.Consumer\Theater.Consumer.csproj", "{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theater.SignalR", "Theater.SignalR\Theater.SignalR.csproj", "{61A6D3CC-AE99-4AE3-A170-F8CB515B29AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theater.SignalR.TerminalChat", "Theater.SignalR.TerminalChat\Theater.SignalR.TerminalChat.csproj", "{12CD875B-019D-46BC-9306-0AACD2395B17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,14 @@ Global
 		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{906A59E7-A6D3-4AB5-B659-1D5ABBBC162E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61A6D3CC-AE99-4AE3-A170-F8CB515B29AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61A6D3CC-AE99-4AE3-A170-F8CB515B29AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61A6D3CC-AE99-4AE3-A170-F8CB515B29AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61A6D3CC-AE99-4AE3-A170-F8CB515B29AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12CD875B-019D-46BC-9306-0AACD2395B17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12CD875B-019D-46BC-9306-0AACD2395B17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12CD875B-019D-46BC-9306-0AACD2395B17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12CD875B-019D-46BC-9306-0AACD2395B17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

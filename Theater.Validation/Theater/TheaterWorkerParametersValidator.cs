@@ -2,6 +2,7 @@
 using FluentValidation;
 using Theater.Contracts;
 using Theater.Contracts.Theater.TheaterWorker;
+using Theater.Validation.UserAccount;
 
 namespace Theater.Validation.Theater;
 

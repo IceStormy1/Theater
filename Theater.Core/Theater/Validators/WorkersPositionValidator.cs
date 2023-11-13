@@ -17,22 +17,22 @@ public sealed class WorkersPositionValidator : IDocumentValidator<WorkersPositio
         _workersPositionRepository = workersPositionRepository;
     }
 
-    public Task<WriteResult> CheckIfCanCreate(WorkersPositionParameters parameters, Guid? userId = null)
+    public Task<Result> CheckIfCanCreate(WorkersPositionParameters parameters, Guid? userId = null)
     {
-        return Task.FromResult(WriteResult.Successful);
+        return Task.FromResult(Result.Successful);
     }
 
-    public Task<WriteResult> CheckIfCanUpdate(Guid entityId, WorkersPositionParameters parameters, Guid? userId = null)
+    public Task<Result> CheckIfCanUpdate(Guid entityId, WorkersPositionParameters parameters, Guid? userId = null)
     {
-        return Task.FromResult(WriteResult.Successful);
+        return Task.FromResult(Result.Successful);
     }
 
-    public async Task<WriteResult> CheckIfCanDelete(Guid entityId, Guid? userId = null)
+    public async Task<Result> CheckIfCanDelete(Guid entityId, Guid? userId = null)
     {
         var hasTheaterWorkers = await _workersPositionRepository.HasTheaterWorkers(entityId);
 
         return !hasTheaterWorkers 
-            ? WriteResult.Successful 
-            : WriteResult.FromError(WorkersPositionErrors.HasTheaterWorkers.Error);
+            ? Result.Successful 
+            : Result.FromError(WorkersPositionErrors.HasTheaterWorkers.Error);
     }
 }

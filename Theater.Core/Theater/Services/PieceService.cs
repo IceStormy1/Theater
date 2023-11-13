@@ -16,7 +16,7 @@ using Theater.Entities.Theater;
 
 namespace Theater.Core.Theater.Services;
 
-public sealed class PieceService : ServiceBase<PieceParameters, PieceEntity>, IPieceService
+public sealed class PieceService : BaseCrudService<PieceParameters, PieceEntity>, IPieceService
 {
     private readonly IPieceRepository _pieceRepository;
     private readonly IFileStorageService _fileStorageService;
@@ -32,17 +32,17 @@ public sealed class PieceService : ServiceBase<PieceParameters, PieceEntity>, IP
         _fileStorageService = fileStorageService;
     }
 
-    public async Task<WriteResult<PieceModel>> GetPieceById(Guid pieceId)
+    public async Task<Result<PieceModel>> GetPieceById(Guid pieceId)
     {
         var pieceEntity = await _pieceRepository.GetByEntityId(pieceId);
 
         if (pieceEntity is null)
-            return WriteResult<PieceModel>.FromError(PieceErrors.NotFound.Error);
+            return Result<PieceModel>.FromError(PieceErrors.NotFound.Error);
 
         var pieceResult = Mapper.Map<PieceModel>(pieceEntity);
         await EnrichPieceModel(pieceResult);
 
-        return WriteResult.FromValue(pieceResult);
+        return Result.FromValue(pieceResult);
     }
 
     public async Task EnrichPieceShortInformation(Page<PieceShortInformationModel> shortInformationModel)

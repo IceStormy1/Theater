@@ -1,17 +1,12 @@
 ﻿using System;
-using Theater.Common;
-using Theater.Entities.Authorization;
+using Theater.Common.Enums;
 using Theater.Entities.Theater;
+using Theater.Entities.Users;
 
 namespace Theater.Entities.FileStorage;
 
-public sealed class FileStorageEntity
+public sealed class FileStorageEntity : BaseEntity, IHasCreatedAt
 {
-    /// <summary>
-    /// Идентификатор файла
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Исходное наименование файла
     /// </summary>
@@ -37,10 +32,8 @@ public sealed class FileStorageEntity
     /// </summary>
     public ulong Size { get; set; }
 
-    /// <summary>
-    /// Дата и время загрузки файла
-    /// </summary>
-    public DateTime UploadAt { get; set; }
+    /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
+    public DateTime CreatedAt { get; set; }
 
     public PieceEntity Piece { get; set; }
     public UserEntity User { get; set; }

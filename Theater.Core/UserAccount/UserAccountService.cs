@@ -10,15 +10,17 @@ using Theater.Abstractions.UserAccount;
 using Theater.Common;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
-using Theater.Entities.Authorization;
+using Theater.Entities.Users;
 using VkNet.Abstractions;
 using VkNet.Enums.Filters;
 using VkNet.Model;
 
 namespace Theater.Core.UserAccount;
 
-public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>, IUserAccountService
+public sealed class UserAccountService : BaseCrudService<UserParameters, UserEntity>, IUserAccountService
 {
+    private const string SystemUser = "SystemUser";
+
     private readonly IJwtHelper _jwtHelper;
     private readonly IUserAccountRepository _userAccountRepository;
     private readonly IVkApi _vkApiAuth;
@@ -36,19 +38,19 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
         _userAccountRepository = repository;
     }
 
-    public async Task<WriteResult<CreateUserResult>> CreateUser(UserParameters user)
+    public async Task<Result<CreateUserResult>> CreateUser(UserParameters user)
     {
         var userEntity = Mapper.Map<UserEntity>(user);
 
         return await _userAccountRepository.CreateUser(userEntity);
     }
 
-    public async Task<WriteResult> UpdateUser(UserParameters user, Guid userId)
+    public async Task<Result> UpdateUser(UserParameters user, Guid userId)
     {
         var userEntity = await Repository.GetByEntityId(userId);
 
         if(userEntity is null)
-            return WriteResult.FromError(UserAccountErrors.NotFound.Error);
+            return Result.FromError(UserAccountErrors.NotFound.Error);
 
         Mapper.Map(user, userEntity);
 
@@ -64,7 +66,7 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
             : GetAuthenticateResponseByUser(userEntity);
     }
 
-    public async Task<WriteResult<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto authenticateVkDto)
+    public async Task<Result<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto authenticateVkDto)
     {
         var @params = new ApiAuthParams { Settings = Settings.All, AccessToken = authenticateVkDto.AccessToken };
         try
@@ -74,7 +76,7 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
             var vkUserInfo = await _vkApiAuth.Account.GetProfileInfoAsync();
 
             if (vkUserInfo is null)
-                return WriteResult<AuthenticateResponse>.FromError(UserAccountErrors.NotFound.Error);
+                return Result<AuthenticateResponse>.FromError(UserAccountErrors.NotFound.Error);
 
             var userEntity = await _userAccountRepository.FindUser(userName:null, password: null, vkId: default); // todo: Добавить нормальный vkID
 
@@ -85,26 +87,24 @@ public sealed class UserAccountService : ServiceBase<UserParameters, UserEntity>
                 var createResult = await _userAccountRepository.CreateUser(userEntity);
 
                 if (!createResult.IsSuccess)
-                    return WriteResult<AuthenticateResponse>.FromError(createResult.Error);
+                    return Result<AuthenticateResponse>.FromError(createResult.Error);
             }
 
             var authenticateResponse = GetAuthenticateResponseByUser(userEntity);
 
-            return WriteResult.FromValue(authenticateResponse);
+            return Result.FromValue(authenticateResponse);
 
         }
         catch (Exception e)
         {
             Logger.LogError(e, "Произошла ошибка во время авторизации VK");
 
-            return WriteResult<AuthenticateResponse>.FromError(AbstractionErrors.InternalError.Error);
+            return Result<AuthenticateResponse>.FromError(AbstractionErrors.InternalError.Error);
         }
     }
 
-    public async Task<WriteResult> ReplenishBalance(Guid userId, decimal replenishmentAmount)
-    {
-        return await _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
-    }
+    public Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount)
+        => _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
 
     private AuthenticateResponse GetAuthenticateResponseByUser(UserEntity userEntity)
     {

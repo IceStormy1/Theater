@@ -15,11 +15,11 @@ using Theater.Contracts.Authorization;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater.PurchasedUserTicket;
 using Theater.Contracts.UserAccount;
-using Theater.Controllers.BaseControllers;
-using Theater.Entities.Authorization;
+using Theater.Controllers.Base;
 using Theater.Entities.Theater;
+using Theater.Entities.Users;
 using VkNet.Abstractions;
-using RoleUser = Theater.Abstractions.Authorization.Models.UserRole;
+using RoleUser = Theater.Common.Enums.UserRole;
 
 namespace Theater.Controllers;
 
@@ -122,7 +122,7 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     /// <response code="400">В случае ошибок валидации</response>
     [AllowAnonymous]
     [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] AuthenticateParameters parameters)
     {

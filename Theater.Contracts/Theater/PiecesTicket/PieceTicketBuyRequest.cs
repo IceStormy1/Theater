@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Theater.Contracts.Theater.PiecesTicket
+namespace Theater.Contracts.Theater.PiecesTicket;
+
+public sealed class PieceTicketBuyRequest
 {
-    public sealed class PieceTicketBuyRequest
-    {
-        /// <summary>
-        /// Идентификаторы билетов для бронирования/покупки
-        /// </summary>
-        public IReadOnlyCollection<Guid> TicketIds { get; set; }
-    }
+    /// <summary>
+    /// Идентификаторы билетов для бронирования/покупки
+    /// </summary>
+    public IReadOnlyCollection<Guid> TicketIds { get; set; }
 }

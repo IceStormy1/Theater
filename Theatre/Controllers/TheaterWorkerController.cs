@@ -8,11 +8,11 @@ using Theater.Entities.Theater;
 using AutoMapper;
 using Theater.Abstractions;
 using Theater.Contracts.Filters;
-using Theater.Controllers.BaseControllers;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Abstractions.FileStorage;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 

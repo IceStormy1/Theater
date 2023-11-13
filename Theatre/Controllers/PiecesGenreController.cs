@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions.PieceGenre;
 using Theater.Contracts;
 using Theater.Contracts.Theater.PiecesGenre;
-using Theater.Controllers.BaseControllers;
+using Theater.Controllers.Base;
 
 namespace Theater.Controllers;
 
@@ -29,7 +29,6 @@ public sealed class PiecesGenreController : CrudServiceBaseController<PiecesGenr
     public async Task<IActionResult> GetPieceTicketsByDate()
     {
         var tickets = await _pieceGenreService.GetAllGenres();
-
         return Ok(new DocumentCollection<PiecesGenreModel>(tickets));
     }
 }

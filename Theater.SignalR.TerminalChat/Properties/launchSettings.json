@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Theater.SignalR.TerminalChat": {
+      "commandName": "Project",
+      "commandLineArgs": "864ded95-5f17-4968-ba6a-95fdca243657"
+    }
+  }
+}

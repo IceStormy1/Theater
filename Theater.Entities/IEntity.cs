@@ -5,7 +5,7 @@ namespace Theater.Entities;
 public interface IEntity
 {
     /// <summary>
-    /// Идентификатор
+    /// Идентификатор сущности
     /// </summary>
     public Guid Id { get; set; }
 }

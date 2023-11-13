@@ -1,5 +1,5 @@
 ﻿using System;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Contracts.FileStorage;
 
 namespace Theater.Contracts.Theater.TheaterWorker;

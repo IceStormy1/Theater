@@ -24,142 +24,6 @@ namespace Theater.Sql.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Theater.Entities.Authorization.UserEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateOfCreate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<string>("MiddleName")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<decimal>("Money")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("character(11)")
-                        .IsFixedLength();
-
-                    b.Property<Guid?>("PhotoId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int?>("VkId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhotoId")
-                        .IsUnique();
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("VkId");
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("f2343d16-e610-4a73-a0f0-b9f63df511e6"),
-                            BirthDate = new DateTime(2001, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfCreate = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "icestormyy-admin@mail.ru",
-                            FirstName = "Mikhail",
-                            Gender = 1,
-                            LastName = "Tolmachev",
-                            MiddleName = "Evgenievich",
-                            Money = 1000m,
-                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
-                            Phone = "81094316687",
-                            RoleId = 2,
-                            UserName = "IceStormy-admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("e1f83d38-56a7-435b-94bd-fe891ed0f03a"),
-                            BirthDate = new DateTime(2001, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateOfCreate = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "icestormyy-user@mail.ru",
-                            FirstName = "Mikhail",
-                            Gender = 1,
-                            LastName = "Tolmachev",
-                            MiddleName = "Evgenievich",
-                            Money = 1000m,
-                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
-                            Phone = "81094316687",
-                            RoleId = 1,
-                            UserName = "IceStormy-user"
-                        });
-                });
-
-            modelBuilder.Entity("Theater.Entities.Authorization.UserRoleEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            RoleName = "User"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            RoleName = "Admin"
-                        });
-                });
-
             modelBuilder.Entity("Theater.Entities.FileStorage.FileStorageEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -170,6 +34,9 @@ namespace Theater.Sql.Migrations
 
                     b.Property<string>("ContentType")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FileName")
                         .IsRequired()
@@ -182,12 +49,109 @@ namespace Theater.Sql.Migrations
                     b.Property<decimal>("Size")
                         .HasColumnType("numeric(20,0)");
 
-                    b.Property<DateTime>("UploadAt")
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.MessageEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("MessageType")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages", "chat");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.RoomEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.ToTable("Rooms", "chat");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.UserRoomEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<Guid?>("LastReadMessageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastReadMessageTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LastReadMessageId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId", "RoomId")
+                        .IsUnique();
+
+                    b.ToTable("UserRooms", "chat");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.BookedTicketEntity", b =>
@@ -241,6 +205,9 @@ namespace Theater.Sql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(8000)
@@ -262,6 +229,9 @@ namespace Theater.Sql.Migrations
 
                     b.Property<string>("ShortDescription")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -369,6 +339,9 @@ namespace Theater.Sql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
@@ -398,6 +371,9 @@ namespace Theater.Sql.Migrations
 
                     b.Property<Guid>("PositionId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -433,6 +409,9 @@ namespace Theater.Sql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(9000)
@@ -445,6 +424,9 @@ namespace Theater.Sql.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -503,22 +485,205 @@ namespace Theater.Sql.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Theater.Entities.Authorization.UserEntity", b =>
+            modelBuilder.Entity("Theater.Entities.Users.UserEntity", b =>
                 {
-                    b.HasOne("Theater.Entities.FileStorage.FileStorageEntity", "Photo")
-                        .WithOne("User")
-                        .HasForeignKey("Theater.Entities.Authorization.UserEntity", "PhotoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.HasOne("Theater.Entities.Authorization.UserRoleEntity", "UserRole")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("MiddleName")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(11)
+                        .HasColumnType("character(11)")
+                        .IsFixedLength();
+
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int?>("VkId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhotoId")
+                        .IsUnique();
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("VkId");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f2343d16-e610-4a73-a0f0-b9f63df511e6"),
+                            BirthDate = new DateTime(2001, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "icestormyy-admin@mail.ru",
+                            FirstName = "Mikhail",
+                            Gender = 1,
+                            LastName = "Tolmachev",
+                            MiddleName = "Evgenievich",
+                            Money = 1000m,
+                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
+                            Phone = "81094316687",
+                            RoleId = 2,
+                            UserName = "IceStormy-admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("e1f83d38-56a7-435b-94bd-fe891ed0f03a"),
+                            BirthDate = new DateTime(2001, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "icestormyy-user@mail.ru",
+                            FirstName = "Mikhail",
+                            Gender = 1,
+                            LastName = "Tolmachev",
+                            MiddleName = "Evgenievich",
+                            Money = 1000m,
+                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
+                            Phone = "81094316687",
+                            RoleId = 1,
+                            UserName = "IceStormy-user"
+                        },
+                        new
+                        {
+                            Id = new Guid("cd448464-2ec0-4b21-b5fa-9a3cc8547489"),
+                            BirthDate = new DateTime(2001, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2023, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "shadow-theater@mail.ru",
+                            FirstName = "Администрация",
+                            Gender = 1,
+                            LastName = "Театра",
+                            Money = 0m,
+                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
+                            Phone = "81094316687",
+                            RoleId = 3,
+                            UserName = "SystemUser"
+                        });
+                });
+
+            modelBuilder.Entity("Theater.Entities.Users.UserRoleEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RoleName = "User"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            RoleName = "System"
+                        });
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.MessageEntity", b =>
+                {
+                    b.HasOne("Theater.Entities.Rooms.RoomEntity", "Room")
+                        .WithMany("Messages")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Photo");
+                    b.HasOne("Theater.Entities.Users.UserEntity", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("UserRole");
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.UserRoomEntity", b =>
+                {
+                    b.HasOne("Theater.Entities.Rooms.MessageEntity", "LastReadMessage")
+                        .WithMany("UserRooms")
+                        .HasForeignKey("LastReadMessageId");
+
+                    b.HasOne("Theater.Entities.Rooms.RoomEntity", "Room")
+                        .WithMany("Users")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Theater.Entities.Users.UserEntity", "User")
+                        .WithMany("UserRooms")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LastReadMessage");
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.BookedTicketEntity", b =>
@@ -529,7 +694,7 @@ namespace Theater.Sql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Theater.Entities.Authorization.UserEntity", "User")
+                    b.HasOne("Theater.Entities.Users.UserEntity", "User")
                         .WithMany("BookedTickets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -602,7 +767,7 @@ namespace Theater.Sql.Migrations
 
             modelBuilder.Entity("Theater.Entities.Theater.PurchasedUserTicketEntity", b =>
                 {
-                    b.HasOne("Theater.Entities.Authorization.UserEntity", "User")
+                    b.HasOne("Theater.Entities.Users.UserEntity", "User")
                         .WithMany("PurchasedUserTickets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -649,7 +814,7 @@ namespace Theater.Sql.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Theater.Entities.Authorization.UserEntity", "User")
+                    b.HasOne("Theater.Entities.Users.UserEntity", "User")
                         .WithMany("UserReviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -660,18 +825,22 @@ namespace Theater.Sql.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Theater.Entities.Authorization.UserEntity", b =>
+            modelBuilder.Entity("Theater.Entities.Users.UserEntity", b =>
                 {
-                    b.Navigation("BookedTickets");
+                    b.HasOne("Theater.Entities.FileStorage.FileStorageEntity", "Photo")
+                        .WithOne("User")
+                        .HasForeignKey("Theater.Entities.Users.UserEntity", "PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("PurchasedUserTickets");
+                    b.HasOne("Theater.Entities.Users.UserRoleEntity", "UserRole")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
-                    b.Navigation("UserReviews");
-                });
+                    b.Navigation("Photo");
 
-            modelBuilder.Entity("Theater.Entities.Authorization.UserRoleEntity", b =>
-                {
-                    b.Navigation("Users");
+                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("Theater.Entities.FileStorage.FileStorageEntity", b =>
@@ -679,6 +848,18 @@ namespace Theater.Sql.Migrations
                     b.Navigation("Piece");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.MessageEntity", b =>
+                {
+                    b.Navigation("UserRooms");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Rooms.RoomEntity", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Theater.Entities.Theater.PieceDateEntity", b =>
@@ -720,6 +901,24 @@ namespace Theater.Sql.Migrations
             modelBuilder.Entity("Theater.Entities.Theater.WorkersPositionEntity", b =>
                 {
                     b.Navigation("TheaterWorker");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Users.UserEntity", b =>
+                {
+                    b.Navigation("BookedTickets");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("PurchasedUserTickets");
+
+                    b.Navigation("UserReviews");
+
+                    b.Navigation("UserRooms");
+                });
+
+            modelBuilder.Entity("Theater.Entities.Users.UserRoleEntity", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

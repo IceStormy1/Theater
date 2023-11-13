@@ -1,10 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection;
-using Theater.Entities.Authorization;
+using System.Threading.Tasks;
+using System.Threading;
 using Theater.Entities.FileStorage;
 using Theater.Entities.Theater;
-using Theater.Sql.Configurations;
+using Theater.Entities.Users;
+using System.Linq;
+using Theater.Entities;
+using Theater.Entities.Rooms;
+using Theater.Sql.Configurations.Users;
 
 namespace Theater.Sql;
 
@@ -83,6 +88,15 @@ public class TheaterDbContext : DbContext
     /// </summary>
     public DbSet<FileStorageEntity> Files { get; set; }
 
+    /// <inheritdoc cref="RoomEntity"/>
+    public DbSet<RoomEntity> Rooms { get; set; }
+
+    /// <inheritdoc cref="UserRoomEntity"/>
+    public DbSet<UserRoomEntity> UserRooms { get; set; }
+
+    /// <inheritdoc cref="MessageEntity"/>
+    public DbSet<MessageEntity> Messages { get; set; }
+
     public TheaterDbContext(DbContextOptions<TheaterDbContext> options) : base(options)
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -93,5 +107,34 @@ public class TheaterDbContext : DbContext
         base.OnModelCreating(modelBuilder);
    
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(UserReviewEntityConfiguration))!);
+    }
+
+    public override int SaveChanges()
+    {
+        SetDates();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        SetDates();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void SetDates()
+    {
+        var entries = ChangeTracker
+            .Entries()
+            .Where(e =>
+                (e.Entity is IHasCreatedAt or IHasUpdatedAt) && (e.State is EntityState.Added or EntityState.Modified));
+
+        foreach (var entityEntry in entries)
+        {
+            if (entityEntry.State == EntityState.Added && entityEntry.Entity is IHasCreatedAt createdEntity)
+                createdEntity.CreatedAt = DateTime.UtcNow;
+
+            if (entityEntry.State == EntityState.Modified && entityEntry.Entity is IHasUpdatedAt modifiedEntity)
+                modifiedEntity.UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

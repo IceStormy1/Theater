@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions.WorkersPosition;
-using Theater.Common;
+using Theater.Common.Enums;
 using Theater.Entities.Theater;
 
 namespace Theater.Sql.Repositories;

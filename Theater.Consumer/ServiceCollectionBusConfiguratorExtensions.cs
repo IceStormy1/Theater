@@ -1,15 +1,16 @@
 ﻿using MassTransit;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Theater.Configuration;
+using System.Reflection;
+using Theater.Common.Settings;
 using Theater.Consumer.Consumers;
-using Theater.Contracts.Rabbit;
 
 namespace Theater.Consumer;
 
 public static class ServiceCollectionBusConfiguratorExtensions
 {
-    public static void RegisterMassTransit(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterMassTransit(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
     {
         var prefetchSettings = configuration
             .GetSection(nameof(ConsumerPrefetchSettings))
@@ -22,7 +23,7 @@ public static class ServiceCollectionBusConfiguratorExtensions
             var endpointNameFormatter = new EndpointNameFormatter();
             mt.SetEndpointNameFormatter(endpointNameFormatter);
            
-            mt.RegisterConsumers(prefetchSettings);
+            RegisterConsumers(services, mt, prefetchSettings, assembly, endpointNameFormatter);
 
             mt.UsingRabbitMq(
                 (context, cfg) =>
@@ -43,17 +44,39 @@ public static class ServiceCollectionBusConfiguratorExtensions
         });
     }
 
-    private static void RegisterConsumers(this IRegistrationConfigurator services, ConsumerPrefetchSettings[] settings)
+    private static void RegisterConsumers(
+        IServiceCollection services,
+        IRegistrationConfigurator registrationConfigurator, 
+        ConsumerPrefetchSettings[] prefetchSettings,
+        Assembly assembly, 
+        EndpointNameFormatter endpointNameFormatter)
     {
-        services.AddConsumer<TestConsumer>().Endpoint(cfg => cfg.ConfigureEndpoint(settings, nameof(TestRabbitModel)));
-    }
+        var genericBaseConsumer = typeof(BaseEventConsumer<,>);
 
-    private static void ConfigureEndpoint(this IEndpointRegistrationConfigurator configurator, IEnumerable<ConsumerPrefetchSettings> settings, string consumerName)
-    {
-        var prefetchCount = settings
-            .FirstOrDefault(eventHandler => string.Equals(eventHandler.ConsumerName, consumerName))?.PrefetchCount;
+        foreach (var type in assembly.GetTypes())
+        {
+            var serviceInterface = type.GetInterfaces()
+                .FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IMessageConsumer<>));
 
-        if (prefetchCount != null)
-            configurator.PrefetchCount = prefetchCount;
+            var eventType = serviceInterface?.GenericTypeArguments[0];
+            if (eventType == null) continue;
+
+            services.Add(ServiceDescriptor.Scoped(type, type));
+            var consumer = genericBaseConsumer.MakeGenericType(type, eventType);
+
+            registrationConfigurator.AddConsumer(consumer)
+                .Endpoint(cfg =>
+                {
+                    var handlerShortName = type.ShortDisplayName();
+                    var prefetchCount = prefetchSettings
+                        .FirstOrDefault(settings => string.Equals(settings.ConsumerName, handlerShortName))
+                        ?.PrefetchCount;
+
+                    if (prefetchCount != null)
+                        cfg.PrefetchCount = prefetchCount;
+
+                    cfg.Name = endpointNameFormatter.GetMessageHandlerQueueName(handlerShortName);
+                });
+        }
     }
 }
