@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts;
 
-public sealed class DocumentMeta
+public class DocumentMeta
 {
     public DocumentMeta(Guid id)
     {

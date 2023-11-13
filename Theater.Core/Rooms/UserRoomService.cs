@@ -20,6 +20,7 @@ namespace Theater.Core.Rooms;
 public sealed class UserRoomService : IUserRoomService
 {
     public const byte MaxUsersInIndividualRoom = 2;
+
     private readonly IRoomRepository _roomRepository;
     private readonly IUserRoomsRepository _userRoomsRepository;
     private readonly IPublishEndpoint _messageBus;
@@ -48,7 +49,7 @@ public sealed class UserRoomService : IUserRoomService
         var userRoom = await _roomRepository.GetActiveRoomRelationForUser(userId, roomId);
 
         if (userRoom is null)
-            return Result.FromError(RoomErrors.RoomNotFoundError.Error);
+            return RoomErrors.RoomNotFoundError;
 
         await DeleteUserAndPublishMessage(userRoom);
 
@@ -61,13 +62,13 @@ public sealed class UserRoomService : IUserRoomService
     {
         var userRoom = await _roomRepository.GetActiveRoomRelationForUser(userId, roomId);
         if(userRoom is null)
-            return Result.FromError(RoomErrors.RoomNotFoundError.Error);
+            return RoomErrors.RoomNotFoundError;
 
         var roomMembers = await _userRoomsRepository.GetRoomMembers(roomId);
         var totalMembers = roomMembers.Count + inviteUsersModel.InvitedUsersIds.Count;
 
         if (userRoom.Room.Type == RoomType.Individual && totalMembers > MaxUsersInIndividualRoom)
-            return Result.FromError(RoomErrors.InvalidTotalMembersError.Error);
+            return RoomErrors.InvalidTotalMembersError;
 
         var usersNotInRoom = await _userRoomsRepository.GetUsersNotInRoom(roomId, inviteUsersModel.InvitedUsersIds);
 
@@ -83,12 +84,39 @@ public sealed class UserRoomService : IUserRoomService
         return Result.Successful;
     }
 
+    public async Task<Result> ReadMessage(Guid userId, Guid roomId, Guid messageId)
+    {
+        var message = await _messageRepository.GetByEntityId(messageId);
+
+        if (message is null)
+            return MessageErrors.MessageNotFoundError;
+
+        await _userRoomsRepository.UpdateLastReadMessage(
+            roomId: roomId,
+            userId: userId,
+            messageId: messageId,
+            messageTime: DateTime.UtcNow);
+
+        if (message.MessageType != MessageType.SystemText)
+        {
+            var messageEvent = new MessageReadModel(
+                roomId: roomId,
+                messageId: messageId,
+                messageAuthorId: message.UserId,
+                messageTime: DateTime.UtcNow);
+
+            await _messageBus.Publish(messageEvent);
+        }
+
+        return Result.Successful;
+    }
+
     private async Task DeleteUserAndPublishMessage(UserRoomEntity userRoom)
     {
         userRoom.IsActive = false;
 
         await _userRoomsRepository.Update(userRoom);
-        await _messageBus.Publish(new UserExitMessage { RoomId = userRoom.RoomId, UserId = userRoom.UserId });
+        await _messageBus.Publish(new UserExitModel { RoomId = userRoom.RoomId, UserId = userRoom.UserId });
     }
 
     private async Task AddAndPublishUserLeaveMessage(UserRoomEntity userRoom, Guid roomId)

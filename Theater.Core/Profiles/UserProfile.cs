@@ -5,6 +5,7 @@ using Theater.Common.Enums;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.FileStorage;
 using Theater.Contracts.Filters;
+using Theater.Contracts.Messages;
 using Theater.Contracts.UserAccount;
 using Theater.Entities.Users;
 using VkNet.Model;
@@ -48,5 +49,9 @@ public sealed class UserProfile : Profile
         CreateMap<UserAccountFilterParameters, UserAccountFilterSettings>();
         CreateMap<UserEntity, UserShortItem>();
         CreateMap<UserReviewFilterParameters, UserReviewFilterSettings>();
+
+        CreateMap<UserEntity, AuthorDto>()
+            .ForMember(destination => destination.Photo, options => options.MapFrom(exp => exp.PhotoId.HasValue ? new StorageFileListItem { Id = exp.PhotoId.Value } : null))
+            ;
     }
 }

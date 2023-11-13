@@ -18,4 +18,12 @@ public interface IUserRoomService
     /// Добавляет пользователей в комнату
     /// </summary>
     Task<Result> InviteUsersToRoom(Guid userId, Guid roomId, InviteUsersModel inviteUsersModel);
+
+    /// <summary>
+    /// Пометить сообщение как прочитанное
+    /// </summary>
+    /// <param name="userId">Индентификатор текущего пользователя</param>
+    /// <param name="roomId">Идентификатор комнаты</param>
+    /// <param name="messageId">Идентификатор сообщения</param>
+    Task<Result> ReadMessage(Guid userId, Guid roomId, Guid messageId);
 }

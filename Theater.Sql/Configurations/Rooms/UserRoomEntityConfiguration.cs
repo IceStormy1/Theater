@@ -12,6 +12,10 @@ internal sealed class UserRoomEntityConfiguration : IEntityTypeConfiguration<Use
         builder.HasIndex(x => new { x.UserId, x.RoomId }).IsUnique();
 
         builder.Property(x => x.IsActive).HasDefaultValue(true);
+        
+        builder.HasOne(x => x.LastReadMessage)
+            .WithMany(x => x.UserRooms)
+            .HasForeignKey(x => x.LastReadMessageId);
 
         builder.ToTable(name: "UserRooms", schema: "chat");
     }

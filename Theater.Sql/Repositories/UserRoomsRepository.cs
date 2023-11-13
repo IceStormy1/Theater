@@ -30,4 +30,11 @@ public sealed class UserRoomsRepository : BaseCrudRepository<UserRoomEntity>, IU
         => DbContext.Users.AsNoTracking()
             .Where(x => addedUsersToRoom.Contains(x.Id) && x.UserRooms.All(c => c.RoomId != roomId))
             .ToListAsync();
+
+    public Task UpdateLastReadMessage(Guid roomId, Guid userId, Guid messageId, DateTime messageTime)
+        => DbSet.Where(x => x.UserId == userId && x.RoomId == roomId)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.LastReadMessageId, messageId)
+                    .SetProperty(p => p.LastReadMessageTime, messageTime)
+            );
 }

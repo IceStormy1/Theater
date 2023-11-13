@@ -2,6 +2,7 @@
 using MassTransit;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.Filters;
@@ -14,6 +15,7 @@ using Theater.Contracts.Filters;
 using Theater.Contracts.Messages;
 using Theater.Contracts.Rabbit;
 using Theater.Entities.Rooms;
+using Theater.Entities.Users;
 
 namespace Theater.Core.Message;
 
@@ -65,16 +67,52 @@ public sealed class MessageService : IMessageService
 
     public async Task<Result<List<MessageModel>>> GetMessages(Guid roomId, Guid userId, MessageFilterParameters filter)
     {
-        var isMemberOfRoom = await _roomRepository.IsMemberOfRoom(userId, roomId);
+        var userRoom = await _roomRepository.GetActiveRoomRelationForUser(userId, roomId);
 
-        if (!isMemberOfRoom)
+        if (userRoom is null)
             return Result<List<MessageModel>>.FromError(RoomErrors.RoomNotFoundError.Error);
 
         var filterSettings = _mapper.Map<MessageFilterSettings>(filter);
 
         var messages = await _messageRepository.GetMessages(roomId, filterSettings);
 
-        return Result.FromValue(_mapper.Map<List<MessageModel>>(messages));
+        var result = new List<MessageModel>();
+
+        if (messages.Count == default)
+            return Result.FromValue(result);
+
+        var usersIds = messages.Select(x => x.UserId)
+            .Distinct()
+            .ToArray();
+
+        var users = await _userAccountRepository.GetByEntityIds(usersIds);
+        var usersDict = users.ToDictionary(x => x.Id, u => _mapper.Map<UserEntity, AuthorDto>(u));
+
+        var lastReadMessageTime = await _messageRepository.GetLatestReadMessageTimeByRoomId(roomId, userId);
+
+        foreach (var message in messages)
+        {
+            var messageDto = _mapper.Map<MessageModel>(message);
+
+            messageDto.Author = usersDict[message.UserId];
+
+            if (message.UserId == userId) //проверяем прочитано ли сообщение другими пользователями
+            {
+                messageDto.Status = lastReadMessageTime >= message.CreatedAt
+                    ? MessageStatus.Seen
+                    : MessageStatus.Unseen;
+            }
+            else
+            {
+                messageDto.Status = userRoom.LastReadMessageTime >= message.CreatedAt
+                    ? MessageStatus.Seen
+                    : MessageStatus.Unseen;
+            }
+
+            result.Add(messageDto);
+        }
+
+        return Result.FromValue(result);
     }
 
     public async Task PublishMessageSent(Guid userId, Guid roomId, MessageEntity message)

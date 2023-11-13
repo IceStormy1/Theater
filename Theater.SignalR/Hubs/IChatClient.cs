@@ -1,5 +1,7 @@
 ﻿using SignalRSwaggerGen.Attributes;
+using SignalRSwaggerGen.Enums;
 using Theater.Contracts.Messages;
+using Theater.Contracts.Rooms;
 
 namespace Theater.SignalR.Hubs;
 
@@ -17,7 +19,6 @@ public interface IChatClient
     /// </summary>
     /// <param name="roomId">Идентификатор активной комнаты</param>
     /// <param name="message">Доставленное сообщение</param>
-    /// <returns></returns>
     Task OnMessageDelivered(
         [SignalRParam(description: "Идентификатор активной комнаты")]
         Guid roomId,
@@ -41,7 +42,17 @@ public interface IChatClient
     Task OnRoomExit([SignalRParam(description: "Идентификатор активной комнаты")] Guid roomId);
 
     /// <summary>
-    /// Update user list
+    /// Обновляет список пользователей
     /// </summary>
     Task UpdateUsersAsync(List<Guid> usersIds);
+
+    /// <summary>
+    /// Событие о прочитанном сообщение в чате
+    /// </summary>
+    /// <param name="message">Прочитанное сообщение</param>
+    [SignalRMethod(
+        summary: "Событие о прочитанном сообщение в чате",
+        description: "Нужен для пометки сообщение как прочитанное в ленте сообщений чата",
+        autoDiscover: AutoDiscover.Params)]
+    Task OnMessageRead(ReadMessageModel message);
 }

@@ -40,4 +40,9 @@ public sealed class MessageRepository : BaseCrudRepository<MessageEntity>, IMess
 
         return await query.ToDictionaryAsync(x => x.Room.Id, m => m);
     }
+
+    public Task<DateTime?> GetLatestReadMessageTimeByRoomId(Guid roomId, Guid userId)
+        => DbContext.UserRooms
+            .Where(x => x.RoomId == roomId && x.IsActive && x.UserId != userId)
+            .MaxAsync(x => x.LastReadMessageTime);
 }

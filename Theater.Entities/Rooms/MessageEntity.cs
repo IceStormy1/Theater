@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Theater.Common.Enums;
 using Theater.Entities.Users;
 
@@ -51,4 +52,7 @@ public sealed class MessageEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 
     /// <inheritdoc cref="RoomEntity"/>
     public RoomEntity Room { get; set; }
+
+    /// <inheritdoc cref="UserRoomEntity"/>
+    public List<UserRoomEntity> UserRooms { get; set; } = new();
 }

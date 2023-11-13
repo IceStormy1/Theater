@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Text;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.Messages;
+using Theater.Contracts.Rabbit;
 using Theater.SignalR.Hubs;
 
 namespace Theater.SignalR.TerminalChat;
@@ -20,6 +21,7 @@ public class Program
 
     public static async Task Main(string[] args)
     {
+        // Для работы необходимо запустить Theater и Theater.SignalR
         Console.OutputEncoding = Encoding.Unicode;
         Console.InputEncoding = Encoding.Unicode;
 
@@ -60,24 +62,23 @@ public class Program
                 .Append($"Id: {message.Id}, ").Append(Environment.NewLine)
                 .Append($"Date: {message.CreatedAt}, ").Append(Environment.NewLine)
                 .Append($"RoomId: {roomId1}, ").Append(Environment.NewLine)
-                .Append($"Author: {message.AuthorId},  ").Append(Environment.NewLine)
+                .Append($"Author: {message.Author.Id};  {message.Author.FullName},").Append(Environment.NewLine)
                 .Append($"Message: {message.Text}").Append(Environment.NewLine)
                 .Append($"MessageType: {message.MessageType}").Append(Environment.NewLine)
                 .ToString());
         });
 
-        //hub.On<ReadMessageDto>("OnMessageRead", (message) =>
-        //{
-        //    Console.WriteLine(new StringBuilder("Пользователь прочитал сообщение - ")
-        //        .Append($"Id: {message.MessageId}, ")
-        //        .ToString());
-        //});
+        hub.On<MessageReadModel>("OnMessageRead", (message) =>
+        {
+            Console.WriteLine(new StringBuilder("Пользователь прочитал сообщение - ")
+                .Append($"Id: {message.MessageId}, ")
+                .ToString());
+        });
 
-
-        hub.On<Guid, string>("OnRoomEnter", (roomIdd, title) =>
+        hub.On<Guid, string>("OnRoomEnter", (handlerRoomId, title) =>
         {
             Console.WriteLine(new StringBuilder("Пользователь вошел в чат - ")
-                .Append($"RoomId: {roomIdd}, ").Append(Environment.NewLine)
+                .Append($"RoomId: {handlerRoomId}, ").Append(Environment.NewLine)
                 .Append($"Title: {title}, ").Append(Environment.NewLine)
                 .ToString());
         });
@@ -95,7 +96,7 @@ public class Program
                 .Append(Environment.NewLine);
 
             foreach (var user in users)
-                updatedUsersMessage.Append($"User Id: {user}");
+                updatedUsersMessage.Append($"User Id: {user}").Append(Environment.NewLine);
 
             Console.WriteLine(updatedUsersMessage.Append(Environment.NewLine).ToString());
         });

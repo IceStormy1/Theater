@@ -2,7 +2,7 @@
 
 namespace Theater.Contracts.Rabbit;
 
-public sealed class UserExitMessage
+public sealed class UserExitModel
 {
     /// <summary>
     /// Идентификатор пользователя

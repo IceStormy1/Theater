@@ -16,7 +16,7 @@ namespace Theater.Controllers.Rooms;
 
 [SwaggerTag("Пользовательские методы для работы с сообщениями чата")]
 [Authorize]
-[Route("api")]
+[Route("api/rooms/{roomId:guid}")]
 public sealed class MessageController : BaseController
 {
     private readonly IMessageService _messageService;
@@ -33,7 +33,7 @@ public sealed class MessageController : BaseController
     /// </summary>
     /// <param name="roomId">Идентификатор активной комнаты</param>
     /// <param name="newMessage">Тело нового сообщения</param>
-    [HttpPost("rooms/{roomId:guid}/message")]
+    [HttpPost("message")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageModel))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
@@ -49,7 +49,7 @@ public sealed class MessageController : BaseController
     /// </summary>
     /// <param name="roomId">Идентификатор активной комнаты</param>
     /// <param name="filter">Параметры пагинации</param>
-    [HttpGet("rooms/{roomId:guid}/messages")]
+    [HttpGet("messages")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<MessageModel>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetMessages([FromRoute] Guid roomId, [FromQuery] MessageFilterParameters filter)

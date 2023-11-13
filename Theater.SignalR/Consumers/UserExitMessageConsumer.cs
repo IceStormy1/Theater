@@ -5,7 +5,7 @@ using Theater.SignalR.Hubs;
 
 namespace Theater.SignalR.Consumers;
 
-public sealed class UserExitMessageConsumer : IMessageConsumer<UserExitMessage>
+public sealed class UserExitMessageConsumer : IMessageConsumer<UserExitModel>
 {
     private readonly ILogger<UserExitMessageConsumer> _logger;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
@@ -21,7 +21,7 @@ public sealed class UserExitMessageConsumer : IMessageConsumer<UserExitMessage>
         _chatManager = chatManager;
     }
 
-    public async Task ProcessMessage(UserExitMessage message)
+    public async Task ProcessMessage(UserExitModel message)
     {
         var connections = _chatManager.GetUserConnectionsById(message.UserId);
         if (connections is not { Count: not 0 })

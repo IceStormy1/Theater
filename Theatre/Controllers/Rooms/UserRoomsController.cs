@@ -55,4 +55,20 @@ public class UserRoomsController : BaseController
             ? RenderResult(UserAccountErrors.Unauthorized)
             : RenderResult(await _userRoomService.InviteUsersToRoom(UserId.Value, roomId, inviteUsersModel));
     }
+
+    /// <summary>
+    /// Пометить сообщение как прочитанное
+    /// </summary>
+    /// <param name="roomId">Идентификатор комнаты</param>
+    /// <param name="messageId">Идентификатор сообщения</param>
+    [HttpPost("messages/{messageId:guid}/read")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> ReadMessage([FromRoute] Guid roomId, [FromRoute] Guid messageId)
+    {
+        return !UserId.HasValue
+            ? RenderResult(UserAccountErrors.Unauthorized)
+            : RenderResult(await _userRoomService.ReadMessage(UserId.Value, roomId, messageId));
+    }
 }

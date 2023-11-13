@@ -21,7 +21,7 @@ public sealed class MessageModel
     /// <summary>
     /// Автор сообщения
     /// </summary>
-    public Guid AuthorId { get; set; }
+    public AuthorDto Author { get; set; }
 
     /// <summary>
     /// Дата создания

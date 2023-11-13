@@ -20,4 +20,14 @@ public interface IUserRoomsRepository : ICrudRepository<UserRoomEntity>
     /// <param name="roomId">Идентификатор комнаты</param>
     /// <param name="addedUsersToRoom">Добавляемые в комнату пользователи</param>
     Task<List<UserEntity>> GetUsersNotInRoom(Guid roomId, IReadOnlyCollection<Guid> addedUsersToRoom);
+
+    /// <summary>
+    /// Обновить данные последнего прочитанного сообщения для указанной комнаты
+    /// </summary>
+    /// <param name="roomId">Идентификатор комнаты</param>
+    /// <param name="userId">Идентификатор текущего пользователя</param>
+    /// <param name="messageId">Идентификатор прочитанного сообщения</param>
+    /// <param name="messageTime">Время прочитанного сообщения</param>
+    /// <returns></returns>
+    Task UpdateLastReadMessage(Guid roomId, Guid userId, Guid messageId, DateTime messageTime);
 }

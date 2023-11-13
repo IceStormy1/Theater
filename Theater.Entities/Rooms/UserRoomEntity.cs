@@ -15,6 +15,7 @@ public sealed class UserRoomEntity : BaseEntity, IHasCreatedAt
     public UserEntity User { get; set; }
 
     public Guid RoomId { get; set; }
+
     /// <inheritdoc cref="RoomEntity"/>
     public RoomEntity Room { get; set; }
 
@@ -31,5 +32,18 @@ public sealed class UserRoomEntity : BaseEntity, IHasCreatedAt
     /// <inheritdoc cref="RoomRole"/>
     public RoomRole Role { get; set; }
 
-    // TODO: последнее прочитанное сообщение
+    /// <summary>
+    /// Идентификатор последнего прочитанного сообщения
+    /// </summary>
+    public Guid? LastReadMessageId { get; set; }
+
+    /// <summary>
+    /// Последнее прочитанного сообщение
+    /// </summary>
+    public MessageEntity LastReadMessage { get; set; }
+
+    /// <summary>
+    /// Дата и время прочтения последнего сообщения
+    /// </summary>
+    public DateTime? LastReadMessageTime { get; set; }
 }
