@@ -126,10 +126,10 @@ app.Run();
 
 void OnStart()
 {
-    app.Logger.LogInformation($"Приложение {apiName} запущено");
+    app.Logger.LogInformation("Приложение {ApiName} запущено", apiName);
 }
 
 void OnShutdown()
 {
-    app.Logger.LogInformation($"Приложение {apiName} остановлено");
+    app.Logger.LogInformation("Приложение {ApiName} остановлено", apiName);
 }
