@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
@@ -14,7 +12,6 @@ using Theater.Consumer;
 using Theater.Core.Profiles;
 using Theater.SignalR.Hubs;
 using Theater.Sql;
-using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 const string apiName = "Theater.SignalR";
 const string corsPolicy = "CorsPolicy";
@@ -41,33 +38,14 @@ builder.Host.UseSerilog((ctx, _, cfg) =>
 );
 
 builder.Services.AddTheaterAuthentication(builder.Configuration)
-    .AddAllDbContext(builder.Configuration);
-builder.Services.AddControllers();
+    .AddAllDbContext(builder.Configuration)
+    .AddControllers();
 
 
 builder.Services
     .AddEndpointsApiExplorer()
     .AddRouting(c => c.LowercaseUrls = true)
-    .AddSwaggerGen(c =>
-    {
-        c.CustomSchemaIds(type => type.ToString());
-        c.CustomOperationIds(d => (d.ActionDescriptor as ControllerActionDescriptor)?.ActionName);
-        c.SwaggerDoc($"v{assemblyVersion}", new OpenApiInfo
-        {
-            Version = $"v{assemblyVersion}",
-            Title = $"{apiName} API",
-        });
-
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-        var xmlContractDocs = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory), "*.xml");
-        foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);
-
-        c.EnableAnnotations();
-        c.AddEnumsWithValuesFixFilters();
-        c.AddSignalRSwaggerGen();
-    })
+    .AddSwaggerForSignalR(assemblyVersion, apiName)
     .AddCors(options =>
     {
         options.AddPolicy(corsPolicy, policyBuilder =>
