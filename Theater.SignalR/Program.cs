@@ -61,7 +61,7 @@ builder.Services
     })
     .AddAutoMapper(x => x.AddMaps(typeof(AbstractProfile).Assembly))
     .AddRepositories()
-    .AddServices().AddSingleton<ChatManager>()
+    .AddServices()
     .AddFileStorage()
     .AddMemoryCache()
     .AddRedis(builder.Configuration, builder.Environment)

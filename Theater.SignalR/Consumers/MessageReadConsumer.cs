@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Theater.Abstractions.Caches;
 using Theater.Consumer;
 using Theater.Contracts.Rabbit;
 using Theater.Contracts.Rooms;
@@ -12,28 +13,28 @@ public sealed class MessageReadConsumer : IMessageConsumer<MessageReadModel>
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
     private readonly IMapper _mapper;
     private readonly ILogger<MessageReadConsumer> _logger;
-    private readonly ChatManager _chatManager;
+    private readonly IConnectionsCache _connectionsCache;
 
     public MessageReadConsumer(
         IHubContext<ChatHub, IChatClient> hubContext, 
         IMapper mapper, 
         ILogger<MessageReadConsumer> logger, 
-        ChatManager chatManager)
+        IConnectionsCache connectionsCache)
     {
         _hubContext = hubContext;
         _mapper = mapper;
         _logger = logger;
-        _chatManager = chatManager;
+        _connectionsCache = connectionsCache;
     }
 
     public async Task ProcessMessage(MessageReadModel message)
     {
-        var connections = _chatManager.GetUserConnectionsById(message.MessageAuthorId);
+        var connections = await _connectionsCache.GetConnections(message.MessageAuthorId);
         if (connections is not { Count: not 0 })
             return;
 
         await _hubContext.Clients
-            .Clients(connections.Select(x => x.ConnectionId))
+            .Clients(connections)
             .OnMessageRead(_mapper.Map<ReadMessageModel>(message));
 
         _logger.LogInformation("Сообщение {messageId} для чата {roomId} прочитано", message.MessageId, message.RoomId);
