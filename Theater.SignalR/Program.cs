@@ -8,6 +8,7 @@ using Serilog.Exceptions.Core;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 using Theater.Configuration.Extensions;
+using Theater.Configuration.Helpers;
 using Theater.Consumer;
 using Theater.Core.Profiles;
 using Theater.SignalR.Hubs;
@@ -23,9 +24,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
-    .AddEnvironmentVariables();
+.AddEnvironmentVariables();
 
-builder.Services.AddSignalR();
+var redisConfigurationOptions = OptionsHelper.GetRedisConfigurationOptions(builder.Configuration, builder.Environment);
+builder.Services
+    .AddSignalR()
+    .AddStackExchangeRedis(redisConfigurationOptions.ToString());
 
 builder.Host.UseSerilog((ctx, _, cfg) =>
     cfg
@@ -57,9 +61,10 @@ builder.Services
     })
     .AddAutoMapper(x => x.AddMaps(typeof(AbstractProfile).Assembly))
     .AddRepositories()
-    .AddServices().AddSingleton<ChatManager>()
+    .AddServices()
     .AddFileStorage()
     .AddMemoryCache()
+    .AddRedis(builder.Configuration, builder.Environment)
     .RegisterMassTransit(builder.Configuration, Assembly.GetExecutingAssembly())
     ;
 

@@ -21,6 +21,7 @@ services:
       - minio
       - postgres
       - rabbitmq
+      - redis
 
   postgres:
     container_name: 'postgres'
@@ -73,6 +74,18 @@ services:
     networks:
       - theater-dev
 
+  redis:
+    image: redis
+    container_name: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - theater-dev
+
 volumes:
+  redisdata:
   postgres:
     driver: local

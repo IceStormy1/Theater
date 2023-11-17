@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-preview.4.23259.5" />
-		<PackageReference Include="Theater.Clients" Version="2023.7.23.1826" />
 	</ItemGroup>
 
 </Project>

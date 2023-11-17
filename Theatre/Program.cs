@@ -94,6 +94,7 @@ builder.Services
     .AddServices()
     .AddFileStorage()
     .AddMemoryCache()
+    .AddRedis(builder.Configuration, builder.Environment)
     .RegisterMassTransit(builder.Configuration, typeof(IMessageConsumer<>).Assembly);
 
 var app = builder.Build();

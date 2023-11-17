@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Theater.Abstractions.Caches;
 using Theater.Common.Enums;
 using Theater.Consumer;
 using Theater.Contracts.Messages;
@@ -13,18 +14,18 @@ public sealed class MessageSentConsumer : IMessageConsumer<MessageSentModel>
     private readonly ILogger<MessageSentConsumer> _logger;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
     private readonly IMapper _mapper;
-    private readonly ChatManager _chatManager;
+    private readonly IConnectionsCache _connectionsCache;
 
     public MessageSentConsumer(
         ILogger<MessageSentConsumer> logger,
         IHubContext<ChatHub, IChatClient> hubContext,
         IMapper mapper,
-        ChatManager chatManager)
+        IConnectionsCache connectionsCache)
     {
         _logger = logger;
         _hubContext = hubContext;
         _mapper = mapper;
-        _chatManager = chatManager;
+        _connectionsCache = connectionsCache;
     }
 
     public async Task ProcessMessage(MessageSentModel message)
@@ -32,10 +33,10 @@ public sealed class MessageSentConsumer : IMessageConsumer<MessageSentModel>
         IChatClient group;
         if (message.MessageType != MessageType.SystemText)
         {
-            var authorConnections = _chatManager.GetUserConnectionsById(message.AuthorId) ?? new List<ChatConnection>();
+            var authorConnections = await _connectionsCache.GetConnections(message.AuthorId);
             group = _hubContext.Clients.GroupExcept(
                     groupName: message.RoomId.ToString(), 
-                    excludedConnectionIds: authorConnections.Select(x=>x.ConnectionId));
+                    excludedConnectionIds: authorConnections);
         }
         else
         {

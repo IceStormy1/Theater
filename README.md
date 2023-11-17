@@ -15,4 +15,4 @@
 - [ ] Hangfire (Отдельный хост)
 - [ ] JasperReport (Отдельный хост)
 - [ ] ElasticSearch
-- [ ] Redis
+- [x] Redis

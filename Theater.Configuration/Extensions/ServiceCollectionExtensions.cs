@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Hosting;
 using Theater.Abstractions;
 using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Filters;
@@ -51,6 +52,11 @@ using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theat
 using TicketIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PurchasedUserTicket.PurchasedUserTicketModel, Theater.Entities.Theater.PurchasedUserTicketEntity, Theater.Abstractions.Filters.PieceTicketFilterSettings>;
 using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Users.UserEntity, Theater.Abstractions.Filters.UserAccountFilterSettings>;
 using UserReviewIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.UserReview.UserReviewModel, Theater.Entities.Theater.UserReviewEntity, Theater.Abstractions.Filters.UserReviewFilterSettings>;
+using StackExchange.Redis.Extensions.Core.Configuration;
+using StackExchange.Redis.Extensions.System.Text.Json;
+using Theater.Abstractions.Caches;
+using Theater.Configuration.Helpers;
+using Theater.Core.Caches;
 
 namespace Theater.Configuration.Extensions;
 
@@ -181,6 +187,21 @@ public static class ServiceCollectionExtensions
 
             return new AmazonS3Client(options.Value.AccessKey, options.Value.SecretKey, config);
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration, IHostEnvironment hostEnvironment)
+    {
+        var redisConfigurationOptions = OptionsHelper.GetRedisConfigurationOptions(configuration, hostEnvironment);
+
+        var redisConfiguration = new RedisConfiguration
+        {
+            ConnectionString = redisConfigurationOptions.ToString()
+        };
+        
+        services.AddStackExchangeRedisExtensions<SystemTextJsonSerializer>(new[] { redisConfiguration });
+        services.AddSingleton<IConnectionsCache, ConnectionsCache>();
 
         return services;
     }
