@@ -1,7 +1,6 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -17,28 +16,27 @@ using Theater.Common.Settings;
 using Theater.Contracts.FileStorage;
 using Theater.Core.Utils;
 using Theater.Entities.FileStorage;
-using Theater.Sql;
 
 namespace Theater.Core.FileStorage;
 
 public sealed class FileStorageService : IFileStorageService
 {
-    private readonly TheaterDbContext _dbContext;
+    private readonly IFileStorageRepository _fileStorageRepository;
     private readonly FileStorageOptions _fileStorageOptions;
     private readonly IAmazonS3 _s3Client;
     private readonly IMapper _mapper;
     private readonly ILogger<FileStorageService> _logger;
 
     public FileStorageService(
-        TheaterDbContext dbContext,
         IAmazonS3 s3Client,
         IMapper mapper,
         ILogger<FileStorageService> logger,
-        IOptions<FileStorageOptions> fileStorageOptions)
+        IOptions<FileStorageOptions> fileStorageOptions,
+        IFileStorageRepository fileStorageRepository)
     {
-        _dbContext = dbContext;
         _s3Client = s3Client;
         _logger = logger;
+        _fileStorageRepository = fileStorageRepository;
         _mapper = mapper;
         _fileStorageOptions = fileStorageOptions?.Value;
     }
@@ -76,8 +74,7 @@ public sealed class FileStorageService : IFileStorageService
                 FileStorageName = fileStorageName
             };
 
-            _dbContext.Files.Add(fileEntity);
-            await _dbContext.SaveChangesAsync();
+            await _fileStorageRepository.Add(fileEntity);
 
             var result = _mapper.Map<StorageFileListItem>(fileEntity);
             result.DirectUrl = GetFileUrl(fileEntity);
@@ -160,9 +157,7 @@ public sealed class FileStorageService : IFileStorageService
 
     private async Task<FileStorageEntity> GetFileEntity(Guid entityId)
     {
-        var fileEntity = await _dbContext.Files
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == entityId);
+        var fileEntity = await _fileStorageRepository.GetByEntityId(entityId);
 
         return fileEntity ?? throw new Exception($"Файл c ID {entityId} не найден");
     }
