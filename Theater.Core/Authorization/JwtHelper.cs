@@ -14,7 +14,6 @@ namespace Theater.Core.Authorization;
 
 public sealed class JwtHelper : IJwtHelper
 {
-    private const string FullNameFormat = "{0} {1} {2}";
     private static JwtOptions _jwtOptions;
 
     public JwtHelper(IOptions<JwtOptions> jwOptions)
@@ -32,7 +31,7 @@ public sealed class JwtHelper : IJwtHelper
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.Email, user.Email),
             new (JwtRegisteredClaimNames.PhoneNumber, user.Phone),
-            new (JwtRegisteredClaimNames.Name, string.Format(FullNameFormat, user.LastName, user.FirstName, user.MiddleName).Trim()),
+            new (JwtRegisteredClaimNames.Name, user.FullName),
             new (JwtRegisteredClaimNames.Birthdate, user.BirthDate.ToString("dd/MM/yyyy")),
             new (JwtRegisteredClaimNames.Gender, user.Gender.ToString("D")),
             new ("role", user.UserRole.RoleName.ToLower()),

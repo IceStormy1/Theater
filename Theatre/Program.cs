@@ -40,7 +40,8 @@ builder.Host.UseSerilog((ctx, _, cfg) =>
 .MinimumLevel.Override("System", LogEventLevel.Information)
 );
 
-builder.Services.AddTheaterAuthentication(builder.Configuration)
+builder.Services.ConfigureOptions(builder.Configuration)
+    .AddTheaterAuthentication(builder.Configuration)
     .AddAllDbContext(builder.Configuration)
     .AddRouting(c => c.LowercaseUrls = true);
 

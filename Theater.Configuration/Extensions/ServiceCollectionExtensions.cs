@@ -115,7 +115,7 @@ public static class ServiceCollectionExtensions
         //services.AddCrudServices();
         services.RegisterImplementations(serviceTypes)
             .AddStubValidators()
-            .AddScoped<IJwtHelper, JwtHelper>()
+            .AddSingleton<IJwtHelper, JwtHelper>()
             .AddScoped<IVkApi>(_ => new VkApi())
             .AddValidators()
             .AddIndexReaders()
@@ -136,8 +136,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddTheaterAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.ConfigureOptions(configuration)
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -258,7 +257,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDocumentValidator<UserReviewParameters>, UserReviewValidator>();
     }
 
-    private static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
     {
         return services.Configure<RoleModel>(configuration.GetSection(nameof(RoleModel)))
             .Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)))
