@@ -205,6 +205,13 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services.Configure<RoleModel>(configuration.GetSection(nameof(RoleModel)))
+            .Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)))
+            .Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+    }
+
     private static IServiceCollection RegisterImplementations(this IServiceCollection services, IEnumerable<Type> implementationTypes)
     {
         try
@@ -255,13 +262,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDocumentValidator<PiecesGenreParameters>, PieceGenreValidator>()
             .AddScoped<IDocumentValidator<WorkersPositionParameters>, WorkersPositionValidator>()
             .AddScoped<IDocumentValidator<UserReviewParameters>, UserReviewValidator>();
-    }
-
-    public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
-    {
-        return services.Configure<RoleModel>(configuration.GetSection(nameof(RoleModel)))
-            .Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)))
-            .Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
     }
 
     private static void ConfigureSwaggerGenOptions(this SwaggerGenOptions c, Version version, string apiName)
