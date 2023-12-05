@@ -71,7 +71,7 @@ public sealed class ChatHub : AuthorizedHub<IChatClient>
     }
 }
 
-public class UserIdProvider : IUserIdProvider
+public sealed class UserIdProvider : IUserIdProvider
 {
     public string GetUserId(HubConnectionContext connection)
     {

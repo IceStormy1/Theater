@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 using Theater.Abstractions.Caches;

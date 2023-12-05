@@ -8,7 +8,7 @@ namespace Theater.Abstractions;
 /// Представляет результат запроса с пагинацией.
 /// </summary>
 /// <typeparam name="T">Тип данных.</typeparam>
-public class PagingResult<T>
+public sealed class PagingResult<T>
 {
     /// <summary>
     /// Найденные записи.

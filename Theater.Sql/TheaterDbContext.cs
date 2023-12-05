@@ -16,7 +16,7 @@ namespace Theater.Sql;
 /// <summary>
 /// Контекст базы данных театра
 /// </summary>
-public class TheaterDbContext : DbContext
+public sealed class TheaterDbContext : DbContext
 {
     /// <summary>
     /// Пользователи

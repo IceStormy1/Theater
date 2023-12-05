@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Theater.Common;
-using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
 
 namespace Theater.Abstractions.UserAccount;

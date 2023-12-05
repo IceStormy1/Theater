@@ -19,7 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using Theater.Abstractions;
-using Theater.Abstractions.Authorization;
 using Theater.Abstractions.Caches;
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.Jwt;

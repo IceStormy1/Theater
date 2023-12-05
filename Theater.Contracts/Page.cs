@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Theater.Contracts;
 
-public class Page<T>
+public sealed class Page<T>
 {
     /// <summary>
     /// Список записей
