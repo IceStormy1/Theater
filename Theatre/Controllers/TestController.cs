@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Theater.Abstractions.Caches;
 using Theater.Abstractions.UserAccount;
+using Theater.Attributes;
 using Theater.Contracts.Rabbit;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.Base;
@@ -18,6 +19,7 @@ namespace Theater.Controllers;
 [SwaggerTag("Тестовые методы")]
 [ApiController]
 [Route("[controller]")]
+[RoleAuthorize(roles: nameof(UserRole.Admin))]
 public sealed class TestController : BaseController
 {
     private readonly IPublishEndpoint _messageBus;
@@ -55,7 +57,6 @@ public sealed class TestController : BaseController
     /// </summary>
     [HttpPost("redis/connections/{connectionId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [Authorize]
     public async Task AddConnection(Guid connectionId)
     {
         var innerUserId = await GetUserId();

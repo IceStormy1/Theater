@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.UserAccount;
+using Theater.Attributes;
 using Theater.Contracts;
 
 namespace Theater.Controllers.Base;
@@ -13,7 +13,7 @@ namespace Theater.Controllers.Base;
 /// <summary>
 /// Базовый контроллер в админке с реализацией CRUD. Путь по умолчанию: <c>api/admin</c>.
 /// </summary>
-[Authorize] 
+[RoleAuthorize(roles: nameof(UserRole.Admin))]
 [Route("api/admin")] 
 [ApiController]
 public class AdminBaseController<TParameters> : CrudServiceBaseController<TParameters>

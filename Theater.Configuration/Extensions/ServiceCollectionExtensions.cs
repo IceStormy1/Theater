@@ -27,9 +27,9 @@ using Theater.Abstractions.PurchasedUserTicket;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserReviews;
+using Theater.Common.Constants;
 using Theater.Common.Settings;
 using Theater.Configuration.Helpers;
-using Theater.Configuration.Policy;
 using Theater.Contracts.Rooms;
 using Theater.Contracts.Theater.Piece;
 using Theater.Contracts.Theater.PieceDate;
@@ -130,16 +130,6 @@ public static class ServiceCollectionExtensions
         return services.RegisterImplementations(repositories);
     }
 
-    /// <summary>
-    /// Схема интроспекции по умолчанию
-    /// </summary>
-    public static readonly string IntrospectionSheme = "introspection";
-
-    /// <summary>
-    /// Схема по умолчанию
-    /// </summary>
-    public static readonly string AuthenticationScheme = "jwt";
-
     public static IServiceCollection AddTheaterAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         // TODO: убрать после добавления сертификата
@@ -155,7 +145,7 @@ public static class ServiceCollectionExtensions
                 config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(AuthenticationScheme, options =>
+            .AddJwtBearer(AuthConstants.AuthenticationScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
@@ -163,21 +153,21 @@ public static class ServiceCollectionExtensions
                 options.BackchannelHttpHandler = handler; // TODO: убрать после добавления сертификата
 
                 // if token does not contain a dot, it is a reference token
-                options.ForwardDefaultSelector = Selector.ForwardReferenceToken(IntrospectionSheme);
-            }).AddOAuth2Introspection(IntrospectionSheme, options =>
+                options.ForwardDefaultSelector = Selector.ForwardReferenceToken(AuthConstants.IntrospectionSheme);
+            }).AddOAuth2Introspection(AuthConstants.IntrospectionSheme, options =>
             {
-                options.Authority = "http://localhost:5090/";
+                options.Authority = "http://localhost:5090/"; // TODO: Вынести в конфиг
                 options.ClientId = "TheaterApi";
                 options.ClientSecret = "4844b33f-a869-4cdf-aa0c-ef6703b2136f";
             });
 
         services.AddAuthorization(options =>
         {
-            var policy = new AuthorizationPolicyBuilder(AuthenticationScheme)
+            var policy = new AuthorizationPolicyBuilder(AuthConstants.AuthenticationScheme)
                 .RequireAuthenticatedUser()
                 .Build();
 
-            options.AddPolicy(AuthenticationScheme, policy);
+            options.AddPolicy(AuthConstants.AuthenticationScheme, policy);
             options.DefaultPolicy = policy;
         });
 
@@ -221,7 +211,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
     {
-        return services.Configure<RoleModel>(configuration.GetSection(nameof(RoleModel)))
+        return services
             .Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)))
             .Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
     }
