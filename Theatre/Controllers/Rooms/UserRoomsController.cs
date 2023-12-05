@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.Rooms;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Messages;
 using Theater.Contracts.Rooms;
 using Theater.Controllers.Base;
@@ -21,8 +22,9 @@ public sealed class UserRoomsController : BaseController
 
     public UserRoomsController(
         IMapper mapper, 
-        IUserRoomService userRoomService
-        ) : base(mapper)
+        IUserRoomService userRoomService,
+        IUserAccountService userAccountService
+        ) : base(mapper, userAccountService)
     {
         _userRoomService = userRoomService;
     }
@@ -36,9 +38,11 @@ public sealed class UserRoomsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> LeaveRoom([FromRoute] Guid roomId)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _userRoomService.LeaveRoom(userId: UserId.Value, roomId));
+            : RenderResult(await _userRoomService.LeaveRoom(userId: innerUserId.Value, roomId));
     }
 
     /// <summary>
@@ -51,9 +55,11 @@ public sealed class UserRoomsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> InviteUsersToRoom([FromRoute] Guid roomId, [FromBody] InviteUsersModel inviteUsersModel)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _userRoomService.InviteUsersToRoom(UserId.Value, roomId, inviteUsersModel));
+            : RenderResult(await _userRoomService.InviteUsersToRoom(innerUserId.Value, roomId, inviteUsersModel));
     }
 
     /// <summary>
@@ -67,8 +73,10 @@ public sealed class UserRoomsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> ReadMessage([FromRoute] Guid roomId, [FromRoute] Guid messageId)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _userRoomService.ReadMessage(UserId.Value, roomId, messageId));
+            : RenderResult(await _userRoomService.ReadMessage(innerUserId.Value, roomId, messageId));
     }
 }

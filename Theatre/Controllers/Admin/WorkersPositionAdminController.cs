@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
+using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.WorkersPosition;
 using Theater.Common.Enums;
 using Theater.Common.Extensions;
@@ -19,7 +20,9 @@ public sealed class WorkersPositionAdminController : AdminBaseController<Workers
 {
     public WorkersPositionAdminController(
         IWorkersPositionService service,
-        IMapper mapper) : base(service, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(service, mapper, userAccountService)
     {
     }
 

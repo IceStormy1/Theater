@@ -13,6 +13,7 @@ using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.TheaterWorker;
 using Theater.Abstractions.FileStorage;
 using Theater.Controllers.Base;
+using Theater.Abstractions.UserAccount;
 
 namespace Theater.Controllers;
 
@@ -29,7 +30,9 @@ public sealed class TheaterWorkerController : CrudServiceBaseController<TheaterW
         ITheaterWorkerService theaterWorkerService,
         IMapper mapper, 
         IIndexReader<TheaterWorkerModel, TheaterWorkerEntity, TheaterWorkerFilterSettings> theaterWorkerIndexReader, 
-        IFileStorageService fileStorageService) : base(theaterWorkerService, mapper)
+        IFileStorageService fileStorageService,
+        IUserAccountService userAccountService
+        ) : base(theaterWorkerService, mapper, userAccountService)
     {
         _theaterWorkerService = theaterWorkerService;
         _theaterWorkerIndexReader = theaterWorkerIndexReader;

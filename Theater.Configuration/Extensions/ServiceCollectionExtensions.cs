@@ -43,7 +43,6 @@ using Theater.Contracts.Theater.UserReview;
 using Theater.Contracts.Theater.WorkersPosition;
 using Theater.Contracts.UserAccount;
 using Theater.Core;
-using Theater.Core.Authorization;
 using Theater.Core.Caches;
 using Theater.Core.Theater.Validators;
 using Theater.Entities.Theater;
@@ -52,8 +51,6 @@ using Theater.Sql;
 using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
-using VkNet;
-using VkNet.Abstractions;
 using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.Piece.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filters.PieceFilterSettings>;
 using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorker.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filters.TheaterWorkerFilterSettings>;
 using TicketIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PurchasedUserTicket.PurchasedUserTicketModel, Theater.Entities.Theater.PurchasedUserTicketEntity, Theater.Abstractions.Filters.PieceTicketFilterSettings>;
@@ -117,8 +114,6 @@ public static class ServiceCollectionExtensions
         //services.AddCrudServices();
         services.RegisterImplementations(serviceTypes)
             .AddStubValidators()
-            .AddSingleton<IJwtHelper, JwtHelper>()
-            .AddScoped<IVkApi>(_ => new VkApi())
             .AddValidators()
             .AddIndexReaders()
             ;
@@ -218,7 +213,9 @@ public static class ServiceCollectionExtensions
         };
         
         services.AddStackExchangeRedisExtensions<SystemTextJsonSerializer>(new[] { redisConfiguration });
-        services.AddSingleton<IConnectionsCache, ConnectionsCache>();
+        services.AddSingleton<IConnectionsCache, ConnectionsCache>()
+            .AddSingleton<IUserAccountCache, UserAccountCache>()
+            ;
 
         return services;
     }

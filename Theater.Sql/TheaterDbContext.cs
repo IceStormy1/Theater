@@ -24,11 +24,6 @@ public class TheaterDbContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
 
     /// <summary>
-    /// Роли пользователей
-    /// </summary>
-    public DbSet<UserRoleEntity> UserRoles { get; set; }
-
-    /// <summary>
     /// Должности работников театра
     /// </summary>
     public DbSet<WorkersPositionEntity> WorkersPositions { get; set; }

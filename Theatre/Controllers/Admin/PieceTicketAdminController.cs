@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Ticket;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
 using Theater.Contracts.Theater.PiecesTicket;
 using Theater.Controllers.Base;
@@ -19,7 +20,9 @@ public sealed class PieceTicketAdminController : CrudServiceBaseController<Piece
 
     public PieceTicketAdminController(
         IPieceTicketService pieceTicketService, 
-        IMapper mapper) : base(pieceTicketService, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(pieceTicketService, mapper, userAccountService)
     {
         _pieceTicketService = pieceTicketService;
     }

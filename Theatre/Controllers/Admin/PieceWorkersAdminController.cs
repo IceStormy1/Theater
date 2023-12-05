@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.PieceWorkers;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Theater.PieceWorker;
 using Theater.Controllers.Base;
 
@@ -13,7 +14,9 @@ public sealed class PieceWorkersAdminController : AdminBaseController<PieceWorke
 {
     public PieceWorkersAdminController(
         IMapper mapper,
-        IPieceWorkersService pieceWorkersService) : base(pieceWorkersService, mapper)
+        IPieceWorkersService pieceWorkersService,
+        IUserAccountService userAccountService
+        ) : base(pieceWorkersService, mapper, userAccountService)
     {
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.Rooms;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Messages;
 using Theater.Contracts.Rooms;
@@ -24,8 +25,9 @@ public sealed class RoomsController : CrudServiceBaseController<RoomParameters>
 
     public RoomsController(
         IRoomService service, 
-        IMapper mapper
-        ) : base(service, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(service, mapper, userAccountService)
     {
         _roomService = service;
     }
@@ -39,9 +41,11 @@ public sealed class RoomsController : CrudServiceBaseController<RoomParameters>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RoomItemDto>))]
     public async Task<IActionResult> GetRooms([FromQuery] RoomSearchParameters filter)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _roomService.GetRoomsForUser(UserId.Value, filter));
+            : RenderResult(await _roomService.GetRoomsForUser(innerUserId.Value, filter));
     }
 
     /// <summary>
@@ -54,9 +58,11 @@ public sealed class RoomsController : CrudServiceBaseController<RoomParameters>
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> CreateRoom([FromBody] RoomParameters roomParameters)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _roomService.CreateOrUpdate(roomParameters, entityId: null, userId: UserId.Value));
+            : RenderResult(await _roomService.CreateOrUpdate(roomParameters, entityId: null, userId: innerUserId.Value));
     }
 
     /// <summary>
@@ -70,8 +76,10 @@ public sealed class RoomsController : CrudServiceBaseController<RoomParameters>
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> UpdateRoom([FromRoute] Guid roomId, [FromBody] RoomParameters roomParameters)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _roomService.CreateOrUpdate(roomParameters, roomId, userId: UserId.Value));
+            : RenderResult(await _roomService.CreateOrUpdate(roomParameters, roomId, userId: innerUserId.Value));
     }
 }

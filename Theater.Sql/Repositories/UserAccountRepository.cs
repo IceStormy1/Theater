@@ -23,28 +23,19 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
         _dbContext = dbContext;
     }
 
-    public async Task<UserEntity> FindUser(string userName, string password, int? vkId = null)
-    {
-        var userQuery = _dbContext.Users.AsNoTracking().AsQueryable();
+    public Task<UserEntity> FindUser(string userName, Guid externalUserId)
+        => _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(user => string.Equals(user.UserName, userName) || user.ExternalUserId == externalUserId);
 
-        if (vkId != null)
-            return await userQuery.FirstOrDefaultAsync(user => user.VkId == vkId);
-
-        return await userQuery.FirstOrDefaultAsync(user => string.Equals(password, user.Password)
-                                                         && (string.Equals(user.UserName, userName)
-                                                             || string.Equals(user.Email, userName)));
-    }
-
-        public async Task<Result<CreateUserResult>> CreateUser(UserEntity userEntity)
+    public async Task<Result<CreateUserResult>> CreateUser(UserEntity userEntity)
     {
         var isUserExists = await _dbContext.Users
-            .AnyAsync(user => string.Equals(userEntity.UserName, user.UserName) ||
-                              string.Equals(userEntity.Email, user.Email));
+            .AnyAsync(user => string.Equals(userEntity.UserName, user.UserName));
 
         if (isUserExists)
             return Result<CreateUserResult>.FromError(UserAccountErrors.UserAlreadyExist.Error);
 
-        userEntity.UserRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.Id == userEntity.RoleId); // todo: переделать, нужно для авторизации ВК 
         _dbContext.Users.Add(userEntity);
         await DbContext.SaveChangesAsync();
 
@@ -76,12 +67,17 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
 
     public async Task<Result<UserEntity>> GetSystemUser()
     {
-        var systemUser = await DbSet.FirstOrDefaultAsync(x => x.RoleId == (int)UserRole.System);
+        var systemUser = await DbSet.FirstOrDefaultAsync(x => x.Role.HasFlag(UserRole.System));
 
         return systemUser is null 
             ? Result<UserEntity>.FromError(UserAccountErrors.NotFound.Error) 
             : Result.FromValue(systemUser);
     }
+
+    public Task<Guid?> GetUserIdByExternalId(Guid externalId)
+        => DbSet.Where(x => x.ExternalUserId == externalId)
+            .Select(x => x.Id == default ? (Guid?)null : x.Id)
+            .FirstOrDefaultAsync();
 
     public override IQueryable<UserEntity> AddIncludes(IQueryable<UserEntity> query)
     {

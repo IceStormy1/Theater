@@ -6,7 +6,9 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Theater.Abstractions.Caches;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Rabbit;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.Base;
@@ -26,7 +28,9 @@ public sealed class TestController : BaseController
         IPublishEndpoint messageBus,
         ILogger<TestController> logger,
         IConnectionsCache connectionsCache,
-        IMapper mapper) : base(mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(mapper, userAccountService)
     {
         _messageBus = messageBus;
         _logger = logger;
@@ -51,14 +55,24 @@ public sealed class TestController : BaseController
     /// </summary>
     [HttpPost("redis/connections/{connectionId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public Task AddConnection(Guid connectionId)
-        => _connectionsCache.SetConnection(UserId!.Value, connectionId.ToString());
+    [Authorize]
+    public async Task AddConnection(Guid connectionId)
+    {
+        var innerUserId = await GetUserId();
+
+        await _connectionsCache.SetConnection(innerUserId!.Value, connectionId.ToString());
+    }
 
     /// <summary>
     /// Получает соединения для залогиненного пользователя в Redis
     /// </summary>
     [HttpGet("redis/connections")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public Task GetConnections()
-        => _connectionsCache.GetConnections(UserId!.Value);
+    [Authorize]
+    public async Task GetConnections()
+    {
+        var innerUserId = await GetUserId();
+
+        await _connectionsCache.GetConnections(innerUserId!.Value);
+    }
 }

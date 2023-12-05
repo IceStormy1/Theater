@@ -1,51 +1,36 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Theater.Abstractions;
-using Theater.Abstractions.Authorization;
-using Theater.Abstractions.Authorization.Models;
+using Theater.Abstractions.Caches;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.UserAccount;
 using Theater.Common;
-using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
 using Theater.Entities.Users;
-using VkNet.Abstractions;
-using VkNet.Enums.Filters;
-using VkNet.Model;
 
 namespace Theater.Core.UserAccount;
 
 public sealed class UserAccountService : BaseCrudService<UserParameters, UserEntity>, IUserAccountService
 {
-    private const string SystemUser = "SystemUser";
-
-    private readonly IJwtHelper _jwtHelper;
     private readonly IUserAccountRepository _userAccountRepository;
-    private readonly IVkApi _vkApiAuth;
+    private readonly IUserAccountCache _userAccountCache;
 
     public UserAccountService(
         IMapper mapper, 
         IUserAccountRepository repository,
         IDocumentValidator<UserParameters> documentValidator,
-        IJwtHelper jwtHelper,
-        ILogger<UserAccountService> logger,
-        IVkApi vkApiAuth) : base(mapper, repository, documentValidator, logger)
+        ILogger<UserAccountService> logger, 
+        IUserAccountCache userAccountCache
+        ) : base(mapper, repository, documentValidator, logger)
     {
-        _jwtHelper = jwtHelper;
-        _vkApiAuth = vkApiAuth;
         _userAccountRepository = repository;
+        _userAccountCache = userAccountCache;
     }
 
-    public async Task<Result<CreateUserResult>> CreateUser(UserParameters user)
-    {
-        var userEntity = Mapper.Map<UserEntity>(user);
-
-        return await _userAccountRepository.CreateUser(userEntity);
-    }
-
-    public async Task<Result> UpdateUser(UserParameters user, Guid userId)
+    public async Task<Result> UpdateUserProfile(UserParameters user, Guid userId)
     {
         var userEntity = await Repository.GetByEntityId(userId);
 
@@ -57,59 +42,61 @@ public sealed class UserAccountService : BaseCrudService<UserParameters, UserEnt
         return await _userAccountRepository.UpdateUser(userEntity);
     }
 
-    public async Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters)
+    public async Task<Result<UserModel>> CreateOrUpdateUser(ClaimsPrincipal userClaims)
     {
-        var userEntity = await _userAccountRepository.FindUser(authenticateParameters.UserName, authenticateParameters.Password);
+        var userModel = Mapper.Map<UserModel>(userClaims.Claims);
 
-        return userEntity == null 
-            ? null 
-            : GetAuthenticateResponseByUser(userEntity);
-    }
+        var user = await _userAccountRepository.FindUser(userModel.UserName, userModel.ExternalUserId);
 
-    public async Task<Result<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto authenticateVkDto)
-    {
-        var @params = new ApiAuthParams { Settings = Settings.All, AccessToken = authenticateVkDto.AccessToken };
-        try
-        {
-            await _vkApiAuth.AuthorizeAsync(@params);
-
-            var vkUserInfo = await _vkApiAuth.Account.GetProfileInfoAsync();
-
-            if (vkUserInfo is null)
-                return Result<AuthenticateResponse>.FromError(UserAccountErrors.NotFound.Error);
-
-            var userEntity = await _userAccountRepository.FindUser(userName:null, password: null, vkId: default); // todo: Добавить нормальный vkID
-
-            if (userEntity is null)
-            {
-                userEntity = Mapper.Map<UserEntity>(vkUserInfo);
-
-                var createResult = await _userAccountRepository.CreateUser(userEntity);
-
-                if (!createResult.IsSuccess)
-                    return Result<AuthenticateResponse>.FromError(createResult.Error);
-            }
-
-            var authenticateResponse = GetAuthenticateResponseByUser(userEntity);
-
-            return Result.FromValue(authenticateResponse);
-
-        }
-        catch (Exception e)
-        {
-            Logger.LogError(e, "Произошла ошибка во время авторизации VK");
-
-            return Result<AuthenticateResponse>.FromError(AbstractionErrors.InternalError.Error);
-        }
+        return user is null 
+            ? await CreateUser(userModel) 
+            : await UpdateUser(userModel, user);
     }
 
     public Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount)
         => _userAccountRepository.ReplenishBalance(userId, replenishmentAmount);
 
-    private AuthenticateResponse GetAuthenticateResponseByUser(UserEntity userEntity)
+    public async Task<Guid?> GetUserIdByExternalId(Guid externalId)
     {
-        var token = _jwtHelper.GenerateJwtToken(userEntity);
+        var innerUserId = await _userAccountCache.GetInnerUserIdByExternalId(externalId);
 
-        return new AuthenticateResponse { AccessToken = token, Id = userEntity.Id };
+        if (innerUserId.HasValue)
+            return innerUserId;
+
+        innerUserId = await _userAccountRepository.GetUserIdByExternalId(externalId);
+
+        if(!innerUserId.HasValue)
+            return null;
+
+        await _userAccountCache.LinkUserIds(externalId, innerUserId.Value);
+        
+        return innerUserId;
+    }
+
+    private async Task<Result<UserModel>> CreateUser(UserModel userModel)
+    {
+        var userEntity = Mapper.Map<UserEntity>(userModel);
+        var createResult = await _userAccountRepository.CreateUser(userEntity);
+
+        if (!createResult.IsSuccess)
+            return Result<UserModel>.FromError(createResult.Error);
+
+        userModel.Id = userEntity.Id;
+
+        return Result.FromValue(userModel);
+    }
+
+    private async Task<Result<UserModel>> UpdateUser(UserModel userModel, UserEntity userEntity)
+    {
+        Mapper.Map(userModel, userEntity);
+
+        var updateResult = await _userAccountRepository.UpdateUser(userEntity);
+
+        if (!updateResult.IsSuccess)
+            return Result<UserModel>.FromError(updateResult.Error);
+
+        userModel.Id = userEntity.Id;
+
+        return Result.FromValue(userModel);
     }
 }

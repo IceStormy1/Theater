@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Theater.Entities.Theater;
@@ -13,9 +14,11 @@ using Theater.Sql;
 namespace Theater.Sql.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    partial class TheaterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231205103440_RemoveRolesAndAddUserFields")]
+    partial class RemoveRolesAndAddUserFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -524,6 +527,9 @@ namespace Theater.Sql.Migrations
                     b.Property<decimal>("Money")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
                     b.Property<string>("Phone")
                         .HasMaxLength(11)
                         .HasColumnType("character(11)")
@@ -571,6 +577,7 @@ namespace Theater.Sql.Migrations
                             LastName = "Tolmachev",
                             MiddleName = "Evgenievich",
                             Money = 1000m,
+                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
                             Phone = "81094316687",
                             Role = 2,
                             UserName = "IceStormy-admin"
@@ -587,6 +594,7 @@ namespace Theater.Sql.Migrations
                             LastName = "Tolmachev",
                             MiddleName = "Evgenievich",
                             Money = 1000m,
+                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
                             Phone = "81094316687",
                             Role = 1,
                             UserName = "IceStormy-user"
@@ -602,6 +610,7 @@ namespace Theater.Sql.Migrations
                             Gender = 1,
                             LastName = "Театра",
                             Money = 0m,
+                            Password = "E10ADC3949BA59ABBE56E057F20F883E",
                             Phone = "81094316687",
                             Role = 4,
                             UserName = "SystemUser"

@@ -1,22 +1,13 @@
 ﻿using FluentValidation;
 using System.Text.RegularExpressions;
-using Theater.Contracts;
 using Theater.Contracts.UserAccount;
-using Theater.Validation.UserAccount;
 
 namespace Theater.Validation.Authorization;
 
 public sealed class UserParametersValidator : AbstractValidator<UserParameters>
 {
-    /// <param name="userValidator"><see cref="UserValidator"/></param>
-    /// <param name="userBaseValidator"><see cref="UserBase"/></param>
-    public UserParametersValidator(
-        IValidator<IUser> userValidator,
-        IValidator<UserBase> userBaseValidator)
+    public UserParametersValidator()
     {
-        Include(userValidator);
-        Include(userBaseValidator);
-
         When(x => string.IsNullOrWhiteSpace(x.Email), () =>
         {
             RuleFor(user => user.Phone)

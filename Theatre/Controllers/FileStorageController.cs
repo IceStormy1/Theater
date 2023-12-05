@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.FileStorage;
+using Theater.Abstractions.UserAccount;
 using Theater.Common.Enums;
 using Theater.Contracts.FileStorage;
 using Theater.Controllers.Base;
@@ -18,7 +19,9 @@ public sealed class FileStorageController : BaseController
 
     public FileStorageController(
         IMapper mapper,
-        IFileStorageService fileStorageService) : base(mapper)
+        IFileStorageService fileStorageService,
+        IUserAccountService userAccountService
+        ) : base(mapper, userAccountService)
     {
         _fileStorageService = fileStorageService;
     }
@@ -64,10 +67,8 @@ public sealed class FileStorageController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(StorageFileInfo), StatusCodes.Status200OK)]
     public Task<StorageFileInfo> GetStorageFileInfo([FromRoute] Guid id)
-    {
-        return _fileStorageService.GetStorageFileInfoById(id);
-    }
-
+        => _fileStorageService.GetStorageFileInfoById(id);
+    
     /// <summary>
     /// Получить сам файл по идентификатору
     /// </summary>
@@ -80,6 +81,7 @@ public sealed class FileStorageController : BaseController
     {
         var storageFileInfo = await _fileStorageService.GetStorageFileInfoById(id);
         var stream = await _fileStorageService.GetFileStreamById(id, storageFileInfo.Bucket, storageFileInfo.StorageFileName);
+
         return File(stream, storageFileInfo.ContentType, storageFileInfo.FileName);
     }
 
@@ -94,6 +96,7 @@ public sealed class FileStorageController : BaseController
     public async Task<IActionResult> DeleteFileById([FromRoute] Guid id)
     {
         await _fileStorageService.DeleteFileById(id);
+
         return Ok();
     }
 }

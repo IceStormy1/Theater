@@ -11,14 +11,12 @@ using Theater.Abstractions.FileStorage;
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
-using Theater.Contracts.Authorization;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Theater.PurchasedUserTicket;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.Base;
 using Theater.Entities.Theater;
 using Theater.Entities.Users;
-using VkNet.Abstractions;
 using RoleUser = Theater.Common.Enums.UserRole;
 
 namespace Theater.Controllers;
@@ -33,37 +31,19 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     private readonly IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> _userIndexReader;
     private readonly IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> _pieceTicketIndexReader;
     private readonly IFileStorageService _fileStorageService;
-    private readonly IVkApi _vkApiAuth;
 
     public UserAccountController(
         IUserAccountService userAccountService,
         IMapper mapper,
         IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader,
         IIndexReader<PurchasedUserTicketModel, PurchasedUserTicketEntity, PieceTicketFilterSettings> pieceTicketIndexReader,
-        IFileStorageService fileStorageService,
-        IVkApi vkApiAuth) : base(userAccountService, mapper)
+        IFileStorageService fileStorageService
+        ) : base(userAccountService, mapper, userAccountService)
     {
         _userAccountService = userAccountService;
         _userIndexReader = userIndexReader;
         _fileStorageService = fileStorageService;
-        _vkApiAuth = vkApiAuth;
         _pieceTicketIndexReader = pieceTicketIndexReader;
-    }
-
-    /// <summary>
-    /// Регистрирует нового пользователя
-    /// </summary>
-    /// <response code="200">В случае успешной регистрации</response>
-    /// <response code="400">В случае ошибок валидации</response>
-    [AllowAnonymous]
-    [HttpPost("registration")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Registration([FromBody] UserParameters parameters)
-    {
-        var createUserResult = await _userAccountService.CreateUser(parameters);
-
-        return RenderResult(createUserResult);
     }
 
     /// <summary>
@@ -103,10 +83,11 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     [ProducesResponseType(typeof(Page<PurchasedUserTicketModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserTickets([FromQuery] PieceTicketFilterParameters filterParameters)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        if (UserId.Value != filterParameters.UserId && UserRole != RoleUser.Admin)
+        if (innerUserId.Value != filterParameters.UserId && !UserRole.HasFlag(RoleUser.Admin))
             return RenderResult(UserAccountErrors.InsufficientRights);
 
         var filterSettings = Mapper.Map<PieceTicketFilterSettings>(filterParameters);
@@ -116,56 +97,38 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     }
 
     /// <summary>
-    /// Войти при помощи логина и пароля
+    /// Создать или обновить профиль пользователя исходя из токена
     /// </summary>
     /// <response code="200">В случае успешной регистрации</response>
     /// <response code="400">В случае ошибок валидации</response>
-    [AllowAnonymous]
     [HttpPost("login")]
-    [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Login([FromBody] AuthenticateParameters parameters)
+    public async Task<IActionResult> Login()
     {
-        var authenticateResult = await _userAccountService.Authorize(parameters);       
-
-        return authenticateResult is null
-            ? RenderResult(UserAccountErrors.NotFound)
-            : Ok(authenticateResult);
-    }
-
-    /// <summary>
-    /// Войти при помощи логина и пароля
-    /// </summary>
-    /// <response code="200">В случае успешной регистрации</response>
-    /// <response code="400">В случае ошибок валидации</response>
-    [AllowAnonymous]
-    [HttpPost("vk/login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> LoginWithVkToken([FromBody] AuthenticateVkDto parameters)
-    {
-        var authenticateResult = await _userAccountService.AuthorizeWithVk(parameters);
+        var authenticateResult = await _userAccountService.CreateOrUpdateUser(User);
 
         return RenderResult(authenticateResult);
     }
 
     /// <summary>
-    /// Обновить профиль пользователя
+    /// Обновить профиль пользователя в ЛК
     /// </summary>
     /// <response code="200">В случае успешного запроса</response>
     /// <response code="400">В случае ошибок валидации</response>
     [HttpPut("{userId:guid}/update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UserParameters parameters)
+    public async Task<IActionResult> UpdateUserProfile([FromRoute] Guid userId, [FromBody] UserParameters parameters)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        if (UserId.Value != userId && UserRole != RoleUser.Admin)
+        if (innerUserId.Value != userId && !UserRole.HasFlag(RoleUser.Admin))
             return RenderResult(UserAccountErrors.InsufficientRights);
 
-        var updateResult = await _userAccountService.UpdateUser(parameters, userId);
+        var updateResult = await _userAccountService.UpdateUserProfile(parameters, userId);
 
         return RenderResult(updateResult);
     }
@@ -180,10 +143,11 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReplenishBalance([FromBody] UserReplenishParameters parameters)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        var replenishResult = await _userAccountService.ReplenishBalance(UserId.Value, parameters.ReplenishmentAmount);
+        var replenishResult = await _userAccountService.ReplenishBalance(innerUserId.Value, parameters.ReplenishmentAmount);
 
         return RenderResult(replenishResult);
     }

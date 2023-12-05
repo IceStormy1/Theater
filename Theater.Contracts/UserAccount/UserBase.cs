@@ -1,42 +1,21 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System;
 
 namespace Theater.Contracts.UserAccount;
 
-public abstract class UserBase
+public abstract class UserBase : IUser
 {
-    private string _password;
+    /// <inheritdoc cref="IUser.FirstName"/>
+    public string FirstName { get; set; }
 
-    /// <summary>
-    /// Никнейм пользователя
-    /// </summary>
-    public string UserName { get; set; }
+    /// <inheritdoc cref="IUser.LastName"/>
+    public string LastName { get; set; }
 
-    /// <summary>
-    /// Пароль пользователя
-    /// </summary>
-    public string Password
-    {
-        get => _password;
-        set => _password = GetMD5HashPassword(value);
-    }
+    /// <inheritdoc cref="IUser.MiddleName"/>
+    public string MiddleName { get; set; }
 
-    // ReSharper disable once InconsistentNaming
-    private static string GetMD5HashPassword(string password)
-    {
-        if (string.IsNullOrWhiteSpace(password))
-            return null;
+    /// <inheritdoc cref="IUser.Gender"/>
+    public GenderType Gender { get; set; }
 
-        var md5 = MD5.Create();
-
-        var bytes = Encoding.ASCII.GetBytes(password);
-        var hash = md5.ComputeHash(bytes);
-
-        var result = new StringBuilder();
-
-        foreach (var b in hash)
-            result.Append(b.ToString("X2"));
-
-        return result.ToString();
-    }
+    /// <inheritdoc cref="IUser.BirthDate"/>
+    public DateTime BirthDate { get; set; }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
+using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.WorkersPosition;
 using Theater.Common.Enums;
 using Theater.Contracts;
@@ -19,7 +20,8 @@ public sealed class WorkersPositionController : CrudServiceBaseController<Worker
 
     public WorkersPositionController(
         IWorkersPositionService workersPositionService,
-        IMapper mapper) : base(workersPositionService, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService) : base(workersPositionService, mapper, userAccountService)
     {
         _workersPositionService = workersPositionService;
     }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.PieceDates;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Theater.PieceDate;
 using Theater.Controllers.Base;
 
@@ -13,7 +14,9 @@ public sealed class PieceDateAdminController : AdminBaseController<PieceDatePara
 {
     public PieceDateAdminController(
         IPieceDateService service, 
-        IMapper mapper) : base(service, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(service, mapper, userAccountService)
     {
     }
 }

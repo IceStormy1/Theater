@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Theater.Abstractions.Authorization.Models;
 using Theater.Common;
 using Theater.Contracts.Authorization;
 using Theater.Contracts.UserAccount;
@@ -10,28 +10,17 @@ namespace Theater.Abstractions.UserAccount;
 public interface IUserAccountService : ICrudService<UserParameters>
 {
     /// <summary>
-    /// Создать пользователя
-    /// </summary>
-    /// <param name="user">Данные пользователя</param>
-    Task<Result<CreateUserResult>> CreateUser(UserParameters user);
-
-    /// <summary>
-    /// Обновить профиль пользователя
+    /// Обновить профиль пользователя в ЛК
     /// </summary>
     /// <param name="user">Данные пользователя</param>
     /// <param name="userId">Идентификатор пользователя</param>
-    Task<Result> UpdateUser(UserParameters user, Guid userId);
+    Task<Result> UpdateUserProfile(UserParameters user, Guid userId);
 
     /// <summary>
-    /// Авторизация пользователя
+    /// Создать или обновить профиль пользователя исходя из токена
     /// </summary>
-    /// <param name="authenticateParameters"></param>
-    Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters);
-
-    /// <summary>
-    /// Авторизоваться при помощи ВКонтакте
-    /// </summary>
-    Task<Result<AuthenticateResponse>> AuthorizeWithVk(AuthenticateVkDto  authenticateVkDto);
+    /// <param name="userClaims"></param>
+    Task<Result<UserModel>> CreateOrUpdateUser(ClaimsPrincipal userClaims);
 
     /// <summary>
     /// Пополнить баланс пользователя
@@ -39,4 +28,10 @@ public interface IUserAccountService : ICrudService<UserParameters>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="replenishmentAmount">Сумма пополнения</param>
     Task<Result> ReplenishBalance(Guid userId, decimal replenishmentAmount);
+
+    /// <summary>
+    /// Получить идентификатор пользователя по его внешнему идентификатору
+    /// </summary>
+    /// <param name="externalId">Внешний идентификатор пользователя</param>
+    Task<Guid?> GetUserIdByExternalId(Guid externalId);
 }

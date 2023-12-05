@@ -1,11 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Theater.Abstractions.UserAccount;
 using Theater.Common;
 using Theater.Common.Enums;
+using Theater.Common.Extensions;
 
 namespace Theater.Controllers.Base;
 
@@ -17,44 +21,68 @@ namespace Theater.Controllers.Base;
 public class BaseController : ControllerBase
 {
     /// <summary>
-    /// Идентификатор пользователя
-    /// </summary>
-    protected Guid? UserId => GetUserId();
-
-    /// <summary>
     /// Роль пользователя
     /// </summary>
-    protected UserRole? UserRole => GetUserRoleFromToken();
+    protected UserRole UserRole => GetUserRoleFromToken();
+
+    /// <summary>
+    /// ExternalId авторизованного пользователя
+    /// </summary>
+    protected Guid AuthorizedUserExternalId
+    {
+        get
+        {
+            var nameIdentifier = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            if (!string.IsNullOrWhiteSpace(nameIdentifier) && Guid.TryParse(nameIdentifier, out var userExternalId))
+                return userExternalId;
+
+            return default;
+        }
+    }
 
     protected readonly IMapper Mapper;
 
-    public BaseController(IMapper mapper)
+    private readonly IUserAccountService _userAccountService;
+
+    public BaseController(
+        IMapper mapper, 
+        IUserAccountService userAccountService)
     {
         Mapper = mapper;
+        _userAccountService = userAccountService;
     }
 
     /// <summary>
-    /// Возвращает ActionResult из Result
+    /// Возвращает ActionResult из <see cref="IResult{T}"/>
     /// </summary>
-    /// <param name="source">Write result с ошибкой или моделью</param>
+    /// <param name="source">Result с ошибкой или моделью</param>
     /// <typeparam name="T"></typeparam>
     protected IActionResult RenderResult<T>(IResult<T> source)
     {
         if (!source.IsSuccess)
             return RenderError(source.Error);
 
-        if (source.ResultData == null)
-            return new NoContentResult();
-
-        return new JsonResult(source.ResultData);
+        return source.ResultData == null 
+            ? new NoContentResult()
+            : new JsonResult(source.ResultData);
     }
 
     /// <summary>
     /// Возвращает ActionResult из Result
     /// </summary>
-    /// <param name="source">Write result</param>
+    /// <param name="source">Result</param>
     protected IActionResult RenderResult(Result source)
         => source.IsSuccess ? new OkResult() : RenderError(source.Error);
+
+    /// <summary>
+    /// Получить внутренний идентификатор пользователя по идентификатору из токена
+    /// </summary>
+    /// <returns></returns>
+    protected Task<Guid?> GetUserId()
+        => AuthorizedUserExternalId == Guid.Empty
+            ? null
+            : _userAccountService.GetUserIdByExternalId(AuthorizedUserExternalId);
 
     /// <summary>
     /// Возвращает action result для ошибки как <see cref="ProblemDetails"/> с status code
@@ -95,16 +123,7 @@ public class BaseController : ControllerBase
     /// <summary>
     /// Получить роль пользователя из токена
     /// </summary>
-    /// <returns></returns>
-    private UserRole? GetUserRoleFromToken()
-        => Enum.TryParse<UserRole>(User.Claims.First(x => x.Type == ClaimTypes.Role).Value, true, out var userRole)
-            ? userRole
-            : null;
-
-    private Guid? GetUserId()
-    {
-        var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-        return Guid.TryParse(userId, out var userIdResult) ? userIdResult : null;
-    }
+    private UserRole GetUserRoleFromToken()
+        => User.Claims.First(x => x.Type == "role").Value
+            .ConvertStringToEnum<UserRole>();
 }
