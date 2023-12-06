@@ -156,9 +156,12 @@ public static class ServiceCollectionExtensions
                 options.ForwardDefaultSelector = Selector.ForwardReferenceToken(AuthConstants.IntrospectionSheme);
             }).AddOAuth2Introspection(AuthConstants.IntrospectionSheme, options =>
             {
-                options.Authority = "http://localhost:5090/"; // TODO: Вынести в конфиг
-                options.ClientId = "TheaterApi";
-                options.ClientSecret = "4844b33f-a869-4cdf-aa0c-ef6703b2136f";
+                var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>() 
+                                 ?? throw new ArgumentException($"Section {nameof(JwtOptions)} not found", nameof(configuration)); 
+
+                options.Authority = jwtOptions.Authority; 
+                options.ClientId = jwtOptions.ClientId;
+                options.ClientSecret = jwtOptions.ClientSecret;
             });
 
         services.AddAuthorization(options =>
@@ -213,7 +216,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)))
-            .Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+            ;
     }
 
     private static IServiceCollection RegisterImplementations(this IServiceCollection services, IEnumerable<Type> implementationTypes)
