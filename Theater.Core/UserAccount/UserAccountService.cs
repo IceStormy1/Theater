@@ -73,6 +73,18 @@ public sealed class UserAccountService : BaseCrudService<UserParameters, UserEnt
         return innerUserId;
     }
 
+    public async Task<Result<UserModel>> GetUserByExternalId(Guid externalId)
+    {
+        var userEntity = await _userAccountRepository.GetUserByExternalId(externalId);
+
+        if(userEntity is null)
+            return Result<UserModel>.FromError(UserAccountErrors.NotFound.Error);
+
+        var userModel = Mapper.Map<UserModel>(userEntity);
+
+        return Result.FromValue(userModel);
+    }
+
     private async Task<Result<UserModel>> CreateUser(UserModel userModel)
     {
         var userEntity = Mapper.Map<UserEntity>(userModel);

@@ -44,4 +44,10 @@ public interface IUserAccountRepository : ICrudRepository<UserEntity>
     /// <param name="externalId">Внешний идентификатор пользователя</param>
     /// <returns></returns>
     Task<Guid?> GetUserIdByExternalId(Guid externalId);
+
+    /// <summary>
+    /// Получить сущность пользователя по его внешнему идентификатору
+    /// </summary>
+    /// <param name="externalId">Внешний идентификатор пользователя</param>
+    Task<UserEntity> GetUserByExternalId(Guid externalId);
 }

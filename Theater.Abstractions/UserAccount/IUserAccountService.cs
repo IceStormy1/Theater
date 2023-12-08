@@ -33,4 +33,10 @@ public interface IUserAccountService : ICrudService<UserParameters>
     /// </summary>
     /// <param name="externalId">Внешний идентификатор пользователя</param>
     Task<Guid?> GetUserIdByExternalId(Guid externalId);
+
+    /// <summary>
+    /// Получить пользователя по его внешнему идентификатору
+    /// </summary>
+    /// <param name="externalId">Внешний идентификатор пользователя</param>
+    Task<Result<UserModel>> GetUserByExternalId(Guid externalId);
 }

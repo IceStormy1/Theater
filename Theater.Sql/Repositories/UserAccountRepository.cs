@@ -79,6 +79,10 @@ public sealed class UserAccountRepository : BaseCrudRepository<UserEntity>, IUse
             .Select(x => x.Id == default ? (Guid?)null : x.Id)
             .FirstOrDefaultAsync();
 
+    public Task<UserEntity> GetUserByExternalId(Guid externalId)
+        => DbSet.AsNoTracking()
+            .SingleOrDefaultAsync(x => x.ExternalUserId == externalId);
+
     public override IQueryable<UserEntity> AddIncludes(IQueryable<UserEntity> query)
     {
         return query.Include(x => x.Photo)

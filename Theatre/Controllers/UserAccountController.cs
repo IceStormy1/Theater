@@ -112,6 +112,21 @@ public sealed class UserAccountController : CrudServiceBaseController<UserParame
     }
 
     /// <summary>
+    /// Создать или обновить профиль пользователя исходя из токена
+    /// </summary>
+    /// <response code="200">В случае успешной регистрации</response>
+    /// <response code="400">В случае ошибок валидации</response>
+    [HttpGet("me")]
+    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetAuthorizedUser()
+    {
+        var authenticateResult = await _userAccountService.GetUserByExternalId(AuthorizedUserExternalId);
+
+        return RenderResult(authenticateResult);
+    }
+
+    /// <summary>
     /// Обновить профиль пользователя в ЛК
     /// </summary>
     /// <response code="200">В случае успешного запроса</response>

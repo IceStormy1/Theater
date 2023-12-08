@@ -44,7 +44,7 @@ public sealed class TestController : BaseController
     /// </summary>
     [HttpPost("rabbit")]
     [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-    public async Task CreateReview()
+    public async Task SendMessage()
     {
         var messageId = Guid.NewGuid();
 
