@@ -23,7 +23,8 @@ public sealed class UserAccountAdminController : AdminBaseController<UserParamet
     public UserAccountAdminController(
         IUserAccountService service,
         IMapper mapper,
-        IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader) : base(service, mapper)
+        IIndexReader<UserModel, UserEntity, UserAccountFilterSettings> userIndexReader,
+        IUserAccountService userAccountService) : base(service, mapper, userAccountService)
     {
         _userIndexReader = userIndexReader;
     }

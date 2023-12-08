@@ -43,7 +43,7 @@ public sealed class UserReviewValidator : IDocumentValidator<UserReviewParameter
         var userReviewEntity = await _userReviewRepository.GetByEntityId(entityId);
         var userEntity = await _userAccountRepository.GetByEntityId(userId.Value);
 
-        if(userReviewEntity.UserId != userId.Value && userEntity.RoleId != (int)UserRole.Admin)
+        if(userReviewEntity.UserId != userId.Value && !userEntity.Role.HasFlag(UserRole.Admin))
             return UserAccountErrors.InsufficientRights;
 
         return Result.Successful;

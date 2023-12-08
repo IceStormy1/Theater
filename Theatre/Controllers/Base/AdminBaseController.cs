@@ -1,10 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using Theater.Abstractions;
+using Theater.Abstractions.UserAccount;
+using Theater.Attributes;
 using Theater.Contracts;
 
 namespace Theater.Controllers.Base;
@@ -12,7 +13,7 @@ namespace Theater.Controllers.Base;
 /// <summary>
 /// Базовый контроллер в админке с реализацией CRUD. Путь по умолчанию: <c>api/admin</c>.
 /// </summary>
-[Authorize] 
+[RoleAuthorize(roles: nameof(UserRole.Admin))]
 [Route("api/admin")] 
 [ApiController]
 public class AdminBaseController<TParameters> : CrudServiceBaseController<TParameters>
@@ -20,7 +21,9 @@ public class AdminBaseController<TParameters> : CrudServiceBaseController<TParam
 {
     public AdminBaseController(
         ICrudService<TParameters> service,
-        IMapper mapper) : base(service, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(service, mapper, userAccountService)
     {
     }
 
@@ -33,8 +36,8 @@ public class AdminBaseController<TParameters> : CrudServiceBaseController<TParam
     [HttpPost]
     [ProducesResponseType(typeof(DocumentMeta), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] TParameters parameters)
-        => await CreateOrUpdate(parameters);
+    public Task<IActionResult> Create([FromBody] TParameters parameters)
+        => CreateOrUpdate(parameters);
 
     /// <summary>
     /// Обновить сущность
@@ -45,8 +48,8 @@ public class AdminBaseController<TParameters> : CrudServiceBaseController<TParam
     [HttpPut("{entityId:guid}")]
     [ProducesResponseType(typeof(DocumentMeta), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Update([FromBody] TParameters parameters, [FromRoute] Guid entityId)
-        => await CreateOrUpdate(parameters, entityId);
+    public Task<IActionResult> Update([FromBody] TParameters parameters, [FromRoute] Guid entityId)
+        => CreateOrUpdate(parameters, entityId);
 
     /// <summary>
     /// Удалить сущность

@@ -1,6 +1,6 @@
 ﻿namespace Theater.Common.Settings;
 
-public class FileStorageOptions
+public sealed class FileStorageOptions
 {
     public bool ForcePathStyle { get; set; }
     public bool UseHttp { get; set; }

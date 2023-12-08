@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Abstractions.PieceGenre;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Theater.PiecesGenre;
 using Theater.Controllers.Base;
 
@@ -14,7 +15,9 @@ public sealed class PieceGenreAdminController : AdminBaseController<PiecesGenreP
 {
     public PieceGenreAdminController(
         IPieceGenreService pieceGenreService,
-        IMapper mapper) : base(pieceGenreService, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService) 
+        : base(pieceGenreService, mapper, userAccountService)
     {
     }
 }

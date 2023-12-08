@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 using Theater.Abstractions.Caches;
+using Theater.Abstractions.UserAccount;
+using Theater.Attributes;
 using Theater.Contracts.Rabbit;
 using Theater.Contracts.UserAccount;
 using Theater.Controllers.Base;
@@ -16,6 +19,7 @@ namespace Theater.Controllers;
 [SwaggerTag("Тестовые методы")]
 [ApiController]
 [Route("[controller]")]
+[RoleAuthorize(roles: nameof(UserRole.Admin))]
 public sealed class TestController : BaseController
 {
     private readonly IPublishEndpoint _messageBus;
@@ -26,7 +30,9 @@ public sealed class TestController : BaseController
         IPublishEndpoint messageBus,
         ILogger<TestController> logger,
         IConnectionsCache connectionsCache,
-        IMapper mapper) : base(mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(mapper, userAccountService)
     {
         _messageBus = messageBus;
         _logger = logger;
@@ -38,7 +44,7 @@ public sealed class TestController : BaseController
     /// </summary>
     [HttpPost("rabbit")]
     [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-    public async Task CreateReview()
+    public async Task SendMessage()
     {
         var messageId = Guid.NewGuid();
 
@@ -51,14 +57,23 @@ public sealed class TestController : BaseController
     /// </summary>
     [HttpPost("redis/connections/{connectionId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public Task AddConnection(Guid connectionId)
-        => _connectionsCache.SetConnection(UserId!.Value, connectionId.ToString());
+    public async Task AddConnection(Guid connectionId)
+    {
+        var innerUserId = await GetUserId();
+
+        await _connectionsCache.SetConnection(innerUserId!.Value, connectionId.ToString());
+    }
 
     /// <summary>
     /// Получает соединения для залогиненного пользователя в Redis
     /// </summary>
     [HttpGet("redis/connections")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public Task GetConnections()
-        => _connectionsCache.GetConnections(UserId!.Value);
+    [Authorize]
+    public async Task GetConnections()
+    {
+        var innerUserId = await GetUserId();
+
+        await _connectionsCache.GetConnections(innerUserId!.Value);
+    }
 }

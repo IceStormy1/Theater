@@ -1,29 +1,19 @@
-﻿using System;
-using Theater.Contracts.FileStorage;
+﻿using Theater.Contracts.FileStorage;
 
 namespace Theater.Contracts.UserAccount;
 
-public class UserParameters : UserBase, IUser
+// TODO: для ЛК добавить новую модель для обновления профиля
+public class UserParameters : UserBase
 {
+    /// <summary>
+    /// Никнейм пользователя
+    /// </summary>
+    public string UserName { get; set; }
+
     /// <summary>
     /// Email пользователя
     /// </summary>
     public string Email { get; set; }
-
-    /// <summary>
-    /// Имя 
-    /// </summary>
-    public string FirstName { get; set; }
-
-    /// <summary>
-    /// Фамилия 
-    /// </summary>
-    public string LastName { get; set; }
-
-    /// <summary>
-    /// Отчество
-    /// </summary>
-    public string MiddleName { get; set; }
 
     /// <summary>
     /// Телефон пользователя
@@ -31,14 +21,9 @@ public class UserParameters : UserBase, IUser
     public string Phone { get; set; }
 
     /// <summary>
-    /// Пол
+    /// СНИЛС
     /// </summary>
-    public GenderType Gender { get; set; }
-
-    /// <summary>
-    /// Дата рождения
-    /// </summary>
-    public DateTime BirthDate { get; set; }
+    public string Snils { get; set; }
 
     /// <summary>
     /// Мета-данные фотографии пользователя в ЛК 

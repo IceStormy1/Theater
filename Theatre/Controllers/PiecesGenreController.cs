@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 using Theater.Abstractions.PieceGenre;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
 using Theater.Contracts.Theater.PiecesGenre;
 using Theater.Controllers.Base;
@@ -16,7 +17,10 @@ public sealed class PiecesGenreController : CrudServiceBaseController<PiecesGenr
 {
     private readonly IPieceGenreService _pieceGenreService;
 
-    public PiecesGenreController(IPieceGenreService pieceGenreService, IMapper mapper) : base(pieceGenreService, mapper)
+    public PiecesGenreController(
+        IPieceGenreService pieceGenreService, 
+        IMapper mapper,
+        IUserAccountService userAccountService) : base(pieceGenreService, mapper, userAccountService)
     {
         _pieceGenreService = pieceGenreService;
     }

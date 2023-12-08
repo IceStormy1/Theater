@@ -1,7 +1,18 @@
-﻿namespace Theater.Common.Enums;
+﻿using System;
 
+namespace Theater.Common.Enums;
+
+/// <summary>
+/// Роль пользователя
+/// </summary>
+[Flags]
 public enum UserRole
 {
+    /// <summary>
+    /// Неизвестное значение
+    /// </summary>
+    None = 0,
+
     /// <summary>
     /// Обычный пользователь
     /// </summary>
@@ -15,5 +26,5 @@ public enum UserRole
     /// <summary>
     /// Системный пользователь
     /// </summary>
-    System = 3
+    System = 4
 }

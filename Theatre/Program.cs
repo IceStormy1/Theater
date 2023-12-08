@@ -8,13 +8,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+
+using Swashbuckle.AspNetCore.SwaggerUI;
+using System;
+using System.Globalization;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using System;
-using System.Globalization;
 using Theater.Configuration.Extensions;
 using Theater.Consumer;
 using Theater.Core.Profiles;

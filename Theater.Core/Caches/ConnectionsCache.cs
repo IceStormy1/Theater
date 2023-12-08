@@ -63,13 +63,8 @@ public sealed class ConnectionsCache : IConnectionsCache
     }
 
     private static string GetChatConnectionsCacheKey(Guid userId)
-    {
-        var tt = PrefixKey + userId;
-        return PrefixKey + userId;
-    }
-
+        => PrefixKey + userId;
+    
     private static Guid GetIdFromKey(string key)
-    {
-        return Guid.Parse(key[PrefixKey.Length..]);
-    }
+        => Guid.Parse(key[PrefixKey.Length..]);
 }

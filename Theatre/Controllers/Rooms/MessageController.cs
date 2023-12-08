@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.Message;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts.Filters;
 using Theater.Contracts.Messages;
 using Theater.Controllers.Base;
@@ -23,7 +24,8 @@ public sealed class MessageController : BaseController
 
     public MessageController(
         IMapper mapper,
-        IMessageService messageService) : base(mapper)
+        IMessageService messageService,
+        IUserAccountService userAccountService) : base(mapper, userAccountService)
     {
         _messageService = messageService;
     }
@@ -39,9 +41,11 @@ public sealed class MessageController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> SendMessage([FromRoute] Guid roomId, [FromBody] NewMessageModel newMessage)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _messageService.SendMessage(roomId, UserId.Value, newMessage));
+            : RenderResult(await _messageService.SendMessage(roomId, innerUserId.Value, newMessage));
     }
 
     /// <summary>
@@ -54,8 +58,10 @@ public sealed class MessageController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetMessages([FromRoute] Guid roomId, [FromQuery] MessageFilterParameters filter)
     {
-        return !UserId.HasValue
+        var innerUserId = await GetUserId();
+
+        return !innerUserId.HasValue
             ? RenderResult(UserAccountErrors.Unauthorized)
-            : RenderResult(await _messageService.GetMessages(roomId, UserId.Value, filter));
+            : RenderResult(await _messageService.GetMessages(roomId, innerUserId.Value, filter));
     }
 }

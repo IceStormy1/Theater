@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Theater.Abstractions;
 using Theater.Abstractions.Errors;
 using Theater.Abstractions.Filters;
+using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserReviews;
 using Theater.Contracts;
 using Theater.Contracts.Filters;
@@ -30,7 +31,9 @@ public sealed class UserReviewsController : CrudServiceBaseController<UserReview
     public UserReviewsController(
         IUserReviewsService service, 
         IMapper mapper, 
-        IIndexReader<UserReviewModel, UserReviewEntity, UserReviewFilterSettings> userReviewIndexReader) : base(service, mapper)
+        IIndexReader<UserReviewModel, UserReviewEntity, UserReviewFilterSettings> userReviewIndexReader,
+        IUserAccountService userAccountService
+        ) : base(service, mapper, userAccountService)
     {
         _userReviewsService = service;
         _userReviewIndexReader = userReviewIndexReader;
@@ -44,10 +47,12 @@ public sealed class UserReviewsController : CrudServiceBaseController<UserReview
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateReview([FromBody] UserReviewParameters parameters)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        parameters.UserId = UserId.Value;
+        parameters.UserId = innerUserId.Value;
         var result = await _userReviewsService.CreateOrUpdate(parameters, null);
 
         return RenderResult(result);
@@ -61,10 +66,12 @@ public sealed class UserReviewsController : CrudServiceBaseController<UserReview
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateReview([FromRoute] Guid id, [FromBody] UserReviewParameters parameters)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        parameters.UserId = UserId.Value;
+        parameters.UserId = innerUserId.Value;
         var result = await _userReviewsService.CreateOrUpdate(parameters, id);
 
         return RenderResult(result);
@@ -78,7 +85,8 @@ public sealed class UserReviewsController : CrudServiceBaseController<UserReview
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteReview([FromRoute] Guid id)
     {
-        var result = await _userReviewsService.Delete(id, UserId);
+        var innerUserId = await GetUserId();
+        var result = await _userReviewsService.Delete(id, innerUserId);
 
         return RenderResult(result);
     }

@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using Theater.Abstractions;
+using Theater.Abstractions.Filters;
 using Theater.Abstractions.Piece;
+using Theater.Abstractions.UserAccount;
 using Theater.Contracts;
 using Theater.Contracts.Filters;
-using Theater.Entities.Theater;
-using Swashbuckle.AspNetCore.Annotations;
-using Theater.Abstractions.Filters;
 using Theater.Contracts.Theater.Piece;
 using Theater.Controllers.Base;
+using Theater.Entities.Theater;
 
 namespace Theater.Controllers;
 
@@ -25,7 +26,9 @@ public sealed class PieceController : CrudServiceBaseController<PieceParameters>
     public PieceController(
         IPieceService service, 
         IMapper mapper,
-        IIndexReader<PieceModel, PieceEntity, PieceFilterSettings> pieceIndexReader) : base(service, mapper)
+        IIndexReader<PieceModel, PieceEntity, PieceFilterSettings> pieceIndexReader,
+        IUserAccountService userAccountService
+        ) : base(service, mapper, userAccountService)
     {
         _pieceService = service;
         _pieceIndexReader = pieceIndexReader;

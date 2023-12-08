@@ -12,9 +12,7 @@ public interface IUserAccountRepository : ICrudRepository<UserEntity>
     /// Получить пользователя по его никнейму
     /// </summary>
     /// <param name="userName">Никнейм пользователя</param>
-    /// <param name="password">Пароль пользователя</param>
-    /// <param name="vkId">Идентификатор пользователя в ВК. Если заполнен, то поиск будет проходить только по нему</param>
-    Task<UserEntity> FindUser(string userName, string password, int? vkId = null);
+    Task<UserEntity> FindUser(string userName, Guid externalUserId);
 
     /// <summary>
     /// Создать пользователя
@@ -39,4 +37,17 @@ public interface IUserAccountRepository : ICrudRepository<UserEntity>
     /// Возвращает системного пользователя
     /// </summary>
     Task<Result<UserEntity>> GetSystemUser();
+
+    /// <summary>
+    /// Получить идентификатор пользователя по его внешнему идентификатору
+    /// </summary>
+    /// <param name="externalId">Внешний идентификатор пользователя</param>
+    /// <returns></returns>
+    Task<Guid?> GetUserIdByExternalId(Guid externalId);
+
+    /// <summary>
+    /// Получить сущность пользователя по его внешнему идентификатору
+    /// </summary>
+    /// <param name="externalId">Внешний идентификатор пользователя</param>
+    Task<UserEntity> GetUserByExternalId(Guid externalId);
 }

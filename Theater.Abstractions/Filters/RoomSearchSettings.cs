@@ -5,5 +5,5 @@ public sealed class RoomSearchSettings : PagingSettings
     /// <summary>
     /// Поиск по названию чата или имени контакта (пользователя)
     /// </summary>
-    public string? Query { get; set; }
+    public string Query { get; set; }
 }

@@ -14,19 +14,17 @@ namespace Theater.Entities.Users;
 public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
 {
     /// <summary>
-    /// Идентификатор пользователя, который авторизовался при помощи VK
+    /// Внешний идентификатор пользователя из сервиса авторизации
     /// </summary>
-    public int? VkId { get; set; }
+    /// <remarks>
+    /// <see href="https://github.com/IceStormy1/Authorization-API"></see>
+    /// </remarks>
+    public Guid ExternalUserId { get; set; }
 
     /// <summary>
     /// Никнейм пользователя
     /// </summary>
     public string UserName { get; set; }
-
-    /// <summary>
-    /// Пароль пользователя
-    /// </summary>
-    public string Password { get; set; }
 
     /// <summary>
     /// Email пользователя
@@ -66,7 +64,7 @@ public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     /// <summary>
     /// Роль пользователя
     /// </summary>
-    public ushort RoleId { get; set; }
+    public UserRole Role { get; set; }
 
     /// <summary>
     /// Деньги пользователя
@@ -85,6 +83,11 @@ public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     public Guid? PhotoId { get; set; }
 
     /// <summary>
+    /// СНИЛС
+    /// </summary>
+    public string Snils { get; set; }
+
+    /// <summary>
     /// ФИО
     /// </summary>
     [NotMapped]
@@ -94,12 +97,6 @@ public sealed class UserEntity : BaseEntity, IHasCreatedAt, IHasUpdatedAt
     /// Основная фотография пьесы
     /// </summary>
     public FileStorageEntity Photo { get; set; }
-
-    /// <summary>
-    /// Ссылка на роль пользователя
-    /// </summary>
-    public UserRoleEntity UserRole { get; set; }
-
 
     public List<UserReviewEntity> UserReviews { get; set; } = new();
     public List<BookedTicketEntity> BookedTickets { get; set; } = new();

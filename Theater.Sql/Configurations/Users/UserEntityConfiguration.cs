@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
 using Theater.Common.Enums;
 using Theater.Entities.Users;
 
@@ -19,9 +19,8 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
         builder.Property(x => x.LastName).IsRequired().HasMaxLength(128);
         builder.Property(x => x.MiddleName).HasMaxLength(128);
 
-        builder.Navigation(x => x.UserRole).AutoInclude();
-
-        builder.HasIndex(x => x.VkId);
+        builder.HasIndex(x => new { x.UserName, x.ExternalUserId });
+        builder.HasIndex(x => x.ExternalUserId ).IsUnique();
 
         builder.HasMany(s => s.UserReviews)
             .WithOne(x => x.User)
@@ -52,10 +51,10 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
             .WithOne(x => x.User)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasData(GetPrimaryUsersData());
+        builder.HasData(GetDefaultUsersData());
     }
 
-    private static IEnumerable<UserEntity> GetPrimaryUsersData()
+    private static IEnumerable<UserEntity> GetDefaultUsersData()
         => new List<UserEntity>
         {
             new()
@@ -68,11 +67,11 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
                 Gender = GenderType.Male,
                 Id = Guid.Parse("f2343d16-e610-4a73-a0f0-b9f63df511e6"),
                 Phone = "81094316687",
-                Password = "E10ADC3949BA59ABBE56E057F20F883E", // 123456
-                RoleId = (int)UserRole.Admin,
+                Role = UserRole.Admin,
                 UserName = "IceStormy-admin",
                 BirthDate = new DateTime(2001, 06, 06),
-                Money = new decimal(1000.00)
+                Money = new decimal(1000.00),
+                ExternalUserId = Guid.Parse("f2343d16-e610-4a73-a0f0-b9f63df511e6")
             },
             new()
             {
@@ -84,11 +83,11 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
                 Gender = GenderType.Male,
                 Id = Guid.Parse("e1f83d38-56a7-435b-94bd-fe891ed0f03a"),
                 Phone = "81094316687",
-                Password = "E10ADC3949BA59ABBE56E057F20F883E", // 123456
-                RoleId = (int)UserRole.User,
+                Role = UserRole.User,
                 BirthDate = new DateTime(2001, 06, 06),
                 UserName = "IceStormy-user",
-                Money = new decimal(1000.00)
+                Money = new decimal(1000.00),
+                ExternalUserId = Guid.Parse("e1f83d38-56a7-435b-94bd-fe891ed0f03a")
             },
             new()
             {
@@ -99,10 +98,9 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
                 Gender = GenderType.Male,
                 Phone = "81094316687",
                 Id = Guid.Parse("cd448464-2ec0-4b21-b5fa-9a3cc8547489"),
-                Password = "E10ADC3949BA59ABBE56E057F20F883E", // 123456
-                RoleId = (int)UserRole.System,
+                Role = UserRole.System,
                 BirthDate = new DateTime(2001, 06, 06),
-                UserName = "SystemUser",
+                UserName = "SystemUser"
             }
         };
 }

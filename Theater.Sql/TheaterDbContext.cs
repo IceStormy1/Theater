@@ -16,17 +16,12 @@ namespace Theater.Sql;
 /// <summary>
 /// Контекст базы данных театра
 /// </summary>
-public class TheaterDbContext : DbContext
+public sealed class TheaterDbContext : DbContext
 {
     /// <summary>
     /// Пользователи
     /// </summary>
     public DbSet<UserEntity> Users { get; set; }
-
-    /// <summary>
-    /// Роли пользователей
-    /// </summary>
-    public DbSet<UserRoleEntity> UserRoles { get; set; }
 
     /// <summary>
     /// Должности работников театра

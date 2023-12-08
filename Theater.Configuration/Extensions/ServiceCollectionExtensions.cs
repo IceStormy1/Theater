@@ -1,21 +1,25 @@
 ﻿using Amazon.S3;
 using AutoMapper;
+using IdentityModel.AspNetCore.AccessTokenValidation;
+using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis.Extensions.Core.Configuration;
+using StackExchange.Redis.Extensions.System.Text.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Hosting;
+using System.Net.Http;
 using Theater.Abstractions;
-using Theater.Abstractions.Authorization;
+using Theater.Abstractions.Caches;
 using Theater.Abstractions.Filters;
 using Theater.Abstractions.Jwt;
 using Theater.Abstractions.PieceDates;
@@ -23,8 +27,9 @@ using Theater.Abstractions.PurchasedUserTicket;
 using Theater.Abstractions.TheaterWorker;
 using Theater.Abstractions.UserAccount;
 using Theater.Abstractions.UserReviews;
+using Theater.Common.Constants;
 using Theater.Common.Settings;
-using Theater.Configuration.Policy;
+using Theater.Configuration.Helpers;
 using Theater.Contracts.Rooms;
 using Theater.Contracts.Theater.Piece;
 using Theater.Contracts.Theater.PieceDate;
@@ -37,7 +42,7 @@ using Theater.Contracts.Theater.UserReview;
 using Theater.Contracts.Theater.WorkersPosition;
 using Theater.Contracts.UserAccount;
 using Theater.Core;
-using Theater.Core.Authorization;
+using Theater.Core.Caches;
 using Theater.Core.Theater.Validators;
 using Theater.Entities.Theater;
 using Theater.Entities.Users;
@@ -45,18 +50,11 @@ using Theater.Sql;
 using Theater.Sql.QueryBuilders;
 using Theater.Sql.Repositories;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
-using VkNet;
-using VkNet.Abstractions;
 using PieceIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.Piece.PieceModel, Theater.Entities.Theater.PieceEntity, Theater.Abstractions.Filters.PieceFilterSettings>;
 using TheaterWorkerIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.TheaterWorker.TheaterWorkerModel, Theater.Entities.Theater.TheaterWorkerEntity, Theater.Abstractions.Filters.TheaterWorkerFilterSettings>;
 using TicketIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.PurchasedUserTicket.PurchasedUserTicketModel, Theater.Entities.Theater.PurchasedUserTicketEntity, Theater.Abstractions.Filters.PieceTicketFilterSettings>;
 using UserIndexReader = Theater.Sql.IndexReader<Theater.Contracts.UserAccount.UserModel, Theater.Entities.Users.UserEntity, Theater.Abstractions.Filters.UserAccountFilterSettings>;
 using UserReviewIndexReader = Theater.Sql.IndexReader<Theater.Contracts.Theater.UserReview.UserReviewModel, Theater.Entities.Theater.UserReviewEntity, Theater.Abstractions.Filters.UserReviewFilterSettings>;
-using StackExchange.Redis.Extensions.Core.Configuration;
-using StackExchange.Redis.Extensions.System.Text.Json;
-using Theater.Abstractions.Caches;
-using Theater.Configuration.Helpers;
-using Theater.Core.Caches;
 
 namespace Theater.Configuration.Extensions;
 
@@ -115,8 +113,6 @@ public static class ServiceCollectionExtensions
         //services.AddCrudServices();
         services.RegisterImplementations(serviceTypes)
             .AddStubValidators()
-            .AddSingleton<IJwtHelper, JwtHelper>()
-            .AddScoped<IVkApi>(_ => new VkApi())
             .AddValidators()
             .AddIndexReaders()
             ;
@@ -136,37 +132,46 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddTheaterAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        // TODO: убрать после добавления сертификата
+        var handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+        services
+            .AddHttpClient(OAuth2IntrospectionDefaults.BackChannelHttpClientName)
+            .ConfigurePrimaryHttpMessageHandler(() => handler);
+        
+        services.AddHttpContextAccessor()
+            .AddAuthentication(config =>
+            {
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(AuthConstants.AuthenticationScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
 
-                var jwtOptions = services.BuildServiceProvider().GetRequiredService<IOptions<JwtOptions>>()?.Value;
-                if (jwtOptions != null)
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = jwtOptions.Issuer,
-                        ValidateIssuer = true,
+                options.BackchannelHttpHandler = handler; // TODO: убрать после добавления сертификата
 
-                        ValidAudience = jwtOptions.Audience,
-                        ValidateAudience = true,
+                // if token does not contain a dot, it is a reference token
+                options.ForwardDefaultSelector = Selector.ForwardReferenceToken(AuthConstants.IntrospectionSheme);
+            }).AddOAuth2Introspection(AuthConstants.IntrospectionSheme, options =>
+            {
+                var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>() 
+                                 ?? throw new ArgumentException($"Section {nameof(JwtOptions)} not found", nameof(configuration)); 
 
-                        IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(), // HS256
-                        ValidateIssuerSigningKey = true,
-
-                        ValidateLifetime = true
-                    };
+                options.Authority = jwtOptions.Authority; 
+                options.ClientId = jwtOptions.ClientId;
+                options.ClientSecret = jwtOptions.ClientSecret;
             });
-
-        var defaultPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
 
         services.AddAuthorization(options =>
         {
-            options.DefaultPolicy = defaultPolicy;
+            var policy = new AuthorizationPolicyBuilder(AuthConstants.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
 
-            options.AddRoleModelPolicies<UserPolices>(configuration, nameof(RoleModel.User));
+            options.AddPolicy(AuthConstants.AuthenticationScheme, policy);
+            options.DefaultPolicy = policy;
         });
 
         return services;
@@ -200,16 +205,18 @@ public static class ServiceCollectionExtensions
         };
         
         services.AddStackExchangeRedisExtensions<SystemTextJsonSerializer>(new[] { redisConfiguration });
-        services.AddSingleton<IConnectionsCache, ConnectionsCache>();
+        services.AddSingleton<IConnectionsCache, ConnectionsCache>()
+            .AddSingleton<IUserAccountCache, UserAccountCache>()
+            ;
 
         return services;
     }
 
     public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
     {
-        return services.Configure<RoleModel>(configuration.GetSection(nameof(RoleModel)))
+        return services
             .Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)))
-            .Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+            ;
     }
 
     private static IServiceCollection RegisterImplementations(this IServiceCollection services, IEnumerable<Type> implementationTypes)

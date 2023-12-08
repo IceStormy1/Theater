@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Abstractions;
+using Theater.Abstractions.UserAccount;
 
 namespace Theater.Controllers.Base;
 
@@ -15,7 +16,9 @@ public class CrudServiceBaseController<TParameters> : BaseController
 
     public CrudServiceBaseController(
         ICrudService<TParameters> service,
-        IMapper mapper) : base(mapper) 
+        IMapper mapper,
+        IUserAccountService userAccountService
+        ) : base(mapper, userAccountService) 
     {
         Service = service;
     }

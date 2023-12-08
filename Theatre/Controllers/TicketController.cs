@@ -9,6 +9,7 @@ using Theater.Abstractions.Errors;
 using Swashbuckle.AspNetCore.Annotations;
 using Theater.Contracts.Theater.PiecesTicket;
 using Theater.Controllers.Base;
+using Theater.Abstractions.UserAccount;
 
 namespace Theater.Controllers;
 
@@ -20,7 +21,9 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
 
     public TicketController(
         IPieceTicketService service, 
-        IMapper mapper) : base(service, mapper)
+        IMapper mapper,
+        IUserAccountService userAccountService) 
+        : base(service, mapper, userAccountService)
     {
         _pieceTicketService = service;
     }
@@ -52,10 +55,12 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> BuyTickets([FromBody] PieceTicketBuyRequest ticketBuyRequest)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        var buyTicketResult = await _pieceTicketService.BuyTickets(ticketBuyRequest.TicketIds, UserId.Value);
+        var buyTicketResult = await _pieceTicketService.BuyTickets(ticketBuyRequest.TicketIds, innerUserId.Value);
 
         return RenderResult(buyTicketResult);
     }
@@ -72,10 +77,12 @@ public sealed class TicketController : CrudServiceBaseController<PiecesTicketPar
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> BookTickets([FromBody] PieceTicketBuyRequest ticketBuyRequest)
     {
-        if (!UserId.HasValue)
+        var innerUserId = await GetUserId();
+
+        if (!innerUserId.HasValue)
             return RenderResult(UserAccountErrors.Unauthorized);
 
-        var buyTicketResult = await _pieceTicketService.BookTicket(ticketBuyRequest.TicketIds, UserId.Value);
+        var buyTicketResult = await _pieceTicketService.BookTicket(ticketBuyRequest.TicketIds, innerUserId.Value);
 
         return RenderResult(buyTicketResult);
     }

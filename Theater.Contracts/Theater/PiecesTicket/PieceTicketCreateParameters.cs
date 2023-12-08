@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Theater.Contracts.Theater.PiecesTicket;
 
-public class PieceTicketCreateParameters
+public sealed class PieceTicketCreateParameters
 {
     /// <summary>
     /// Идентификатор даты начала пьесы
