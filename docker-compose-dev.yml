@@ -6,13 +6,31 @@ networks:
 
 services:
   theater:
-    container_name: 'theater'
-    image: ${DOCKER_REGISTRY-}theater
+    image: ${DOCKER_REGISTRY-}theater-api
+    container_name: 'theater-api'
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: theater-api.dockerfile
     ports:
-      - "80:80"
+      - "8080:8080"
+    networks:
+      - theater-dev
+    env_file:
+      - .env-dev
+    depends_on:
+      - minio
+      - postgres
+      - rabbitmq
+      - redis
+
+  theater-signalr:
+    image: ${DOCKER_REGISTRY-}theater-signalr
+    container_name: 'theater-signalR'
+    build: 
+      context: .
+      dockerfile: theater-signalr.dockerfile
+    ports:
+      - "8081:8080"
     networks:
       - theater-dev
     env_file:
@@ -24,8 +42,8 @@ services:
       - redis
 
   postgres:
-    container_name: 'postgres'
     image: postgres:latest
+    container_name: 'postgres'
     env_file:
       - .env-dev
     command: -p 5434
@@ -63,6 +81,7 @@ services:
 
   minio:
     image: minio/minio:latest
+    container_name: 'minio'
     env_file:
       - .env-dev
     command: server --console-address ":9001" /data
