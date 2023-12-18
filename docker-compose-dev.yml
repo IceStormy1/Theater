@@ -6,13 +6,31 @@ networks:
 
 services:
   theater:
-    image: ${DOCKER_REGISTRY-}theater
-    container_name: 'theater'
+    image: ${DOCKER_REGISTRY-}theater-api
+    container_name: 'theater-api'
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: theater-api.dockerfile
     ports:
       - "8080:8080"
+    networks:
+      - theater-dev
+    env_file:
+      - .env-dev
+    depends_on:
+      - minio
+      - postgres
+      - rabbitmq
+      - redis
+
+  theater-signalr:
+    image: ${DOCKER_REGISTRY-}theater-signalr
+    container_name: 'theater-signalR'
+    build: 
+      context: .
+      dockerfile: theater-signalr.dockerfile
+    ports:
+      - "8081:8080"
     networks:
       - theater-dev
     env_file:
