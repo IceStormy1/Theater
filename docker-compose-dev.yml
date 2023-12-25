@@ -1,12 +1,16 @@
 version: '3.4'
 
+name: theater-backend
+
 networks:
+  theater_dev:
+    name: theater_dev
   services_dev:
     external: true
     name: services_dev
 
 services:
-  theater:
+  theater-api:
     image: ${DOCKER_REGISTRY-}theater-api
     container_name: 'theater-api'
     build: 
@@ -16,6 +20,7 @@ services:
       - "8080:8080"
     networks:
       - services_dev
+      - theater_dev
     env_file:
       - .env-dev
 
@@ -29,7 +34,8 @@ services:
       - "8081:8080"
     networks:
       - services_dev
+      - theater_dev
     env_file:
       - .env-dev
     depends_on:
-      - theater
+      - theater-api
