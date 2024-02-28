@@ -13,6 +13,7 @@ using Theater.Consumer;
 using Theater.Core.Profiles;
 using Theater.SignalR.Hubs;
 using Theater.Sql;
+using Theater.Sql.Extensions;
 
 const string apiName = "Theater.SignalR";
 const string corsPolicy = "CorsPolicy";
