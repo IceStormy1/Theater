@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Theater.Sql;
+namespace Theater.Sql.Extensions;
 
 public static class ServiceCollectionExtensions
 {

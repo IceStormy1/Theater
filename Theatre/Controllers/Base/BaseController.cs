@@ -34,10 +34,9 @@ public class BaseController : ControllerBase
         {
             var nameIdentifier = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-            if (!string.IsNullOrWhiteSpace(nameIdentifier) && Guid.TryParse(nameIdentifier, out var userExternalId))
-                return userExternalId;
-
-            return default;
+            return !string.IsNullOrWhiteSpace(nameIdentifier) && Guid.TryParse(nameIdentifier, out var userExternalId)
+                ? userExternalId
+                : default;
         }
     }
 

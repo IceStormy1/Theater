@@ -21,6 +21,7 @@ using Theater.Consumer;
 using Theater.Core.Profiles;
 using Theater.Sql;
 using Theater.Validation.Authorization;
+using Theater.Sql.Extensions;
 
 const string apiName = "Theater";
 Version assemblyVersion = new(1, 0);
